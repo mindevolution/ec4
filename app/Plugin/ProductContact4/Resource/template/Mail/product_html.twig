@@ -1,0 +1,6 @@
+{% if data.Product %}
+<dl style="display: flex;border-bottom: 1px dotted #ccc;margin: 0;">
+    <dt style="padding-top: 14px;width: 30%;"><label class="ec-label">商品</label></dt>
+    <dd style="width: 70%;line-height: 3;">{{ data.Product.name }}(ID:{{ data.Product.id }})</dd>
+</dl>
+{% endif %}

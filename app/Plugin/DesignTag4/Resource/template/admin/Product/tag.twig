@@ -1,0 +1,15 @@
+<script>
+    {% set Page = repository('Eccube\\Entity\\Page').findOneBy({'url' : 'product_list'}) %}
+    {% if Page %}
+        var link = "<a href='{{ url('admin_content_page_edit', {'id' : Page.id}) }}' target='_blank'>商品一覧ページ</a>";
+    {% else %}
+        var link = "商品一覧ページ";
+    {% endif %}
+
+    $(function () {
+        $('.c-primaryCol').append("<div>商品一覧ページにタグを表示するには、" + link + "のテンプレート上で表示したい場所に次のコードを記載してください<br>※{{ "{% for Product in pagination %}" }}のループの中に記載してください。<br><br>" +
+            "<pre>{{ "{{ include('@DesignTag4/tag_list.twig', ignore_missing = true) }}" }}</pre></div>")
+    })
+
+</script>
+

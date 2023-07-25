@@ -1,0 +1,26 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+
+<script>
+    $(function () {
+        $('#maker_area').insertBefore($('div.ec-productRole__category'));
+    });
+</script>
+
+{% if Product.Maker is not empty %}
+    <div id="maker_area" class="ec-productRole__maker" style="padding: 14px 0; border-bottom: 1px dotted #ccc;">
+        {% if Product.maker_url is not empty %}
+            <p class="ec-maker">{{ 'maker.admin.maker'|trans }}： <a href="{{ Product.maker_url }}" target="_blank">{{ Product.Maker.name }}</a></p>
+        {% else %}
+            <p class="ec-maker">{{ 'maker.admin.maker'|trans }}： {{ Product.Maker.name }}</p>
+        {% endif %}
+    </div>
+{% endif %}

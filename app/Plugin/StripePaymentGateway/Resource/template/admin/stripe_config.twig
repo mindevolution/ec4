@@ -1,0 +1,253 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['stripe', 'stripe_config'] %}
+
+{% block title %}{{ 'stripe_payment_gateway.admin.config.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'stripe_payment_gateway.admin.config.sub_title'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+
+{% endblock stylesheet %}
+
+{% block main %}
+
+{% if licensed == 0 %}
+        {% form_theme form_license '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+        <div class="c-contentsArea__cols license_notice">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span>{{ 'stripe_payment_gateway.admin.license.test_setting'|trans }}</span></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.license.test_setting_notice'|trans }}</span></div>
+                                <div class="col mb-2">
+                                    <a href="{{ url('stripe_payment_gateway_admin_test_config') }}" class="btn btn-ec-conversion px-5" type="button">
+                                        {{ 'stripe_payment_gateway.admin.license.test_env'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12"><span>{{ 'stripe_payment_gateway.admin.license.test_setting_details'|trans }}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form role="form" method="post">
+            {{ form_widget(form_license._token) }}
+            <div class="c-contentsArea__cols">
+                <div class="c-contentsArea__primaryCol">
+                    <div class="c-primaryCol">
+                        <div class="card rounded border-0 mb-4">
+                            <div class="card-header"><span>{{ 'stripe_payment_gateway.admin.license.header'|trans }}</span></div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.license.license_key'|trans }}</span><span
+                                                class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.license.required'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form_license.license_key) }}
+                                        {{ form_errors(form_license.license_key) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.license.email'|trans }}</span><span
+                                                class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.license.required'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form_license.email) }}
+                                        {{ form_errors(form_license.email) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-conversionArea">
+                <div class="c-conversionArea__container">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-6">
+                            <div class="c-conversionArea__leftBlockItem">
+                                <a class="c-beseLink"
+                                href="{{ url('admin_store_plugin') }}">
+                                    <i class="fa fa-backward" aria-hidden="true"></i>
+                                    <span>{{ 'stripe_payment_gateway.admin.config.back'|trans }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row align-items-center justify-content-end">
+                                <div class="col-auto">
+                                    <button class="btn btn-ec-conversion px-5" type="submit">
+                                        {{ 'stripe_payment_gateway.admin.license.confirm'|trans }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% elseif licensed == 1 %}
+        <form role="form" method="post">
+
+            {{ form_widget(form._token) }}
+            {% if product_licensed == 1 %}
+                <div class="c-contentsArea__cols license_notice">
+                        <div class="c-contentsArea__primaryCol">
+                            <div class="c-primaryCol">
+                                <div class="card rounded border-0 mb-4">
+                                    <div class="card-header"><span>{{ 'stripe_payment_gateway.admin.license.notice.header'|trans }}</span></div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            
+                                            <div class="col mb-2">                                       
+                                                    {{ 'stripe_payment_gateway.admin.license.test_key_elim'|trans }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            {% endif %}
+            <div class="c-contentsArea__cols">
+                <div class="c-contentsArea__primaryCol">
+                    <div class="c-primaryCol">
+                        <div class="card rounded border-0 mb-4">
+                            <div class="card-header"><span>{{ 'stripe_payment_gateway.admin.config.header'|trans }}</span></div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.config.publishable_key'|trans }}</span><span
+                                                class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.config.required'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.publishable_key) }}
+                                        {{ form_errors(form.publishable_key) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.config.secret_key'|trans }}</span><span
+                                                class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.config.required'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.secret_key) }}
+                                        {{ form_errors(form.secret_key) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.config.charge_method'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.is_auth_and_capture_on) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.config.stripe_fees_percent'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.stripe_fees_percent) }}
+                                        {{ form_errors(form.stripe_fees_percent) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"><span>{{ 'stripe_payment_gateway.admin.config.ga_pay_enabled'|trans }}</span></div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.prod_detail_ga_enable) }}
+                                        {{ form_errors(form.prod_detail_ga_enable) }}
+                                        <br>
+                                        {{ form_widget(form.cart_ga_enable) }}
+                                        {{ form_errors(form.cart_ga_enable) }}
+                                        <br>
+                                        {{ form_widget(form.checkout_ga_enable) }}
+                                        {{ form_errors(form.checkout_ga_enable) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>{{ 'stripe_payment_gateway.admin.config.konbini_enable'|trans }}</span>
+                                    </div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.konbini_enable) }}
+                                        {{ form_errors(form.konbini_enable) }}
+                                    </div>
+                                </div>
+                                <div id="webhook-config" {%if form.konbini_enable.vars.data == '' %} style="display: none;" {% endif %}>
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <span>{{ 'stripe_payment_gateway.admin.config.webhook_signature.label'|trans }}</span>
+                                            <span class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.config.required'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            {{ form_widget(form.webhook_signature) }}
+                                            {{ form_errors(form.webhook_signature) }}
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 20px;">
+                                        <div class="col-3">
+                                            <span>Webhook エンドポイントURL</span>
+                                            <span class="badge badge-primary ml-1">{{ 'stripe_payment_gateway.admin.config.required'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            {# {{ app.request.schemeAndHttpHost }}{{ app.request.basePath }}/plugin/StripeRec/webhook #}
+                                            {{ url('plugin_stripe_payment_gateway_webhook') }}
+                                            <div class="ga_pay_enable_notice mt-2">
+                                            コンビニ決済を行うためには、Webhook設定をしなければならないです。
+                                            Webhook登録を行う時は下記のイベントを許可してください。<br><br>
+                                                payment_intent.succeeded<br>
+                                                payment_intent.payment_failed<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-conversionArea">
+                <div class="c-conversionArea__container">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-6">
+                            <div class="c-conversionArea__leftBlockItem">
+                                <a class="c-beseLink"
+                                href="{{ url('admin_store_plugin') }}">
+                                    <i class="fa fa-backward" aria-hidden="true"></i>
+                                    <span>{{ 'stripe_payment_gateway.admin.config.back'|trans }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row align-items-center justify-content-end">
+                                <div class="col-auto">
+                                    <button class="btn btn-ec-conversion px-5"
+                                            type="submit">{{ 'stripe_payment_gateway.admin.config.save'|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+(function() {
+    var konbiniEnable = "{{ form.konbini_enable.vars.data }}"
+    
+    
+    var konbiniObj = $("#{{ form.konbini_enable.vars.id }}");
+    var webhookConfigObj = $("#webhook-config");
+    konbiniObj.on('change', function(e) {
+        var enabled = konbiniObj.prop('checked')
+        if (enabled) {
+            webhookConfigObj.fadeIn();
+        } else {
+            webhookConfigObj.fadeOut();
+        }
+    })
+
+})()
+</script>
+{% endblock %}

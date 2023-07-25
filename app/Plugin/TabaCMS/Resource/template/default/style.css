@@ -1,0 +1,224 @@
+/*
+ * Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+/* --------------------------------------------------
+ 投稿リスト
+ -------------------------------------------------- */
+.tabacms_post_list {
+	list-style: none;
+	padding: 0;
+}
+
+.tabacms_post_list .row {
+	margin-left: 15px !important;
+	margin-right: 15px !important;
+	padding-bottom: 10px !important;
+}
+
+.tabacms_post_list li {
+	/*margin-bottom: 16px;*/
+
+}
+
+.tabacms_post_list li time {
+	margin-right: 16px;
+	margin-bottom: 16px;
+	display: inline-block;
+}
+
+.tabacms_post_list li label {
+	background-color: #000;
+	color: #ffffff;
+	text-align: center;
+	padding: 3px 5px 3px 5px;
+	font-size: 10px;
+	min-width: 110px !important;
+	display: inline-block;
+	float: right;
+}
+
+/* --------------------------------------------------
+ カテゴリーリスト
+ -------------------------------------------------- */
+.tabacms_category_list {
+	list-style: none;
+	padding: 0;
+}
+
+.tabacms_category_list .row {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.tabacms_category_list li {
+	margin-bottom: 16px;
+}
+
+/* --------------------------------------------------
+ Thumbnail
+ -------------------------------------------------- */
+.tabacms_thumbnail_wrapper {
+	margin: 0px 0px 16px 0px !important;
+	padding: 0 !important;
+	position: relative;
+	width: 100%;
+	border: solid 1px #ffffff;
+}
+
+.tabacms_thumbnail_wrapper:before {
+	content: "";
+	display: block;
+	padding-top: 56.25%;
+}
+
+.tabacms_thumbnail_wrapper .tabacms_thumbnail {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	overflow: hidden;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.tabacms_thumbnail_wrapper .tabacms_thumbnail img {
+	height: 100%;
+}
+
+@media screen and (max-width: 767px) {
+	.tabacms_thumbnail_wrapper .tabacms_thumbnail img {
+		width: 100%;
+	}
+}
+
+/* --------------------------------------------------
+ Ellipsis
+ -------------------------------------------------- */
+.tabacms_ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tabacms_ellipsis_2 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.tabacms_ellipsis_3 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+}
+
+/* --------------------------------------------------
+ 投稿リスト(ブログタイプ)
+ -------------------------------------------------- */
+.tabacms_blog_list {
+	list-style: none;
+	padding: 0;
+}
+
+.tabacms_blog_list article {
+	clear: both;
+	margin-bottom: 16px;
+	overflow: hidden;
+}
+
+.tabacms_blog_list .tabacms_detail time {
+	font-size: 0.9em;
+	display: block;
+	margin: 0px 0px 10px 0px;
+	font-weight: bold;
+	float: right;
+	clear: both;
+}
+
+.tabacms_blog_list .tabacms_detail label {
+	background-color: #000;
+	color: #ffffff;
+	text-align: center;
+	font-size: 0.7em;
+	display: inline-block;
+	margin: 0px 0px 10px 0px;
+	padding: 3px 5px 3px 5px;
+	clear: both;
+}
+
+.tabacms_blog_list .tabacms_detail h2 {
+	font-size: 1.0em;
+	margin: 0px 0px 10px 0px;
+	clear: both;
+}
+
+.tabacms_blog_list .tabacms_detail p {
+	font-size: 0.9em;
+	margin: 0px 0px 10px 0px;
+}
+
+.tabacms_blog_list .tabacms_detail .tabacms_readmore {
+	font-size: 0.9em;
+	display: inline-block;
+	float: right;
+}
+
+/* --------------------------------------------------
+ 投稿(ブログタイプ)
+ -------------------------------------------------- */
+.tabacms_post {
+	margin-bottom: 16px;
+}
+
+.tabacms_post header h1 {
+	font-size: 1.5em;
+	margin-bottom: 16px;
+}
+
+@media screen and (max-width: 767px) {
+	.tabacms_post header h1 {
+		font-size: 1.0em;
+	}
+}
+
+.tabacms_post header time {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 0.9em;
+	float: right;
+	clear: both;
+}
+
+.tabacms_post label {
+	background-color: #000;
+	color: #ffffff;
+	text-align: center;
+	padding: 3px 5px 3px 5px;
+	font-size: 10px;
+	min-width: 130px !important;
+	display: inline-block;
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+/* --------------------------------------------------
+ ウィジット
+ -------------------------------------------------- */
+.tabacms_widget {
+}
+
+.tabacms_widget h2,
+.tabacms_widget h4 {
+	font-size: 1.0em;
+	margin-bottom: 16px;
+}

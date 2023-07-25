@@ -1,0 +1,23 @@
+{% if Order.Payment.getMethodClass == 'Plugin\\StripePaymentGateway\\Service\\Method\\StripeCreditCard' %}
+<script>
+    $(function(){
+        $("#shopping-form [type=submit]").text("決済する")
+        $("#shopping-form [type=submit]").on('click', function(e){
+            e.preventDefault();
+            $("#shopping-form").attr('action', "{{ url('plugin_stripe_credit_card') }}").submit();
+        })
+    })
+</script>
+{% endif %}
+
+{% if Order.Payment.getMethodClass == 'Plugin\\StripePaymentGateway\\Service\\Method\\StripeKonbini' %}
+<script>
+    $(function(){
+        $("#shopping-form [type=submit]").text("決済する")
+        $("#shopping-form [type=submit]").on('click', function(e){
+            e.preventDefault();
+            $("#shopping-form").attr('action', "{{ url('plugin_stripe_konbini') }}").submit();
+        })
+    })
+</script>
+{% endif %}

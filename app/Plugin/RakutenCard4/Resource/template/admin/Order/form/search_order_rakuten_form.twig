@@ -1,0 +1,12 @@
+{%- block form_row -%}
+    <div class="col">
+        <div class="form-row">
+            <div class="col-12">
+                <p class="col-form-label">{{form.vars['label']}}</p>
+                {{ form_widget(form, { 'label_attr': { 'class': 'checkbox-inline'}}) }}
+                {{ form_errors(form) }}
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+{%- endblock form_row -%}

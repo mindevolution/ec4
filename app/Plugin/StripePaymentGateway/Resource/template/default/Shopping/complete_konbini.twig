@@ -1,0 +1,13 @@
+<script>
+    $(function(){
+        var orderDescription = $(".ec-reportDescription");
+        $("<iframe src='{{ voucher_url }}' class='voucher-instruction'></iframe>").insertBefore(orderDescription);
+    });
+</script>
+<style>
+.voucher-instruction {
+    width: 100%;
+    min-height: 800px;
+    margin-bottom: 20px;
+}
+</style>

@@ -1,0 +1,12 @@
+ss_next.admin.config.header: ネクストエンジン連携設定
+ss_next.admin.config.is_product_code.name: 商品在庫連携属性
+ss_next.admin.config.api_key.name: 接続キー
+ss_next.admin.config.order_mail.name: 受注連携メールアドレス
+ss_next.config.option.product_class_id: 商品規格ID
+ss_next.config.option.product_class_code: 商品コード
+ss_next.admin.config.title: ネクストエンジン連携
+ss_next.admin.config.sub_title: 接続情報
+ss_next.admin.config.back: 戻る
+ss_next.admin.config.save: 保存
+ss_next.admin.save.success: 保存しました
+ss.next.admin.common.csv_download: ネクストCSV

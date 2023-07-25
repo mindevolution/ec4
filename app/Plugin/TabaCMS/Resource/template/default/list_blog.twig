@@ -1,0 +1,83 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{# 投稿リストの取得 #}
+{% set post_list = TabaCMSPostList() %}
+
+{% block javascript %}
+{{ TabaCMSAsset('jquery.matchHeight-min.js','script')|raw }}
+{{ TabaCMSAsset('script.js','script')|raw }}
+{% endblock javascript %}
+
+{% block stylesheet %}
+{{ TabaCMSAsset('style.css','style')|raw }}
+{% endblock stylesheet %}
+
+{% block main %}
+<div class="ec-pageHeader"><h1>{{ type.getTypeName }}</h1></div>
+<div class="row" style="margin-right:0px;">
+	<div class="col-md-9">
+		<ul class="tabacms_blog_list tabacms_height_match">
+			{% set no_image = TabaCMSAsset('no_image.jpg') %}
+			{% for post in post_list %}
+			<li class="col-sm-6 col-md-4">
+				<article>
+					<div class="tabacms_thumbnail_wrapper">
+						<div class="tabacms_thumbnail">
+							{% set thumb = no_image %}
+							{% if post.getThumbnail is not empty %}
+							{% set thumb = asset(post.getThumbnail,'save_image') %}
+							{% endif %}
+							{% if post.getContentDiv == constant('CONTENT_DIV_BODY',post) %}
+							<a href="{{ post.getURI }}"><img src="{{ thumb }}"></a>
+							{% elseif post.getContentDiv == constant('CONTENT_DIV_LINK',post) %}
+							<a href="{{ post.getLinkUrl }}" {% if post.getLinkTarget %} target="{{ post.getLinkTarget }}" {% endif %}><img src="{{ thumb }}"></a>
+							{% elseif post.getContentDiv == constant('CONTENT_DIV_TITLE',post) %}
+							<img src="{{ thumb }}">
+							{% endif %}
+						</div>
+					</div>
+					<div class="tabacms_detail">
+						{% if post.getCategory is not empty %}
+						<label class="text-nowrap tabacms_category_{{ post.getType.getDataKey }}_{{ post.getCategory.getDataKey }}" {{ post.getCategory.getTagAttributes|raw }}>{{ post.getCategory.getCategoryName }}</label>
+						{% endif %}
+						<time>
+							{{ post.getPublicDate|date('Y/m/d') }}
+						</time>
+						{% if post.getContentDiv == constant('CONTENT_DIV_BODY',post) %}
+						<h2 class="tabacms_ellipsis_2">
+							<a href="{{ post.getURI }}">{{ post.getTitle }}</a>
+						</h2>
+						<p class="tabacms_ellipsis_3">
+							{{ post.getBody|striptags|raw }}
+						</p>
+						<a href="{{ post.getURI }}" class="tabacms_readmore">もっと読む</a>
+						{% elseif post.getContentDiv == constant('CONTENT_DIV_LINK',post) %}
+						<h2 class="tabacms_ellipsis_2">
+							<a href="{{ post.getLinkUrl }}" {% if post.getLinkTarget %} target="{{ post.getLinkTarget }}" {% endif %}>{{ post.getTitle }}</a>
+						</h2>
+						{% elseif post.getContentDiv == constant('CONTENT_DIV_TITLE',post) %}
+						<h2 class="tabacms_ellipsis_2">
+							{{ post.getTitle }}
+						</h2>
+						{% endif %}
+					</div>
+				</article>
+			</li>
+			{% endfor %}
+		</ul>
+		{% if post_list.totalItemCount > 0 %}
+		    {% include "pager.twig" with {'pages':post_list.paginationData} %}
+		{% endif %}
+	</div>
+	<div class="col-md-3">
+		{{ TabaCMSWidget('category')|raw }}
+	</div>
+</div>
+{% endblock %}
+

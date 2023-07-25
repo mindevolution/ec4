@@ -1,0 +1,17 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if form_element.vars.help is not empty %}
+<div class="d-inline-block" data-tooltip="true" data-placement="top" title="{{ form_element.vars.help|trans }}">
+{% else %}
+<div class="d-inline-block">
+{% endif %}
+    <span>
+    {{ form_element.vars.label|trans }}
+    {% if form_element.vars.help %}<i class="fa fa-question-circle fa-lg ml-1"></i>{% endif %}
+    {% if form_element.vars.required %}<span class="badge badge-primary ml-1">{{ 'admin.common.required'|trans }}</span>{% endif %}
+    </span>
+</div>

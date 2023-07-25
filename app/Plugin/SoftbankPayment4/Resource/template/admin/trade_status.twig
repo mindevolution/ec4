@@ -1,0 +1,336 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['order', 'sbps_admin_trade_status'] %}
+
+{% block title %}{{ 'SBPS決済状況一覧' }}{% endblock %}
+{% block sub_title %}{{ '受注管理' }}{% endblock %}
+
+{% block stylesheet %}
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script>
+        $(function() {
+            if ($('[type="date"]').prop('type') != 'date') {
+                // input type属性でdateが利用できるかどうか(カレンダー表示できないブラウザ対応)
+                $.when(
+                    $.getScript("{{ asset('assets/js/vendor/moment.min.js', 'admin') }}"),
+                    $.getScript("{{ asset('assets/js/vendor/moment-with-locales.min.js', 'admin') }}"),
+                    $.getScript("{{ asset('assets/js/vendor/tempusdominus-bootstrap-4.min.js', 'admin') }}")
+                ).done(function() {
+                    $('input[id$=_date_start]').datetimepicker({
+                        locale: '{{ eccube_config.locale }}',
+                        format: 'YYYY-MM-DD',
+                        useCurrent: false,
+                        buttons: {
+                            showToday: true,
+                            showClose: true
+                        }
+                    });
+
+                    $('input[id$=_date_end]').datetimepicker({
+                        locale: '{{ eccube_config.locale }}',
+                        format: 'YYYY-MM-DD',
+                        useCurrent: false,
+                        buttons: {
+                            showToday: true,
+                            showClose: true
+                        }
+                    });
+                });
+            }
+
+            // 登録チェックボックス
+            $('#check_all').on('change', function() {
+                var checked = $(this).prop('checked');
+                if (checked) {
+                    $('input[id^="sbps_check_"]').prop('checked', true);
+                } else {
+                    $('input[id^="sbps_check_"]').prop('checked', false);
+                }
+                toggleBtnBulk('input[id^="sbps_check_"]', '.btn-bulk-wrapper');
+            });
+
+            // 一括決済操作
+            $('#bulk_submit').click(function(){
+                var check_cnt = countCheck();
+                if(check_cnt == 0) {
+                    alert("対象の受注が選択されていません");
+                    return false;
+                }
+
+                let disp_action;
+                let action_type = $('#action').val();
+
+                if(action_type == 'capture') {
+                    disp_action = '一括売上';
+                } else if (action_type == 'refund') {
+                    disp_action = '一括取消返金';
+                }
+
+                if(!confirm(disp_action + 'を行います。よろしいですか？')) {
+                    return false;
+                }
+            });
+
+            function countCheck() {
+                var check_count = 0;
+                $('input[id^="sbps_check_"]').each(function(){
+                    if($(this).prop('checked')) {
+                        check_count++;
+                    }
+                });
+                return check_count;
+            }
+        });
+
+    // 個別決済操作
+    $('[id^=request_action_]').click(function(event) {
+        event.preventDefault();
+        var id = $(this).attr('id');
+        var order_id = id.slice(id.lastIndexOf('_') + 1);
+
+        if (confirm('決済操作を実行します。よろしいですか？')) {
+            $('#trade_id').val(order_id);
+            $('#sync').attr('action', "{{ url('sbps_admin_trade_action') }}");
+            $('#sync').submit();
+        }
+    });
+    // 個別取消返金
+    $('[id^=refund_]').click(function(event) {
+        event.preventDefault();
+        var id = $(this).attr('id');
+        var order_id = id.slice(id.lastIndexOf('_') + 1);
+        if (confirm('取消返金操作を実行します。よろしいですか？')) {
+            $('#trade_id').val(order_id);
+            $('#sync').attr('action', "{{ url('sbps_admin_trade_action_refund') }}");
+            $('#sync').submit();
+        }
+    });
+
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <!--検索条件設定テーブルここから-->
+    <div class="c-outsideBlock">
+        <form name="search_form" id="search_form" method="POST" action="{{ url('sbps_admin_trade_status') }}">
+            <div class="c-outsideBlock__contents">
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_widget(searchForm._token) }}
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label class="col-form-label"  data-tooltip="true" data-placement="top" title="{{ 'tooltip.order.order_search_status'|trans }}">{{ 'admin.order.order_status'|trans }}<i class="fa fa-question-circle fa-lg ml-1"></i></label>
+                                <div id="admin_search_order_status">
+                                    {% set statusForm = searchForm.status %}
+                                    <!-- 各対応状況の件数を表示する -->
+                                    {% for status_id, child in statusForm.children %}
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox"
+                                                    id="{{ child.vars.id }}"
+                                                    name="{{ child.vars.full_name }}"
+                                                    class="form-check-input"
+                                                    value="{{ child.vars.value }}"{{ child.vars.checked ? ' checked="checked"' }}>
+                                            <label class="form-check-label" for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                        </div>
+                                    {% endfor %}
+                                    {{ form_errors(searchForm.status) }}
+                                </div>
+                                <br>
+                                <label class="col-form-label"  data-tooltip="true" data-placement="top" title="{{ 'admin.common.payment_method'|trans }}">{{ 'admin.common.payment_method'|trans }}</label>
+                                <div id="admin_search_order_status">
+                                    <div class="form-check form-check-inline">
+                                        {{ form_widget(searchForm.pay_methods, { 'label_attr': { 'class': 'checkbox-inline'}}) }}
+                                    </div>
+                                    {{ form_errors(searchForm.pay_methods) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-outsideBlock__contents">
+                <div class="row">
+                    <div class="mb-4">
+                        <div class="col-12">
+                            <button class="btn btn-ec-conversion px-5" type="submit" id="search_submit">{{ 'admin.common.search'|trans }}</button>
+                            {% if pagination %}
+                                <span class="font-weight-bold ml-2" id="search_total_count">{{ 'admin.common.search_result'|trans({"%count%":pagination.totalItemCount})|raw }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-outsideBlock__contents mb-5">
+                {{ include('@admin/search_items.twig', { 'form': searchForm }, ignore_missing = true) }}
+            </div>
+        </form>
+    </div>
+    <!--検索条件設定テーブルここまで-->
+
+    <!--個別決済同期操作用フォーム-->
+    <form name="sync" id="sync" method="POST" action="">
+        <input type="hidden" name="id" id="trade_id" value="">
+    </form>
+
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+                {% if pagination and pagination.totalItemCount %}
+                    <form name="bulkActionForm" id="bulkActionForm" action="{{ url('sbps_admin_trade_action_bulk') }}" method="POST">
+                        <input type="hidden" name="action_type" id="action_type" value="">
+                        <div class="c-outsideBlock__contents" id="collective_setting_box__body">
+                            <div class="box-header">
+                                <h3 class="box-title">決済連携機能</h3>
+                            </div>
+                            <div id="collective_setting__body" class="box-body">
+                                <div id="collective_setting__list" class="table_list">
+                                    <div id="collective_setting__list_body" class="table-responsive with-border">
+                                        <table class="table">
+                                            <tr>
+                                                <td class="text-center" style="background-color: #f9f9f9;">
+                                                    <label class="control-label required ">決済処理</label>
+                                                </td>
+                                                <td>{{ form_widget(actionForm.action) }}</td>
+                                                <td><button class="btn btn-success" id="bulk_submit">一括処理</button></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}" value="{{ csrf_token(constant('Eccube\\Common\\Constant::TOKEN_NAME')) }}">
+                        <div class="row justify-content-between mb-2">
+                            <div class="col-6"></div>
+                            <div class="col-5 text-right">
+                                <div class="d-inline-block">
+                                    <select class="custom-select" onchange="location = this.value;">
+                                        {% for pageMax in pageMaxis %}
+                                            <option {% if pageMax.name == page_count %} selected {% endif %}
+                                                    value="{{ path('sbps_admin_trade_status', {'page_no': 1, 'page_count': pageMax.name}) }}">
+                                                {{ 'admin.common.count'|trans({ '%count%': pageMax.name }) }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card rounded border-0 mb-4">
+                            <div class="card-body p-0">
+                                <table class="table table-sm" id="search_result">
+                                    <thead>
+                                    <tr>
+                                        <th class="border-top-0 pt-2 pb-2 text-center pl-3">
+                                            <input type="checkbox" id="check_all" name="filter" value="open">
+                                        </th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">注文者</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">決済方法</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">SBPSトラッキングID</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">購入金額</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">決済操作</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">取消返金</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">対応状況</th>
+                                        <th class="border-top-0 pt-2 pb-2 text-center">決済状況</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% set cssClassStatus = {
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::NEW')): "badge-ec-blue",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::CANCEL')): "badge-ec-glay",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::IN_PROGRESS')): "badge-ec-blue",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::DELIVERED')): "badge-ec-glay",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::PAID')): "badge-ec-green",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::PROCESSING')): "badge-ec-yellow",
+                                        (constant('Eccube\\Entity\\Master\\OrderStatus::RETURNED')): "badge-ec-glay",
+                                    }
+                                    %}
+                                    {%
+                                        set tradeStatus = {
+                                            0: "未定義の状態",
+                                            1: "与信済",
+                                            2: "売上済",
+                                            3: "取消済",
+                                            4: "返金済",
+                                           98: "期限切れ",
+                                            "": "不明な状態",
+                                        }
+                                    %}
+                                    {% for Order in pagination %}
+                                        <tr>
+                                            <td class="align-middle text-center pl-3">
+                                                <input type="checkbox"  name="ids[]" id="sbps_check_{{ Order.id }}" value="{{ Order.id }}">
+                                            </td>
+                                            <td class="align-middle text-left" id="orderer_--{{ Order.id }}">
+                                                <a class="action-edit" href="{{ url('admin_order_edit', { id : Order.id }) }}">{{ Order.order_no }}</a><br>
+                                                {{ Order.name01 }} {{ Order.name02 }}<br>
+                                                {{ Order.order_date|date_min }}
+                                            </td>
+                                            <td class="align-middle text-center">{{ Order.payment_method }}</td>
+                                            <td class="align-middle text-center"  id="order_tracking_id--{{ Order.id }}">{{ Order.SbpsTrade.tracking_id }}</td>
+                                            <td class="align-middle text-right" id="payment_total--{{ Order.id }}">
+                                                {{ Order.payment_total|price }}
+                                                {% if Order.SbpsTrade.Alert is not null %}
+                                                    <br /><span class="badge badge-danger">[SBPSとの差額:{{(Order.SbpsTrade.Alert)|price}}]</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                {% if Order.SbpsTrade.DispAction(capture_type) is not null %}
+                                                    <a href="?" id="request_action_{{ Order.id }}">{{ Order.SbpsTrade.DispAction(capture_type) }}</a>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                {% if Order.SbpsTrade.canRefund %}
+                                                    <a href="?" id="refund_{{ Order.id }}">取消返金</a>
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td class="align-middle text-center"  id="order_status--{{ Order.id }}">
+                                                <span class="badge {{ attribute(cssClassStatus, Order.OrderStatus.id) }}">{{ Order.OrderStatus }}</span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                {{ attribute(tradeStatus, Order.SbpsTrade.status) }}
+                                                {% if Order.SbpsTrade.status == 2 or Order.SbpsTrade.status == 4 %}
+                                                    <br /><span class="badge badge-info">[売上額:{{(Order.SbpsTrade.capturedAmount)|price}}]</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="row justify-content-md-center mb-4"></div>
+                            </div>
+
+                            <div class="row justify-content-md-center mb-4"></div>
+                        </div>
+                        <div class="row justify-content-md-center mb-4">
+                            {% if pagination.totalItemCount > 0 %}
+                                {% include "@admin/pager.twig" with { 'pages' : pagination.paginationData, 'routes' : 'sbps_admin_trade_status_pageno' } %}
+                            {% endif %}
+                        </div>
+                    </form>
+                    {# 検索条件エラー時 #}
+                {% elseif has_errors %}
+                    <div class="card rounded border-0">
+                        <div class="card-body p-4">
+                            <div class="text-center text-muted mb-4 h5">{{ 'admin.common.search_invalid_condition'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_change_condition'|trans }}</div>
+                        </div>
+                    </div>
+                    {# 検索結果なし #}
+                {% else %}
+                    <div class="card rounded border-0">
+                        <div class="card-body p-4">
+                            <div class="text-center text-muted mb-4 h5">{{ 'admin.common.search_no_result'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_change_condition'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_advanced_search'|trans }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

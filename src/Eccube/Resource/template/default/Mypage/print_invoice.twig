@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>請求書 | {{ BaseInfo.shop_name }}</title>
+    <style>
+        .container {
+            width: 900px !important;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .logo {
+            float: left;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .inkan {
+            position: relative;
+            padding-right: 80px;
+        }
+
+        .inkan-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+            width: 70px;
+        }
+
+        table thead {
+            background-color: #eee !important;
+        }
+
+        table tbody {
+            border-top: none !important;
+        }
+
+    </style>
+    <style media="print">
+        #print-footer {
+            display: none;
+        }
+
+        input[type="text"] {
+            outline: 0;
+            border: none;
+        }
+
+        button,
+        #edit,
+        #mod {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/vendor/printThis.js') }}"></script>
+    <script>
+        $(function() {
+
+            $('#print').click(function() {
+                $('body').printThis({
+                    importStyle: true
+                });
+            });
+
+            $('#edit').click(function() {
+                var name = $('.print_name').text();
+                var input = $('<input type="text" id="input-name">').val(name);
+                $('.print_name').empty().append(input);
+                $('#edit').hide();
+                $('#mod').show();
+            });
+
+            $('#mod').click(function() {
+                var newname = $('#input-name').val();
+                $('.print_name').empty().text(newname);
+                $('#input-name').remove();
+                $('#edit').show();
+                $('#edit').removeAttr('style');
+                $('#mod').hide();
+                showEx();
+            });
+
+            function showEx() {
+                var tmp = $('.print_name').text();
+
+                if (tmp == '') {
+                    $('.print_name_ex').hide();
+                } else {
+                    $('.print_name_ex').show();
+                }
+            }
+
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <!-- {{ BaseInfo.shop_name }} -->
+        <img class="" src="{{ asset('assets/img/logo.png') }}" alt="" style="width:150px;">
+
+    </div>
+    <div class="text-end">注文No. {{ Order.order_no }}</div>
+    <div class="text-end">発行日 {{ Order.Shippings[0].shipping_date|date_format(null, 'Y年m月d日') }}</div>
+    <h1 class="text-center">請　求　書</h1>
+    <div class="row">
+        <div class="col-6">
+            <h2 id="name"><span class="print_name">{% if Order.company_name %}{{ Order.company_name }} 御中{% else %}{{ Order.name01 }} {{ Order.name02 }} </span><span class="print_name_ex"> 様</span>{% endif %}</h2>
+            <!-- <button type="button" id="edit">宛先変更</button> -->
+            <button type="button" id="edit">宛先変更</button>
+            <button type="button" id="mod" style="display: none;">適用</button>
+            <div>
+                このたびはお買上げいただきありがとうございます。<br>
+                下記の内容にて請求させていただきます。
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="text-end">
+{#                <div class="inkan">
+#}
+                    {% if BaseInfo.company_name %}
+                        {{ BaseInfo.company_name }}　(押印省略)<br>
+                    {% endif %}
+                    {{ BaseInfo.shop_name }}<br>
+                    〒810-0054 福岡県福岡市中央区<br>
+                    今川2-3-54エスペランサ今川 2F<br>
+                    TEL 05035706788<br>
+                    <img src="{{ asset('assets/img/common/inkan.jpg') }}" alt="" class="inkan-image">
+{#                </div>
+#}
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-4">
+        <div class="text-center">
+            <h4 class="d-inline-block border-bottom pb-2">合計金額(税込) <span class="ms-5">{{ Order.payment_total|price }}</span></h4>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            下記のとおり請求いたします。
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th class="text-end" style="width:4em">No.</th>
+            <th>商品名</th>
+            <th class="text-end" style="width:4em">数量</th>
+            <th class="text-end">単価</th>
+            <th class="text-end">金額(税込)</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% set index = 1 %}
+        {% for OrderItem in Order.MergedProductOrderItems %}
+            <tr>
+                <td class="text-end">{{ index }}</td>
+                <td>
+                    {{ OrderItem.product_name }}  {{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }}
+                </td>
+                <td class="text-end">{{ OrderItem.quantity|number_format }}</td>
+                <td class="text-end">{{ OrderItem.price|price }}</td>
+                <td class="text-end">{{ OrderItem.total_price|price }}</td>
+            </tr>
+            {% set index = index + 1 %}
+        {% endfor %}
+        <tr>
+            <td class="text-end">{{ index }}</td>
+            <td>送料</td>
+            <td class="text-end">1</td>
+            <td class="text-end">{{ Order.delivery_fee_total|price }}</td>
+            <td class="text-end">{{ Order.delivery_fee_total|price }}</td>
+        </tr>
+        {% set index = index + 1 %}
+        {% if Order.charge > 0 %}
+            <tr>
+                <td class="text-end">{{ index }}</td>
+                <td>手数料</td>
+                <td class="text-end">1</td>
+                <td class="text-end">{{ Order.charge|price }}</td>
+                <td class="text-end">{{ Order.charge|price }}</td>
+            </tr>
+            {% set index = index + 1 %}
+        {% endif %}
+        {% for OrderItem in Order.OrderItems %}
+            {% if OrderItem.order_item_type_id == 4 %}
+                <tr>
+                    <td class="text-end">{{ index }}</td>
+                    <td>{{ OrderItem.product_name }}</td>
+                    <td class="text-end">1</td>
+                    <td class="text-end">{{ OrderItem.priceIncTax|price }}</td>
+                    <td class="text-end">{{ OrderItem.total_price|price }}</td>
+                </tr>
+                {% set index = index + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        <tr>
+            <td colspan="3" rowspan="3"></td>
+            <td class="text-center">合計</td>
+            <td class="text-end h5">{{ Order.payment_total|price }}</td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    {% if Order.note %}
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>備考</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ Order.note|nl2br }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    <div class="row">
+        <div class="col-8">
+            <!-- 【お振込先】<br>
+            XXXX銀行 XXXX支店 普通 9999999 XXXX株式会社<br>
+            振込手数料は御社ご負担でお願い申し上げます。 -->
+            【決済方法】<!--{{Order.payment_method}} -->
+
+{% if Order.Payment.id == 2 %}
+
+<br>【QR決済】を選択いただいた方
+<br>
+<br>下記のURLにアクセスし、お買い上げ総合計金額をQRコードをスキャンしてお支払いしていただくようお願い致します。
+<br>
+<br>https://www.earthmirai.com/pay.html　   
+ <div class="logo">
+        <!-- {{ BaseInfo.shop_name }} -->
+        <img class="" src="{{ asset('https://www.earthmirai.com/QRPay.png') }}" alt="" style="width:100px;">
+
+    </div>
+<br>ご入金が確認でき次第、商品を発送いたします。
+{% endif %}
+{% if Order.Payment.id == 7 %}
+<br>【クレジットカード決済】
+{% endif %}
+<br>{% if Order.Payment.id == 3 %}【銀行振込】
+<br>ーーーーー
+<br>
+<br>★銀行名：PayPay銀行 (ペイペイ銀行・旧称ジャパンネット銀行）
+<br>支店名：すずめ支店(002)
+<br>預金種類：普通預金
+<br>口座番号：5737778
+<br>口座名義：カ）アースミライ
+<br>
+<br>★銀行名：三井住友銀行
+<br>支店名：大分(おおいた)支店(721)
+<br>預金種類：普通預金
+<br>口座番号：1285944
+<br>口座名義：カ）アースミライ
+<br>
+<br>★銀行名：楽天銀行
+<br>支店名：第二営業支店(252)
+<br>預金種類：普通預金
+<br>口座番号：7046389
+<br>口座名義：カ）アースミライ
+<br>
+<br>ーーーーー
+<br>●振込手数料はお客様負担でお願いします。
+<br>●お申込者とお振込時のお名前が異なる場合は、入金確認が遅延する場合がございます。
+<br>  注文情報入力画面の【備考】欄で、必ずお振込時のお名前をご記入ください。
+
+
+<br>ご入金が確認でき次第、商品を発送いたします。
+{% endif %}
+
+
+{% if Order.Payment.id == 1 %}
+<br>【郵便振替】を選択いただいた方
+<br>
+<br>お買い上げ総合計金額を、以下の口座にお振替いただくようお願いいたします。
+<br>在庫商品限り、14時までに入金確認で即日発送致します。
+<br>
+<br>ーーーーー
+<br>記号：17230
+<br>番号：24087411
+<br>名義：カ）アースミライ
+<br>ーーーーー
+<br>
+<br>ご入金が確認でき次第、商品を発送いたします。
+{% endif %}
+
+{% if Order.Payment.id == 6 %}
+
+<br>【WEBコンビニ決済】を選択いただいた方
+<br>
+<br>WEB上で表示される番号を控えて、3日以内にコンビニにて端末やレジで手続き、お支払い期限までお支払いいただくようお願いいたします。
+<br>
+<br>お客様がコンビニエンスストアでお支払いされる際の利用方法をご案内します。
+<br>https://www.econtext.jp/support/cvs/6brand.html
+<br>
+<br>コンビニ決済では、24時間簡単にお支払いが可能です。
+<br>お支払い期限が切れた場合は再注文する必要がありますので、ご了承ください。
+<br>
+<br>ご入金が確認でき次第、商品を発送いたします。
+<br>在庫商品限り、14時までに入金確認で即日発送致します。
+{% endif %}
+
+{% if Order.Payment.id == 4 %}
+<br>-------------------------------------------------------------------------
+<br>【代金引換】を選択いただいた方
+<br>
+<br>在庫商品限り、14時までのご注文で即日発送致します。
+<br>
+<br>※当社指定の配送会社が商品をお届けした際に商品代金および代金引換手数料をお支払いください。
+<br>※配送会社から領収書をお受け取りください。 領収書の宛名には、ご注文者様のお名前が記載されます。宛名の変更はできません。
+<br>※代金引換の場合、理由のいかんを問わず、領収書の再発行はできません。 領収書はお客様ご自身で大切に保管してください。 弊社からの領収書の発行・再発行は、一切承れません。ご了承ください。
+<br>{% endif %}
+
+
+
+
+
+
+
+
+        </div>
+<br>       <div class="col-4 text-end">
+<br>            ご注文商品についてのお問い合わせ・ご意見はこちら<br>
+            {{ BaseInfo.email02 }}
+        </div>
+    </div>
+    <div id="print-footer" class="text-center mt-5">
+        <button type="button" id="print">プリントアウトする</button>
+        <button onclick="window.close();">閉じる</button>
+    </div>
+</div>
+</body>
+</html>

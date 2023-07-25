@@ -1,0 +1,217 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'mypage' %}
+
+{% set mypageno = 'sbps_card_info' %}
+
+{% block javascript %}
+<script type="text/javascript" src="https://stbtoken.sps-system.com/sbpstoken/com_sbps_system_token.js"></script>
+
+    <script>
+
+    function getToken() {
+
+        let card_no = $('#credit_api_card_no_1').val() + $('#credit_api_card_no_2').val() + $('#credit_api_card_no_3').val() + $('#credit_api_card_no_4').val();
+        let expiration = $('#credit_api_expiration_date_year').val() + (0 + $('#credit_api_expiration_date_month').val()).slice(-2);
+
+        let requestObj = {
+            merchantId : $('#credit_api_merchant_id').val(),
+            serviceId : $('#credit_api_service_id').val(),
+            ccNumber : card_no,
+            ccExpiration : expiration,
+            securityCode : $('#credit_api_security_code').val()
+        }
+        com_sbps_system.generateToken(requestObj, callbackFunc);
+    }
+
+let callbackFunc = function(response) {
+    if (response.result == "OK") {
+
+        let tail4 = response.tokenResponse.maskedCcNumber.substr(12, 16)
+
+        $('#credit_api_token').val(response.tokenResponse.token);
+        $('#credit_api_token_key').val(response.tokenResponse.tokenKey);
+        $('#credit_api_card_no_1').val('****');
+        $('#credit_api_card_no_2').val('****');
+        $('#credit_api_card_no_3').val('****');
+        $('#credit_api_card_no_4').val(tail4);
+        $('#credit_api_expiration_date_year').val('');
+        $('#credit_api_expiration_date_month').val('');
+        $('#credit_api_security_code').val('');
+
+        $('#credit-form').submit();
+    } else {
+        let message = createMessageByErrorCode(response.errorCode);
+        alert(message);
+        return false;
+    }
+}
+
+function createMessageByErrorCode(errorCode) {
+    let kind = errorCode.substr(0,2).toString();
+    let param = errorCode.substr(2,5).toString();
+
+    let str_kind = '';
+    switch (kind) {
+        case '03':
+            str_kind = 'を入力してください。';
+            break;
+        case '04':
+            str_kind = 'の形式が不正です。';
+            break;
+        case '05':
+            str_kind = 'の桁数が不正です。';
+            break;
+        case '07':
+        case '99':
+        default:
+            // nop.
+            break;
+    }
+
+    let str_param = '';
+    switch (param) {
+        case '003':
+            str_param = 'カード番号';
+            break;
+        case '004':
+            str_param = '有効期限';
+            break;
+        case '005':
+            str_param = 'セキュリティコード';
+            break;
+        case '001':
+        case '002':
+        default:
+            // nop.
+            break;
+    }
+
+    let message = '';
+    let arr_kind = ['03', '04', '05'];
+    let arr_param = ['003', '004', '005'];
+    if (arr_kind.indexOf(kind) == -1 || arr_param.indexOf(param) == -1) {
+        message = 'システムでエラーが発生しました。\nお手数ですが、別のお支払い方法をご利用ください。\n\nエラーコード:' + response.errorCode.toString();
+    } else {
+        message = str_param + str_kind;
+    }
+
+    return message;
+}
+
+$(function () {
+    // デザイン上、日付フォームを消去する.
+    $('#credit_api_expiration_date_day').hide();
+
+    // 登録済カードを利用する場合はロックする.
+    $('#credit_api_use_stored_card_0').on('click', function() {
+        if ($('#credit_api_use_stored_card_0').prop('checked')) {
+            $('#credit_api_card_no_1').prop('disabled', true);
+            $('#credit_api_card_no_2').prop('disabled', true);
+            $('#credit_api_card_no_3').prop('disabled', true);
+            $('#credit_api_card_no_4').prop('disabled', true);
+            $('#credit_api_expiration_date_year').prop('disabled', true);
+            $('#credit_api_expiration_date_month').prop('disabled', true);
+            $('#credit_api_security_code').prop('disabled', true);
+        } else {
+            $('#credit_api_card_no_1').prop('disabled', false);
+            $('#credit_api_card_no_2').prop('disabled', false);
+            $('#credit_api_card_no_3').prop('disabled', false);
+            $('#credit_api_card_no_4').prop('disabled', false);
+            $('#credit_api_expiration_date_year').prop('disabled', false);
+            $('#credit_api_expiration_date_month').prop('disabled', false);
+            $('#credit_api_security_code').prop('disabled', false);
+        }
+    })
+
+    // 4文字になったら次をフォーカス、0文字になったら前をフォーカス
+    $('input[id^="credit_api_card_no"]').keyup(function() {
+        if ($(this).val().length >= $(this).attr('maxlength')) {
+            $(this).next().focus();
+        } else if ($(this).val().length == 0) {
+            $(this).prev().focus();
+        }
+    });
+
+    $('.ec-blockBtn--cancel').on('click', function () {
+        if (!$('#credit_api_use_stored_card_0').prop('checked')) {
+            if (validateForm()) {
+                getToken();
+                return false;
+            }
+            return false;
+        }
+    });
+})
+
+function validateForm() {
+    secCode = $('#credit_api_security_code').val();
+    if (secCode.length != 3) {
+        alert('セキュリティコードを入力してください。');
+        return false;
+    }
+    return true;
+}
+
+</script>
+{% endblock %}
+
+{% block main %}
+    <div class="ec-layoutRole__main">
+        <div class="ec-mypageRole">
+            <div class="ec-pageHeader">
+                <h1>{{ 'front.mypage.title'|trans }}/カード情報管理</h1>
+            </div>
+            {{ include('Mypage/navi.twig') }}
+        </div>
+        <div class="ec-mypageRole">
+            <form id="credit-form" method="post" action="?" novalidate class="h-adr">
+                <div>
+                    <div class="ec-rectHeading" id="sbps_credit_form">
+                        <h2>クレジット情報入力</h2>
+                        <div style="margin-bottom: 10px">
+                            <label class="ec-label">クレジットカード番号</label>
+                            <div id="sbps_card_no" class="form-inline">
+                                {{ form_widget(form.card_no_1) }}
+                                -
+                                {{ form_widget(form.card_no_2) }}
+                                -
+                                {{ form_widget(form.card_no_3) }}
+                                -
+                                {{ form_widget(form.card_no_4) }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 d-inline-block">
+                                <label class="ec-label">有効期限</label>
+                                <div id="sbps_expiration_date">{{ form_widget(form.expiration_date) }}</div>
+                            </div>
+
+                            <div class="col-md-3 d-inline-block">
+                                <label class="ec-label">セキュリティコード</label>
+                                <div id="sbps_security_code">{{ form_widget(form.security_code) }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_widget(form._token) }}
+                    {{ form_widget(form.merchant_id) }}
+                    {{ form_widget(form.service_id) }}
+                    {{ form_widget(form.token) }}
+                    {{ form_widget(form.token_key) }}
+
+                    <div class="ec-registerRole__actions">
+                        <div class="ec-off4Grid">
+                            <div class="ec-off4Grid__cell">
+                                <div class="ec-totalBox__btn" style="margin-top: 30px">
+                                    <button type="submit" class="ec-blockBtn--cancel">登録する</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

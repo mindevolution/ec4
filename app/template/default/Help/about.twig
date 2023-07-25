@@ -1,0 +1,189 @@
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+
+<style>
+#page_help_about .ec-layoutRole .ec-layoutRole__main {
+    background-image: url(/html/user_data/bg-aboutus.svg);
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#page_help_about .ec-layoutRole .ec-layoutRole__main {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.about-page-box {
+  padding: 60px 0 200px;
+  max-width: 760px;
+}
+.about-logo {
+  text-align: center;
+  width: 400px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+.about-logo img {
+  width: 100%;
+  display: block;
+}
+.about-page-box h2 {
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 32px;
+}
+.about-page-box p {
+  font-weight: 400;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+  vertical-align: middle;
+  margin-bottom: 24px;
+}
+.about-page-box .about-title-bg {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 3px;
+  font-size: 20px;
+  color: #fff;
+  background-color: #016cbe;
+}
+.about-page-box .about-lead {
+  margin-top: 60px;
+  font-size: 32px;
+}
+.about-feature {
+  display: flex;
+  margin-top: 30px;
+}
+.about-feature__header {
+  text-align: center;
+  border-radius: 3px 0 0 3px;
+  background: rgb(0,97,171);
+  background: linear-gradient(0deg, rgba(0,97,171,1) 0%, rgba(53,116,190,1) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  width: 240px;
+  min-height: 190px;
+}
+.about-feature__title {
+  color: #fff !important;
+  font-weight: bold !important;
+  font-size: 24px !important;
+  margin-bottom: 0 !important;
+}
+.about-feature__body {
+  padding: 24px 42px;
+  border-radius: 0 3px 3px 0;
+  background-color: #e7eef4;
+  display: flex;
+  align-items: center;
+  width: 470px;
+}
+.about-feature__list {
+  padding: 0;
+  margin: 0;
+  list-style: disc;
+  line-height: 1.6;
+  list-style-position: inside;
+}
+.about-feature__list-item {
+  font-size: 18px;
+  color: #222;
+}
+@media (max-width: 640px) {
+  #page_help_about .ec-layoutRole .ec-layoutRole__main {
+    background-image: none;
+  }
+  .about-logo {
+    width: auto;
+  }
+  .about-feature {
+    display: block;
+  }
+  .about-feature__header {
+    width: 100%;
+    min-height: auto;
+  }
+  .about-feature__body {
+    padding: 24px;
+    width: auto;
+  }
+}
+</style>
+<div class="ec-role">
+<div class="ec-off1Grid">
+  <div class="ec-off1Grid__cell">
+    <div class="about-page-box">
+      <div class="about-logo"><img src="https://ecnext.jp/html/template/default/assets/img/logo.png" alt=""></div>
+      <h2>ECNEXTについて</h2>
+      <p>イーシーネクストは、総合商社株式会社アースミライが運営する<br>
+        ペット関連商品の会員制オンラインショッピングサイトです。<br>
+        自社取り扱いブランドをはじめ、全世界から集めた逸品を<br>
+        幅広く取り揃えていきます。
+        </p>
+      <p>世界から一流のブランドやアイテムを集め、高品質な商品・サービスの提供を<br>
+        通じて、一流の日本のお客様に新しい感動や喜びを提供しています。
+        </p>
+      <h3 class="about-title-bg">サイト名の由来</h3>
+      <p>Carnival（カーニバル）とは、日本語で謝肉祭（しゃにくさい）という意味です。<br>
+        肉食動物である犬や猫に最適なアイテムをお届けしたいという強い思いからイーシーネクストという名前にしました。
+        </p>
+      <p>大切な家族の一員のために。<br>
+        愛犬、愛猫が安全に健康に長生きしていただくために、<br>
+        世界中から集めた逸品を、大切なペットのもとへ。
+        </p>
+      <section class="about-feature-wrap">
+        <div class="about-feature">
+          <div class="about-feature__header">
+            <p class="about-feature__title">会員ステージに<br>
+              応じた特典</p>
+          </div>
+          <div class="about-feature__body">
+            <ul class="about-feature__list">
+              <li class="about-feature__list-item">入会金・年会費無料</li>
+              <li class="about-feature__list-item">商品購入で最大20%のポイント還元</li>
+              <li class="about-feature__list-item">初回購入で5倍ボーナスポイント獲得</li>
+              <li class="about-feature__list-item">限定セールやイベントへご招待</li>
+            </ul>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature__header">
+            <p class="about-feature__title">お買物で使える<br>
+              ポイント
+              </p>
+          </div>
+          <div class="about-feature__body">
+            <ul class="about-feature__list">
+              <li class="about-feature__list-item">獲得後1年間有効</li>
+              <li class="about-feature__list-item">獲得したポイントは1ポイントから使用可能</li>
+              <li class="about-feature__list-item">1ポイントを1円として使用可能</li>
+            </ul>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature__header">
+            <p class="about-feature__title">ライフスタイルに<br>合わせて利用可能
+              </p>
+          </div>
+          <div class="about-feature__body">
+            <ul class="about-feature__list">
+              <li class="about-feature__list-item">365日・24時間いつでも注文可能</li>
+              <li class="about-feature__list-item">様々な決済方法を選択可能</li>
+              <li class="about-feature__list-item">年中無休、最短で即日発送可能</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <p class="about-lead">ペットとの暮らしに更なる楽しみが生まれ、<br>
+        輝く毎日へ。
+        </p>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}

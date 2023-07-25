@@ -1,0 +1,136 @@
+<script>
+
+    var order_ids = {{  order_ids|json_encode }};
+    $(function () {
+        for(var key in order_ids) {
+            var val = order_ids[key];
+            $('#check_' + val ).parent().parent().children('td:last').before('<td class="align-middle text-center">' +  $('#insert_area' + val).html() +'</td>');
+            $('#insert_area' + val).remove();
+        }
+
+        if( 0 < order_ids.length) {
+            $('.table > thead > tr > th:last ').before('<th class="border-top-0 pt-2 pb-2 text-center">' + $('#insert_th_text_area').html() + '</th>');
+
+            // $('button#btn_bulk_status').after( $('#insert_select_button_area').html());
+             $('#form_bulk > .card.rounded.border-0.mb-4.d-block').before($('#insert_select_button_area2').html());
+        }
+        $('#insert_th_text_area').remove();
+        // $('#insert_select_button_area').remove();
+         $('#insert_select_button_area2').remove();
+    });
+
+    $(function() {
+        var updater;
+        // プログレスバーの表示を制御
+        $('#bulkChange, .rakuten_progressModal').on('click', function (e) {
+            var eventTarget = $(e.currentTarget);
+            var type = eventTarget.data('type');
+            var modal = $('#sentUpdateModal');
+            switch (type) {
+                case 'rakuten_payment_status':
+                    if ($('#option_bulk_rakuten_payment_status').val() == '') {
+                        alert('決済状況を選択してください');
+                        return;
+                    }
+                     updater = new RakutenStatusUpdate(modal, eventTarget);
+                     modal.modal();
+            }
+
+            $('.modal-title', modal).text("{{ 'rakuten_card4.admin.order_index.change_status'|trans }}");
+            $('.modal-body > p.modal-message', modal).text("{{ 'admin.order.bulk_action__in_progress_message'|trans }}");
+            $('button', modal).hide();
+            $('#bulk-options').hide();
+            $('.progress', modal).show();
+            updater.totalCount = updater.getTotalCount();
+            var progress = new $.Deferred();
+            progress.progress(function () {
+                updater.progress(this, progress);
+            }).fail(function () {
+                updater.fail(this);
+            }).always(function () {
+                updater.always(this);
+            });
+            updater.getPromises(progress);
+        });
+    });
+
+
+ /*
+  * 楽天決済状況更新
+  */
+    function RakutenStatusUpdate(modal, eventTarget) {
+        ConfirmationModal.call(this, modal);
+        this.eventTarget = eventTarget;
+    }
+    // extend super class
+    RakutenStatusUpdate.prototype = Object.create(ConfirmationModal.prototype, {
+        constructor: {
+            value: ConfirmationModal
+        },
+        modalTitle: {
+            value: "{{ 'rakuten_card4.admin.order.change_status'|trans }}"
+        },
+        getTotalCount: {
+            value: function () {
+                return $('input[data-id]:checked').length;
+            }
+        },
+        getPromises: {
+            value: function (progress) {
+                return $('input[data-id]:checked').map(function () {
+                    var id = $(this).val();
+                    var url = '{{ url('admin_shipping_update_rakuten_status')}}' + id + '/';
+                    var data = {'admin_shipping_update_rakuten_status': $('#option_bulk_rakuten_payment_status').val()};
+                    return ConfirmationModal.prototype.getPromises.call(this, progress, url, data);
+                });
+            }
+        }
+    });
+</script>
+
+<div id="insert_th_text_area">
+    {{ 'rakuten_card4.admin.order_index.payment_status.table_header'|trans }}
+</div>
+
+{% if pagination and pagination.totalItemCount %}
+    {% for Order in pagination %}
+        {% for Shipping in Order.Shippings %}
+        <div id="insert_area{{ Shipping.id }}">
+            <div>
+                {% if Order.Rc4OrderPayment is not null %}
+                    {%  if Order.Rc4OrderPayment.isConenience %}
+                        {{ Order.Rc4OrderPayment.PaymentStatusName }}
+                    {%  elseif Order.Rc4OrderPayment.isCard %}
+                        {{ Order.Rc4OrderPayment.PaymentStatusName }}
+                    {% endif %}
+                {% else %}
+                    --
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+<div id="insert_select_button_area2">
+    <div class="row justify-content-between mb-2">
+        <div class="col-7">
+            <div class="row justify-content-between">
+                <div class="col d-none btn-bulk-wrapper">
+                    <label class="mr-2" data-tooltip="true" data-placement="top" title="" >{{ 'rakuten_card4.admin.order_index.select.label'|trans }}</label>
+                    <div class="d-inline-block mr-2">
+                        <select class="custom-select" id="option_bulk_rakuten_payment_status">
+                            <option value="" selected>{{ 'rakuten_card4.admin.order.change_status'|trans }}</option>
+                            {% for key, item in RakutenPaymentStatuses %}
+                                <option value="{{ key }}">{{ item|trans  }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="button" id="btn_bulk_rakuten_payment_status" class="btn btn-ec-regular mr-2 rakuten_progressModal" data-type="rakuten_payment_status" data-submit="bulk">
+                        {{ 'admin.common.decision'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

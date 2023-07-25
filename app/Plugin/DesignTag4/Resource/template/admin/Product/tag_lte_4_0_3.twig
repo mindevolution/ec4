@@ -1,0 +1,35 @@
+{% set renderTags = ['show_product_list_flg', 'text_color', 'background_color', 'border_color'] %}
+
+{% for f in form if f.vars.eccube_form_options.auto_render and f.vars.name in renderTags %}
+    <div class="col-auto align-items-center designTagAdditionalNew" style="display: none">
+        <div>
+            <span>{{ f.vars.label|trans }}</span>
+            {{ form_widget(f) }}
+            {{ form_errors(f) }}
+        </div>
+    </div>
+{% endfor %}
+
+{% for Tag in Tags %}
+    {% for f in forms[Tag.id] if f.vars.eccube_form_options.auto_render %}
+        {% if f.vars.name in renderTags %}
+            <div class="col-auto align-items-center designTagAdditionalEdit" data-tag-id="{{ Tag.id }}" style="display: none">
+                <div>
+                    <span>{{ f.vars.label|trans }}</span>
+                    {{ form_widget(f) }}
+                    {{ form_errors(f) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+<script>
+    $(function () {
+        $('.designTagAdditionalNew').appendTo($('.card > .list-group > .list-group-item:first-child > form')).show()
+        $('.designTagAdditionalEdit').each(function () {
+            var tagId = $(this).attr('data-tag-id')
+            $(this).appendTo($('#ex-tag-' + tagId + ' > form')).show()
+        })
+    })
+</script>

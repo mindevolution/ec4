@@ -1,0 +1,37 @@
+{#
+This file is part of Refine
+
+Copyright(c) 2022 Refine Co.,Ltd. All Rights Reserved.
+
+https://www.re-fine.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+<script>
+    const favoriteCountList = JSON.parse('{{ favoriteCountList|json_encode|raw }}')
+    $(function () {
+        $('table tr').each(function (i, tr) {
+
+            if (i !== 0) {
+                // product id 抽出
+                let favoriteCount = 0
+                const s = tr.id.split('-')
+                if (s.length === 3) {
+                    const productId = s[2]
+                    if (favoriteCountList[productId] !== undefined) {
+                        favoriteCount = favoriteCountList[productId]
+                    }
+
+                }
+
+                $('td:eq(4)', this).after('<td class="align-middle">' + favoriteCount + '</td>');
+
+            } else {
+                $('th:eq(4)', this).after('<th class="border-top-0 pt-2 pb-2">{{ 'admin.product_customer_favorite_product_count'|trans }}</th>');
+            }
+        });
+
+
+    });
+</script>

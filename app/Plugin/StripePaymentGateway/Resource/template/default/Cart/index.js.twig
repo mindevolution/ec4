@@ -1,0 +1,34 @@
+<script>
+
+{% for CartIndex, Cart in Carts %}
+    {% set cartKey = Cart.cart_key %}
+
+    $("<div id='button-{{ cartKey }}' style='margin-bottom: 10px'></div>").insertBefore($(".ec-blockBtn--action[href*='{{ cartKey }}']"))
+    
+    registerPayButton({
+        // shipping_fetch_url : 'https://279a4a530961.ngrok.io/plugin/stripe_payment_gateway/pr_shipping',
+        // pay_url            : "https://279a4a530961.ngrok.io/plugin/stripe_payment_gateway/pr_pay",
+        button_id          :  'button-{{ cartKey }}',
+        getData            :    function() {
+            return { "cart_key" : "{{ cartKey }}" }
+        },
+        onSuccess          :    function(){
+            location.href = "{{ url('shopping_complete') }}"
+        },
+        request_data: {
+            country     :   "JP",
+            currency    :   "jpy",
+            total       :   {
+                label  :    "{{ 'stripe_payment_gateway.payrequest.pay_now_label'|trans }}",
+                amount :    parseInt("{{ Cart.totalPrice }}".replace(",", ""))
+            },
+            requestPayerName    : true,
+            requestPayerEmail   : true,
+            requestPayerPhone   : true,
+            requestShipping     : true
+        }
+    })
+
+
+{% endfor %}
+</script>

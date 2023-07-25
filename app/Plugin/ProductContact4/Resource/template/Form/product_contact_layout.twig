@@ -1,0 +1,33 @@
+
+{%- extends 'form_div_layout.html.twig' -%}
+
+{%- block hidden_row -%}
+    {% if data %}
+    {% set Product = repository('Eccube\\Entity\\Product').find(data) %}
+    <dl class="product_row">
+        <dt>
+            <label class="ec-label required" for="contact_email">商品情報</label>
+        </dt>
+        <dd>
+            <div>
+                    {% if Product %}
+                        <img style="width: 300px;" src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}"><br>
+                        {{ Product.name }}
+                    {% endif %}
+            </div>
+            {{ form_widget(form) }}
+        </dd>
+    </dl>
+    <script>
+        $(function () {
+            var $parent = $('.product_row').closest('div');
+            $('.product_row').remove().prependTo($parent)
+        })
+    </script>
+    {% endif %}
+{%- endblock hidden_row -%}
+
+{%- block hidden_widget -%}
+    {%- set type = type|default('hidden') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock hidden_widget -%}

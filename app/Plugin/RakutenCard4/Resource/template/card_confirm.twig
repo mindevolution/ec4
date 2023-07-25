@@ -1,0 +1,63 @@
+<script>
+    $(function () {
+        // クレジット入力フォームをお問い合わせ欄の直前に追加
+        $('#rakuten_card4_credit_form').insertBefore($('#shopping-form > div > div.ec-orderRole__detail > div.ec-orderConfirm'));
+    });
+</script>
+{% set month_point = 'rakuten_card4_expiration_month' %}
+{% set year_point = 'rakuten_card4_expiration_year' %}
+<style>
+    .rakuten_card4_input_area dl dd
+    {
+        padding-top: 5px;
+    }
+</style>
+{{ include("@RakutenCard4/card_parts_style.twig")}}
+
+<div id="rakuten_card4_credit_form" class="ec-orderPayment">
+    <div class="ec-orderPayment">
+        {% set OrderPayment = Order.Rc4OrderPayment %}
+        <div class="ec-rectHeading">
+            <h2>{{ OrderPayment.UseCardLabel|trans }}</h2>
+        </div>
+        <div class="ec-input">
+            <div class="rakuten_card4_input_area">
+                <dl class="only_card_contents">
+                    <dt>{{ 'rakuten_card4.front.shopping.card.input.card_no.title'|trans }}</dt>
+                    <dd>
+                        {{ OrderPayment.getCardNo }}
+                    </dd>
+                </dl>
+                <dl class="input_card_expire_area only_card_contents">
+                    <dt>{{ 'rakuten_card4.front.shopping.card.input.card_expiration.title'|trans }}</dt>
+                    <dd>
+                        {{ OrderPayment.getCardExpireDate }}
+                    </dd>
+                </dl>
+                {% if is_cvv_use() %}
+                    <dl>
+                        <dt>{{ 'rakuten_card4.admin.config.card_cvv_use'|trans }}</dt>
+                        <dd>
+                            {{ eccube_config.eccube_default_password }}
+                        </dd>
+                    </dl>
+                {% endif %}
+                <dl>
+                    <dt class="save_pay_methods">{{ 'rakuten_card4.admin.config.card_installments'|trans }}</dt>
+                    <dd>
+                        {{ OrderPayment.getCardInstallmentLabel }}
+                    </dd>
+                </dl>
+
+                {% if Order.Customer is not empty %}
+                    <dl class="only_card_contents">
+                        <dt>{{ 'rakuten_card4.front.shopping.card.register.title'|trans }}</dt>
+                        <dd>
+                            {{ OrderPayment.CardCheckRegisterLabel|trans }}
+                        </dd>
+                    </dl>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

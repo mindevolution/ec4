@@ -1,0 +1,30 @@
+{# タグ #}
+<style>
+    .ec-shelfRole .ec-shelfRole__tags {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0;
+        padding-bottom: 16px;
+    }
+    .ec-shelfRole .ec-shelfRole__tag {
+        display: inline-block;
+        font-size: 80%;
+        list-style: none;
+        color: #525263;
+        border: solid 2px #d7dadd;
+        border-radius: 3px;
+        background-color: #f5f7f8;
+        padding: 2px 5px;
+    }
+
+    {% for Tag in DesignTags %}
+    {% if Tag.show_product_list_flg %}
+    .ec-shelfRole .ec-shelfRole__tag.tag_{{ Tag.id }}{
+    {% if Tag.text_color %}color: {{ Tag.text_color }};{% endif %}
+    {% if Tag.background_color %}background-color: {{ Tag.background_color }};{% endif %}
+    {% if Tag.border_color %}border-color: {{ Tag.border_color }};{% endif %}
+    }
+    {% endif %}
+    {% endfor %}
+
+</style>

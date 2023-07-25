@@ -1,0 +1,1 @@
+{"name":"ec-cube\/ProductContact4","version":"1.0.3","description":"\u5546\u54c1\u554f\u3044\u5408\u308f\u305b for EC-CUBE4","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.7"},"extra":{"code":"ProductContact4","id":2005}}

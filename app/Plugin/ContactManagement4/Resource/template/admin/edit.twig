@@ -1,0 +1,425 @@
+
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['contact', 'contact_new'] %}
+
+{% block title %}{{ 'admin.contact.contact_registration'|trans }}{% endblock %}
+{% block sub_title %}{{ 'admin.contact.contact_management'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+    <script src="//yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+    <script>
+        $(function () {
+        // 会員検索
+        $('#searchCustomerModalButton').on('click', function() {
+            var list = $('#searchCustomerModalList');
+            list.children().remove();
+
+            $.ajax({
+                url: '{{ url('plugin_contact_search_customer_html') }}',
+                type: 'POST',
+                dataType: 'html',
+                data: {'search_word': $('#admin_search_customer_multi').val()}
+            }).done(function(data) {
+                $('#searchCustomerModalList').html(data);
+            }).fail(function(data) {
+                alert('search customer failed.');
+            });
+        });
+    });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <form name="contact_form" role="form" id="contact_form" method="post" class="h-adr"
+          action="{%- if Contact.id %}{{ url('plugin_contact_edit', { id : Contact.id }) }}{% else %}{{ url('plugin_contact_new') }}{% endif -%}"
+          novalidate>
+        <span class="p-country-name" style="display:none;">Japan</span>
+        {{ form_widget(form._token) }}
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8"><span class="card-title">{{ 'admin.contact.contact_info'|trans }}</span>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#contactInfo"
+                                       aria-expanded="false" aria-controls="contactInfo">
+                                        <i class="fa fa-angle-up fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="contactInfo">
+                            <div class="card-body">
+                                {% if Contact.id %}
+                                    <div class="row mb-2">
+                                        <div class="col-3">
+                                            <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                                 title="{{ 'tooltip.contact.contact_id'|trans }}">
+                                                <span>{{ 'admin.contact.contact_id'|trans }}</span>
+                                                <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <p>{{ Contact.id }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                             title="{{ 'tooltip.contact.customer_id'|trans }}">
+                                            <span>{{ 'admin.contact.customer_id'|trans }}</span>
+                                            <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        {{ form_widget(form.Customer) }}
+                                        <p>
+                                            ID:
+                                            <span id="customerLink">
+                                            {% if Contact.Customer %}<a href="{{ url('admin_customer_edit', {'id' :  Contact.Customer.id }) }}">{{ Contact.Customer.id }}</a>{% else %}未指定{% endif %}
+                                            </span>
+
+                                            <a class="btn btn-ec-regular ml-1 px-3" data-toggle="modal" data-target="#searchCustomerModal">{{ 'admin.contact.edit.select'|trans }}</a>
+                                        </p>
+                                        <!-- 会員検索モーダル -->
+                                        <div class="modal fade" id="searchCustomerModal" tabindex="-1" role="dialog" aria-labelledby="searchCustomerModal" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title font-weight-bold">{{ 'admin.order.search_customer_title'|trans }}</h5>
+                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ form_widget(searchCustomerModalForm.multi, { attr : {'class': 'mb-2searchCustomerModal', placeholder : 'admin.customer.multi_search_label' }}) }}
+                                                        <button type="button" id="searchCustomerModalButton" class="btn btn-ec-conversion px-5 mb-4 mt-2">{{ 'admin.common.search'|trans }}</button>
+                                                        <div class="form-group" id="searchCustomerModalList"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% if Contact.id %}
+                                    <div class="row mb-2">
+                                        <div class="col-3">
+                                            <div class="d-inline-block">
+                                                <span>{{ 'admin.contact.contact_date'|trans }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <p>{{ Contact.contact_date|date_min }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% if Contact.Product %}
+                                    <div class="row mb-2">
+                                        <div class="col-3">
+                                            <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                                 title="{{ 'tooltip.contact.product'|trans }}">
+                                                <span>{{ 'admin.contact.product'|trans }}</span>
+                                                <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <p><a href="{{ url('admin_product_product_edit', {'id' :  Contact.Product.id }) }}">{{ Contact.Product.name }}</a></p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.name'|trans }}</span>
+                                        <span class="badge badge-primary ml-1">{{ 'admin.common.required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_widget(form.name.name01) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form_widget(form.name.name02) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_errors(form.name.name01) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form_errors(form.name.name02) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.kana'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_widget(form.kana.kana01) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form_widget(form.kana.kana02) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_errors(form.kana.kana01) }}
+                                            </div>
+                                            <div class="col">
+                                                {{ form_errors(form.kana.kana02) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-3"><span>{{ 'admin.common.address'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <div class="row justify-content-start">
+                                                <div class="col-auto pr-0 align-self-center"><span>{{ 'admin.common.postal_symbol'|trans }}</span></div>
+                                                <div class="col-auto">
+                                                    {{ form_widget(form.postal_code) }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    {{ form_errors(form.postal_code) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row justify-content-start">
+                                                <div class="col-auto">
+                                                    {{ form_widget(form.address.pref) }}
+                                                    {{ form_errors(form.address.pref) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form_widget(form.address.addr01, { attr : { placeholder : 'admin.common.address_sample_01' }} ) }}
+                                            {{ form_errors(form.address.addr01) }}
+                                        </div>
+                                        <div class="mb-3">
+                                            {{ form_widget(form.address.addr02, { attr : { placeholder : 'admin.common.address_sample_02' }}) }}
+                                            {{ form_errors(form.address.addr02) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.mail_address'|trans }}</span>
+                                        <span class="badge badge-primary ml-1">{{ 'admin.common.required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ form_widget(form.email) }}
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.phone_number'|trans }}</span>
+
+                                    </div>
+                                    <div class="col">
+                                        {{ form_widget(form.phone_number) }}
+                                        {{ form_errors(form.phone_number) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.contact.contents'|trans }}</span>
+                                        <span class="badge badge-primary ml-1">{{ 'admin.common.required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ form_widget(form.contents, {'attr' : {'style' : 'height: 200px;'}}) }}
+                                        {{ form_errors(form.contents) }}
+                                    </div>
+                                </div>
+
+
+
+                                {# エンティティ拡張の自動出力 #}
+                                {% for f in form if f.vars.eccube_form_options.auto_render %}
+                                    {% if f.vars.eccube_form_options.form_theme %}
+                                        {% form_theme f f.vars.eccube_form_options.form_theme %}
+                                        {{ form_row(f) }}
+                                    {% else %}
+                                        <div class="row mb-2">
+                                            <div class="col-3">
+                                                <span>{{ f.vars.label|trans }}</span>
+                                            </div>
+                                            <div class="col">
+                                                {{ form_widget(f) }}
+                                                {{ form_errors(f) }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                    {% if isEdit %}
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                         title="返信一覧">
+                                        <span class="card-title">
+                                            返信一覧({{ Contact.ContactReplies|length }})
+{#                                            {{ 'admin.product.product_class__card_title'|trans }}#}
+                                            <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#standardConfig" aria-expanded="false"
+                                       aria-controls="standardConfig">
+                                        <i class="fa fa-angle-up fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="standardConfig">
+                            <div class="card-body">
+
+                                <div class="text-center pb-2">
+                                    <a class="btn btn-ec-regular" href="{{ url('plugin_contact_reply_new', {'contact_id' : Contact.id}) }}">新しく返信する</a>
+                                </div>
+
+                                {% if Contact.ContactReplies|length %}
+                                <table class="table table-striped">
+                                    <thead class="table-active">
+                                    <tr>
+                                        <th class="pl-3 pt-2 pb-2" style="width: 120px;">
+                                            回答日時
+{#                                            {{ 'admin.product.class_category1__short'|trans }}#}
+                                        </th>
+                                        <th class="pt-2 pb-2">
+                                            回答内容
+{#                                            {{ 'admin.product.class_category2__short'|trans }}#}
+                                        </th>
+                                        <th class="pt-2 pb-2" style="width: 100px;">
+                                            メール送信
+                                            {#                                            {{ 'admin.product.class_category2__short'|trans }}#}
+                                        </th>
+                                        <th class="pr-3 pt-2 pb-2" style="width: 50px;"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for ContactReply in Contact.ContactReplies %}
+                                    <tr>
+                                        <td class="pl-3">{{ ContactReply.reply_date|date_min }}</td>
+{#                                        tdå<td class="pl-3">{{ ContactReply.reply_person }}</td>#}
+                                        <td class="pl-3">{{ ContactReply.contents[:50]|nl2br }}</td>
+                                        {#                                                    <td>{% if Class.hasClassCategory2 %}{{ Class.ClassCategory2.name }}{% endif %}</td>#}
+                                        {#                                                    <td>{{ Class.code }}</td>#}
+                                        <td>{% if ContactReply.MailHistories|length %}<span class="badge badge-ec-blue">送信済</span> {% endif %}</td>
+                                        <td class="pr-3">
+                                            <a href="{{ url('plugin_contact_reply_edit', {'contact_id' : ContactReply.Contact.id, 'id': ContactReply.id}) }}">
+                                                <i class="fa fa-edit fa-lg text-secondary"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% endif %}
+
+{#                                <div class="d-block text-center text-center">#}
+{#                                    <a href="{{ path('admin_product_product_class', { 'id' : id }) }}" class="btn btn-ec-regular" data-action="confirm"#}
+{#                                       title="{{ 'admin.common.move_to_confirm_message'|trans({#}
+{#                                           '%name%' : 'admin.product.product_class_registration'|trans#}
+{#                                       }) }}">{{ 'admin.product.product_class__confirm_of_product'|trans }}</a>#}
+{#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="c-contentsArea__secondaryCol">
+                <div class="c-secondaryCol">
+
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                         title="{{ 'tooltip.product.shop_memo'|trans }}">
+                                        <span class="card-title">
+                                            {{ 'admin.common.shop_memo'|trans }}
+                                            <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#shopMemo" aria-expanded="false"
+                                       aria-controls="shopMemo">
+                                        <i class="fa fa-angle-up fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="shopMemo">
+                            <div class="card-body">
+                                {{ form_widget(form.note, { attr : { rows : "8"} }) }}
+                                {{ form_errors(form.note) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink"
+                               href="{{ url('plugin_contact_page', { page_no : app.session.get('eccube.admin.contact.search.page_no')|default('1') } ) }}?resume=1">
+                                <i class="fa fa-backward" aria-hidden="true"></i>
+                                <span>{{ 'admin.contact.contact_list'|trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="ex-conversion-action" class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                {{ form_widget(form.Staff) }}
+                                {{ form_errors(form.Staff) }}
+                            </div>
+
+                            <div class="col-auto">
+                                {{ form_widget(form.status) }}
+                                {{ form_errors(form.status) }}
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5"
+                                        type="submit">{{ 'admin.common.registration'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

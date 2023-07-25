@@ -1,0 +1,211 @@
+<script type="text/javascript" src="{{ token_url }}"></script>
+<script>
+    function getStyles(){
+        return inputElementStyles = {
+            base: {
+                'width': '99%',
+                'color': '#555555',
+                'border': '1px solid #ccc',
+                'border-radius': '4px',
+                'font-size': '14px'
+            },
+            valid: {
+                'color': 'green',
+                'border': '2px solid green',
+                'border-radius': '4px'
+            },
+            invalid: {
+                'border': '1px solid #CF3F34',
+                'background-color': '#FDF1F0'
+            },
+            // focus: {
+            //     'color': 'black',
+            //     'border': '1px solid violet',
+            //     'border-radius': '4px'
+            // },
+        };
+    }
+    function setUpCardAll(){
+        const inputElementStyles = getStyles();
+        var myElements = {
+            cardNumber: {
+                mount: '#{{ card_point }}',
+                styles: inputElementStyles
+            },
+            expirationMonth: {
+                mount: '#{{ month_point }}',
+                styles: inputElementStyles
+            },
+            expirationYear: {
+                mount: '#{{ year_point }}',
+                styles: inputElementStyles
+            }
+            {% if is_cvv_use() %}
+            ,
+            cvv: {
+                mount: '#{{ cvv_point }}',
+                styles: inputElementStyles
+            }
+            {% endif %}
+        };
+        payvault.setup(myElements);
+    }
+</script>
+<script>
+    const card_error = '{{ 'rakuten_card4.front.card.payvault.card_error'|trans }}';
+    var card_valid = card_error;
+    const expiration_error = '{{ 'rakuten_card4.front.card.payvault.expiration_error'|trans }}';
+    var expiration_valid = expiration_error;
+    {% if is_cvv_use() %}
+        const cvv_error = '{{ 'rakuten_card4.front.card.payvault.cvv_error'|trans }}';
+        var cvv_valid = cvv_error;
+        var cvv_valid_for_card = cvv_error;
+        var cvv_length = 0;
+    {% endif %}
+    function setErrorCard(check){
+        if (check){
+            card_valid = '';
+        }else{
+            card_valid = card_error;
+        }
+    }
+    function setErrorExpiration(check){
+        if (check){
+            expiration_valid = '';
+        }else{
+            expiration_valid = expiration_error;
+        }
+    }
+    function setErrorCvv(check){
+        if (check){
+            cvv_valid = '';
+        }else{
+            cvv_valid = cvv_error;
+        }
+    }
+    function setErrorCvvForCard(check){
+        if (check){
+            cvv_valid_for_card = '';
+        }else{
+            cvv_valid_for_card = cvv_error;
+        }
+    }
+    payvault.card.addEventListener('cardNumber', 'blur', function (event){
+        setErrorCard(event.valid);
+        validateCvv();
+    });
+    payvault.card.addEventListener('expirationMonth', 'blur', function (event){
+        setErrorExpiration(event.valid && event.validDate);
+    });
+    payvault.card.addEventListener('expirationYear', 'blur', function (event){
+        setErrorExpiration(event.valid && event.validDate);
+    });
+    {% if is_cvv_use() %}
+    payvault.card.addEventListener('cvv', 'blur', function (event){
+        cvv_length = event.length;
+        setErrorCvv(event.valid);
+        setErrorCvvForCard(event.validCvvForCardNumber);
+    });
+    {% endif %}
+    function validateCardNumber(){
+        payvault.card.validateCardNumber(function(isValid) {
+            setErrorCard(isValid);
+        });
+    }
+    function validateExpiration(){
+        payvault.card.validateExpiration(function(isValid) {
+            validateExpiration(isValid);
+        });
+    }
+    function validateCvv(){
+        {% if is_cvv_use() %}
+        payvault.card.validateCvv(function(isValid) {
+            setErrorCvv(isValid);
+        });
+        payvault.card.validateCvvForCardNumber(function(isValid) {
+            setErrorCvvForCard(isValid);
+        });
+        {% endif %}
+    }
+
+    function isValidInputCard()
+    {
+        if (card_valid.length > 0){
+            return card_valid;
+        }else if (expiration_valid.length > 0){
+            return expiration_valid;
+        }
+        {% if is_cvv_use() %}
+        else if (cvv_valid_for_card.length > 0){
+            return cvv_valid_for_card;
+        }
+        {% endif %}
+
+        return '';
+    }
+
+    function isValidRegisterCard()
+    {
+        {% if is_cvv_use() %}
+            if (cvv_valid.length > 0){
+                if (cvv_length == 3 || cvv_length == 4){
+                    return '';
+                }else{
+                    return cvv_valid;
+                }
+            }
+        {% endif %}
+        return '';
+    }
+
+    function execCreateToken(input_card)
+    {
+        var integration_kind = '';
+        if (input_card){
+            {% if is_cvv_use() %}
+                integration_kind = 'cardTokenWithCvv';
+            {% else %}
+                integration_kind = 'cardToken';
+            {% endif %}
+        }
+        {% if is_cvv_use() %}
+        else{
+            integration_kind = 'cvvToken';
+        }
+        {% endif %}
+
+        $card_form = $('#{{ form_point }}');
+        if (integration_kind){
+            service_id = '{{ service_id }}';
+            payvault.card.createToken(
+                {
+                    serviceId: service_id,
+                    attachResponseTarget: document.getElementById('{{ form_point }}'),
+                    integrationCase: integration_kind,
+                    maxRetrialTimes: 3,
+                    retryInterval: 100,
+                    timeout: 1000,
+                }, function (token){
+                    console.log(token);
+
+                    error_message = '';
+                    if ('resultType' in token){
+                        $card_form.append('<input type="hidden" name="resultType" value="' + token.resultType + '">');
+                        if (token.resultType == 'failure'){
+                            $card_form.append('<input type="hidden" name="errorCode" value="' + token.errorCode + '">');
+                            $card_form.append('<input type="hidden" name="errorMessage" value="' + token.errorMessage + '">');
+                        }
+                    }
+
+                    $card_form.submit();
+                });
+        }else{
+            $card_form.submit();
+        }
+    }
+</script>
+<script>
+    $(function () {
+        setUpCardAll();
+    });
+</script>

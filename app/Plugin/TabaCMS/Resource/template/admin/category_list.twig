@@ -1,0 +1,107 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+{% use "bootstrap_4_layout.html.twig" %}
+
+{% set const = TabaCMSConstants %}
+{% set menus = [constant('PLUGIN_CATEGORY_ID',const),constant('PLUGIN_CODE_LC',const),constant('PLUGIN_CODE_LC',const)~'_category_'~type.typeId] %}
+{% set bind_prefix = constant('ADMIN_BIND_PREFIX',const) %}
+{% set tag_id_prefix = constant('PLUGIN_CODE_LC',const)~'_type_list' %}
+{% set trans_prefix = constant('PLUGIN_CODE_LC',const)~'.admin' %}
+{% set include_prefix = constant('PLUGIN_CODE',const)~'/Resource/template/admin/' %}
+{% set body_class = constant('PLUGIN_CODE_LC',const)~'_page' %}
+{% block title %}{{ constant('PAGE_TITLE',const)|raw }}{% endblock %}
+{% block sub_title %}{{ type.typeName }} - {{ (trans_prefix~'.title.category_edit')|trans }}{% endblock %}
+
+{% block javascript %}
+<script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.core.min.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.widget.min.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js', 'admin') }}"></script>
+<script>
+$(function() {
+    $(".sortable").sortable({
+        items: 'tr',
+        handle: '.icon_sortable',
+        cursor: 'move',
+        opacity: 0.7,
+        update: function(e, ui) {
+            $('body').append($('<div class="modal-backdrop show"></div>'));
+            $.ajax({
+                url: '{{ path(bind_prefix~'_category_sort',{type_id:type.typeId}) }}',
+                type: 'POST',
+                data: '{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}={{ csrf_token }}&' + $(this).sortable('serialize'),
+                cache: false,
+            }).fail((data, textStatus, jqXHR) => {
+            }).done((data, textStatus, jqXHR) => {
+            }).always((data, textStatus, jqXHR) => {
+                $(".modal-backdrop").remove();
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block main %}
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-body">
+                        {% if list is empty or list|length == 0 %}
+                            データがありません。カテゴリーを登録してください。
+                        {% else %}
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">表示順</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">ID</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">カテゴリー名</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">データキー(スラッグ)</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">投稿数</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">&nbsp;</th>
+                                        <th class="border-top-0 pl-3 pt-2 pb-2">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="sortable">
+                                    {% for row in list %}
+                                    <tr id="category_ids_{{ row.getCategoryId }}">
+                                        <td  class="align-middle pl-2 pt-2 pb-2 icon_sortable" style="cursor:move;"><i class="fa fa-bars text-ec-gray"></i></td>
+                                        <td class="align-middle pl-2 pt-2 pb-2">{{ row.getCategoryId }}</td>
+                                        <td class="align-middle pl-2 pt-2 pb-2"><a href="{{ path(bind_prefix~'_category_edit',{type_id:type.getTypeId,category_id:row.getCategoryId}) }}">{{ row.getCategoryName }}</a></td>
+                                        <td class="align-middle pl-2 pt-2 pb-2">{{ row.getDataKey }}</td>
+                                        <td class="align-middle pl-2 pt-2 pb-2 text-right">{{ row.getPostCount|default(0)|number_format }}</td>
+                                        <td class="align-middle pl-2 pt-2 pb-2 text-center"><a href="{{ path(bind_prefix~'_category_edit',{type_id:type.getTypeId,category_id:row.getCategoryId}) }}"><i class="fa fa-pencil  fa-lg text-secondary"></i> 編集</a></td>
+                                        <td class="align-middle pl-2 pt-2 pb-2 text-center">
+                                            {% if row.getPostCount > 0 %}
+                                            <a style="cursor: not-allowed;"><i class="fa fa-close fa-lg text-secondary"></i> 削除</a>
+                                            {% else %}
+                                            <a href="{{ path(bind_prefix~'_category_delete',{category_id:row.getCategoryId}) }}" {{ csrf_token_for_anchor() }} data-method="delete" data-message="このデータを削除してもよろしいですか？"><i class="fa fa-close fa-lg text-secondary"></i> 削除</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-footer">
+                        <div id="{{ tag_id_prefix }}__footer">
+                            <div id="{{ tag_id_prefix }}__insert_button" class="text-center btn_area">
+                                <a href="{{ url(bind_prefix~'_category_new',{type_id:type.getTypeId}) }}" class="btn btn-ec-regular">{{ 'admin.common.registration__new'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,1 @@
+{"name":"ec-cube\/rakutencard4","version":"1.0.1","description":"\u697d\u5929\u30ab\u30fc\u30c9\u6c7a\u6e08\u30d7\u30e9\u30b0\u30a4\u30f3(4\u7cfb)","type":"eccube-plugin","extra":{"code":"RakutenCard4","id":2355},"require":{"ec-cube\/plugin-installer":"~0.0.6 || ^2.0"}}

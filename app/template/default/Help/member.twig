@@ -1,0 +1,434 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.display-sm {
+  display: none;
+}
+#page_help_member .ec-layoutRole .ec-layoutRole__main {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.member-page-nav {
+    padding: 0;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.member-page-nav a {
+    padding: 10px 20px;
+    background-color: #006CB8;
+    color: #fff;
+    border-radius: 35px;
+    display: block;
+    margin: 0 15px 15px 0;
+}
+.member-page-nav a:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+.member-page-nav i {
+    margin-left: 5px;
+}
+.member-page-box {
+  padding: 60px 0 100px;
+}
+.member-page-box:first-child {
+  padding-bottom: 0;
+}
+.member-page-box h2 {
+  text-align: center;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+.member-page-box h3 {
+  margin-top: 60px;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+.member-page-box p {
+  font-weight: 400;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+  vertical-align: middle;
+  margin-bottom: 24px;
+}
+.member-page-box p.text-small {
+  font-size: 14px;
+}
+.member-page-box p.attention-text {
+  margin: 30px 0 10px;
+  font-weight: bold;
+}
+.member-page-box .color-red {
+  color: red;
+  font-weight: bold;
+}
+.member-page-box table {
+  border-spacing: 2px;
+}
+.member-page-box table thead th {
+  padding: 12px 24px;
+  text-align: center;
+}
+.member-page-box table.table-lg thead th {
+  padding: 18px 24px;
+  text-align: center;
+}
+.member-page-box tbody th {
+  background-color: #f3f3f3 !important;
+  color: #222 !important;
+}
+.member-page-box table tbody th,
+.member-page-box table tbody td {
+  padding: 18px 18px;
+  border: 1px solid #eee;
+  font-size: 15px;
+}
+.member-page-box table.table-lg tbody th,
+.member-page-box table.table-lg tbody td {
+    padding: 16px 16px;
+    border: 1px solid #eee;
+    font-size: 16px !important;
+}
+.member-page-box table.table-lg .icon-center {
+    text-align: center;
+}
+.member-page-box table.table-lg td i.fa-check-circle {
+    font-size: 24px;
+    color: #036bbe;
+}
+.member-page-box table.table-lg td i.fa-times-circle {
+    font-size: 24px;
+    color: #aaa;
+}
+.member-page-box table th {
+  background-color: #3272bc;
+  color: #fff;
+}
+.member-page-box table td {
+  color: #222;
+  background-color: #fff;
+}
+.member-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  margin-top: 40px;
+}
+.member-feature__icon {
+    color: #11A3E6;
+    text-align: center;
+    height: 50px;
+}
+.member-feature__icon i {
+    font-size: 50px;
+}
+.member-feature__title {
+  text-align: center;
+  font-weight: bold !important;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
+}
+.member-feature__text {
+  margin-top: 20px !important;
+  margin-bottom: 0 !important;
+  font-size: 16px !important;
+}
+.member-feature small {
+  margin-top: 5px;
+  display: block;
+}
+
+.member-flow {
+  margin-bottom: 30px;
+}
+.member-flow__box {
+  border-radius: 3px;
+  padding: 20px 20px;
+  background-color: #f3f3f3;
+  margin-top: 20px;
+  display: flex;
+}
+.member-flow__num {
+  background-color: #3272bc;
+  align-self: self-start;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 24px;
+  border-radius: 50%;
+}
+.member-flow__body {
+  margin-left: 24px;
+}
+.member-flow__title {
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+.member-flow__text {
+  margin: 0 !important;
+  font-size: 16px !important;
+}
+.member-flow .arrow-down {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 0; 
+  height: 0; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #3272bc;
+}
+
+
+@media (max-width: 640px) {
+  .display-sm {
+    margin-top: 5px;
+    display: block;
+  }
+  .member-table-wrap {
+    position: relative;
+    overflow-x: scroll;
+  }
+  .member-page-box table {
+    min-width: 500px;
+  }
+  .member-page-box table.table-lg {
+    min-width: 800px;
+  }
+  .member-feature {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+  
+<div class="ec-role">
+  <div class="ec-off1Grid">
+    <div class="ec-off1Grid__cell">
+      <div class="member-page-box">
+        <h2>会員サービス</h2>
+        <aside id="guideNavi">
+        <ul class="member-page-nav">
+          <li><a href="#ippanpro">ユーザー会員とプロ会員について<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#ippan">ユーザー会員について<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#stage">会員ステージについて<i class="fas fa-chevron-down"></i></a></li>
+        </ul>
+      </aside>
+        <p>イーシーネクストは、ペット用品のオンラインショッピングサイトです。
+        <br>自社取り扱いブランドを中心とした全世界から集めた逸品を幅広く取り揃えています。
+        <br>ぜひお気軽にご利用くださいませ。</p>
+        <h3 id="ippanpro">ユーザー会員とプロ会員について</h3>
+        <p>イーシーネクストでは、「ユーザー会員」と「プロ会員」の2種類の会員別サービスを提供しております。</p>
+        <div class="member-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>会員の対象</th>
+                <th>登録資格</th>
+                <th>価格</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>ユーザー会員</th>
+                <td>飼い主様</td>
+                <td>特になし</td>
+                <td>販売価格（ポイント還元）</td>
+              </tr>
+              <tr>
+                <th>プロ会員</th>
+                <td>ペットビジネス関連の<br>法人、組織、教育機関又は個人事業主</td>
+                <td>営業許可書や登記書類の確認</td>
+                <td>お問合せ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <small class="display-sm">※表は左右にスクロールできます</small>
+        <h3 id="ippan">ユーザー会員について</h3>
+        <p>オンラインストアでご利用いただける会員サービスです。（年会費・手数料無料）</p>
+        <section class="member-feature">
+          <div class="member-feature__col">
+            <div class="member-feature__icon"><i class="fas fa-coins fa-lg"></i></div>
+            <p class="member-feature__title">ポイントのご利用</p>
+            <p class="member-feature__text">「1ポイント=1円」として、次回ご購入時から1ポイントから当サイトでご利用いただけます。初回購入ボーナスとして、<span class="color-red">5倍</span>のポイント追加で還元いたします。
+              </p>
+          </div>
+          <div class="member-feature__col">
+            <div class="member-feature__icon"><i class="far fa-envelope fa-lg"></i></div>
+            <p class="member-feature__title">情報配信サービス</p>
+            <p class="member-feature__text">おすすめ商品やイベント、セールなどの最新情報をメールでお届けします。
+              </p>
+          </div>
+          <div class="member-feature__col">
+            <div class="member-feature__icon"><i class="fas fa-tag fa-lg"></i></div>
+            <p class="member-feature__title">会員限定セール</p>
+            <p class="member-feature__text">会員ステージに応じて会員限定セールへご招待！開催時期が近くなりましたら、対象のお客様へご案内いたします。
+              </p>
+          </div>
+          <div class="member-feature__col">
+            <div class="member-feature__icon"><i class="fas fa-signal fa-lg"></i></div>
+            <p class="member-feature__title">会員ステージアップ</p>
+            <p class="member-feature__text">累計購入金額に応じて会員ステージが設定されます。会員ステージがアップすると、ポイント還元率や様々な特典がグレードアップされます。</p>
+          </div>
+        </section>
+        <h3 id="stage">会員ステージについて</h3>
+        <p>累計購入金額に応じて会員ステージが設定されます。<br>会員ステージがアップすると、ポイント還元率や様々な特典がグレードアップされます。</p>
+        <div class="member-table-wrap">
+          <table class="table-lg">
+            <thead>
+              <tr>
+                <th style="background-color: transparent;"></th>
+                <th style="background-color: #aad7f5;">BLUE</th>
+                <th style="background-color: #e36c08;">BRONZE</th>
+                <th style="background-color: #d5d5d4;">SILVER</th>
+                <th style="background-color: #e9d74c;">GOLD</th>
+                <th style="background-color: #95a0b5;">PLATINUM</th>
+                <th style="background-color: #000000;">DIAMOND</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>累計購入金額</th>
+                <td><center>累計額<br><b>10万円未満</b></center></td>
+                <td><center>累計額<br><b>10万円以上</b></center></td>
+                <td><center>累計額<br><b>30万円以上</b></center></td>
+                <td><center>累計額<br><b>50万円以上</b></center></td>
+                <td><center>累計額<br><b>100万円以上</b></center></td>
+                <td><center>累計額<br><b>150万円以上</b></center></td>
+              </tr>
+              <tr>
+                <th>ポイント還元率<br>(100円あたり)</th>
+                <td><center><b>1%</b><br>1p/100円</center></td>
+                <td><center><b>3％</b><br>3p/100円</center></td>
+                <td><center><b>5％</b><br>5p/100円</center></td>
+                <td><center><b>10％</b><br>10p/100円</center></td>
+                <td><center><b>15％</b><br>15p/100円</center></td>
+                <td><center><b>20％</b><br>20p/100円</center></td>
+              </tr>
+              <tr class="icon-center">
+                <th>年会費無料</th>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+              </tr>
+              <tr class="icon-center">
+                <th>初回購入ボーナス</th>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+              </tr>
+              <tr class="icon-center">
+                <th>会員限定セール</th>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+              </tr>
+{#              <tr class="icon-center">
+                <th>送料無料サービス</th>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+              </tr>
+#}
+              <tr class="icon-center">
+                <th>返品送料無料</th>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-times-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+                <td><i class="far fa-check-circle"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <small class="display-sm">※表は左右にスクロールできます</small>
+        <p class="attention-text">注意点と確認事項</p>
+        <p class="text-small"><strong>※会員ステージについて</strong><br>
+            ・ステージアップの基準となるご購入金額は、累計の購入金額（税抜）の合計金額となります。<br>
+          ・ポイント・クーポン・支払い手数料・送料のご利用分は累計の購入金額に計算されません。<br>
+          ・一年間以内に一度でもご購入があれば、金額にかかわらずそのままのステージがキープされます。<br>
+          ・購入金額は、会員ステージがグレードアップしても引き続き計上されます。<br>
+          ・最後の購入から1年間以内にご購入がないと、最初のステージ（BLUEステージ）に戻ります。<br>
+          ・返品・キャンセルの場合には、ステージともにご購入前の状態に戻る場合がございます。<br><br>
+          <strong>※ポイントについて</strong><br>
+          ・ポイントは、1ポイント1円として、次回購入時からご利用いただけます。<br>
+          ・ポイントの有効期限は、購入から１年間です。ポイント失効日までに、ぜひご利用くださいませ。<br>
+          ・商品を配送後にポイントが付与されます。<br><br>
+          <strong>※配送について</strong><br>
+          ・発送や返品対象は日本国内に限ります。<br>
+          ・入金確認後、在庫がある限り10日以内に出荷いたします。（フードを除く）<br>
+          （在庫が無い場合や取り寄せ商品がある場合は商品入荷後出荷いたします。）<br>
+          ・在庫状況、運送会社の混雑状況や繁盛期等配達に通常よりお時間を頂く可能性が有ります。ご了承ください。<br><br>
+          <strong>※商品交換について</strong><br>
+          ・グルーミング用品、ケア用品は、新品未開封品のみ返品交換を承ります。お届日より７日以内にお電話又はメールにてご連絡ください。お客様の都合による返品交換の場合には、決済手数料、振込手数料および往復送料はお客様のご負担とさせていただきます。<br>
+          <strong>但し、PLATINUMステージ、DIAMONDステージの会員様の返品手数料は無料です。</strong><br>
+          ・フードやおやつの返品交換については原則承りません。<br>
+          ・お買い上げ商品に初期不良があった場合、返品交換に応じます。商品到着から７日以内にお電話又はメールにてご連絡ください。交換手数料につきましては当方で負担いたします。<br>
+          ・商品が万が一ご注文商品と違う場合には返品交換に応じます。商品到着から７日以内にお電話又はメールにてご連絡ください。交換手数料につきましては当方で負担いたします<br>
+          ・お客様の不当使用の場合は、返品交換いたしかねます。<br>
+          ・一度開封された商品、お客様の責任でキズや汚れが生じた商品の返品はお受けできません。<br><br>
+          <strong>※商品が破損して届いた場合のお願い</strong><br>
+弊社より小口出荷にてお届けした商品の箱が、一部破れて届いたなど、輸送中の事故があった場合は、次のようにお願い致します。<br>
+輸送中の事故は輸送会社が、運送保険で処理します。<br>
+すぐにお届けした運送会社に送り状をご参照の上、ご連絡お願い致します。<br>
+運送破損と確認された場合、送料のご負担なく代替品の手配をさせて頂きますので、速やかに弊社へもご連絡をお願い致します。<br>
+商品のお受取時の申告が原則となります。<br>
+商品が届いた時に破損していれば、その場で配達員にお申し出お願い致します。<br>
+配達員と別れてから、破損が判明した場合は、すぐに運送会社にお電話下さい。同様に対応致します。<br>
+到着時に「中身の確認の施行」にご協力を…箱は大丈夫。…でも、箱を開けたら、中で商品が破損していた…という場合もございます。<br>
+<br>
+配達から数日経過すると、運送保険の対象外となってしまいます。<br>
+お手数ですが、商品到着後は速やかに中身の確認をお願い致します。<br><br>
+          <strong>※送料について</strong><br>
+          ・5,500円（税込）以上のご購入で全ステージ送料無料となります。<br>
+          ・ご購入金額が5,500円（税込）未満のお客様は一律1,000円（税込）となります。　<br>
+          ※沖縄県及び一部離島へのお届けは送料無料の対象外です。購入金額にかかわらず1,500円（税込）となります。<br>
+          </p>
+      </div>
+      <aside id="guideNavi">
+        <ul class="member-page-nav">
+          <li><a style="padding: 16px 32px;" href="/entry">ユーザー会員登録はこちら<i class="fas fa-chevron-right"></i></a></li>
+        </ul>
+      </aside>
+      <aside id="guideNavi">
+        <ul class="member-page-nav">
+          <li><a style="padding: 16px 32px;" href="/help/pro_member">プロ会員についてはこちら<i class="fas fa-chevron-right"></i></a></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</div>
+{% endblock %}

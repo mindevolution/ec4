@@ -1,0 +1,19 @@
+parameters:
+  sbps:
+    prefix:
+
+monolog:
+  channels: ['sbps']
+  handlers:
+    sbps:
+      type: fingers_crossed
+      action_level: error
+      passthru_level: info
+      handler: sbps_rotating_file
+      channels: ['sbps']
+    sbps_rotating_file:
+      type: rotating_file
+      max_files: 60
+      path: '%kernel.logs_dir%/%kernel.environment%/sbps.log'
+      formatter: eccube.log.formatter.line
+      level: debug

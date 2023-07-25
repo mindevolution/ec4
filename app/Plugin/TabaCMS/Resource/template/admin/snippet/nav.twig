@@ -1,0 +1,27 @@
+{% set const = TabaCMSConstants %}
+{% set bind_prefix = constant('ADMIN_BIND_PREFIX',const) %}
+{% set trans_prefix = constant('PLUGIN_CODE_LC',const) %}
+<script>
+    $(function() {
+        var appendNav = $('#nav-{{ constant('PLUGIN_CODE_LC',const) }}-subnav');
+        $('#nav-{{ constant('PLUGIN_CATEGORY_ID',const) }}').append(appendNav.html());
+    });
+</script>
+<ul id="nav-{{ constant('PLUGIN_CODE_LC',const) }}-subnav" style="display:none;">
+    <a
+        class="c-mainNavArea__navItemSubTitle{{ active_menus(menus)[1] != constant('PLUGIN_CODE_LC',const) ? ' collapsed' }}"
+        data-toggle="collapse"
+        href="#nav-{{ constant('PLUGIN_CODE_LC',const) }}"
+        aria-expanded="{{ active_menus(menus)[1] != constant('PLUGIN_CODE_LC',const) ? 'true' : 'false' }}"
+        aria-controls="nav-{{ constant('PLUGIN_CATEGORY_ID',const) }}">
+        <span>CMS</span></a>
+    <ul class="collapse{{ active_menus(menus)[1] == constant('PLUGIN_CODE_LC',const) ? ' show' }}" id="nav-{{ constant('PLUGIN_CODE_LC',const) }}">
+        {% for type in type_list %}
+            <li><a href="{{ url(bind_prefix~'_post_list',{type_id:type.typeId}) }}" {{ active_menus(menus)[2] == constant('PLUGIN_CODE_LC',const)~'_post_'~type.typeId ? 'class="is-active"' }}><span>{{ type.typeName }}</span></a></li>
+            <li><a href="{{ url(bind_prefix~'_post_list',{type_id:type.typeId}) }}" {{ active_menus(menus)[2] == constant('PLUGIN_CODE_LC',const)~'_post_list_'~type.typeId ? 'class="is-active"' }}><span>&nbsp;&nbsp;投稿一覧</span></a></li>
+            <li><a href="{{ url(bind_prefix~'_post_new',{type_id:type.typeId}) }}" ><span>&nbsp;&nbsp;新規投稿</span></a></li>
+            <li><a href="{{ url(bind_prefix~'_category_list',{type_id:type.typeId}) }}" {{ active_menus(menus)[2] == constant('PLUGIN_CODE_LC',const)~'_category_'~type.typeId ? 'class="is-active"' }}><span>&nbsp;&nbsp;カテゴリー</span></a></li>
+        {% endfor %}
+        <li><a href="{{ url(bind_prefix~'_type_list') }}" {{ active_menus(menus)[2] == constant('PLUGIN_CODE_LC',const)~'_type' ? 'class="is-active"' }}><span>投稿タイプ設定</span></a></li>
+    </ul>
+</ul>

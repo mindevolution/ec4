@@ -1,0 +1,163 @@
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'rakuten_card4_mypage' %}
+
+{% set body_class = 'mypage' %}
+
+{#{% form_theme form 'Form/form_div_layout.twig' %}#}
+
+{% set card_point = 'rakuten_card4_card_number' %}
+{% set month_point = 'rakuten_card4_expiration_month' %}
+{% set year_point = 'rakuten_card4_expiration_year' %}
+{% set cvv_point = 'rakuten_card4_cvv' %}
+{% set input_card_cvv_area = 'rakuten_card4_input_card_cvv_area' %}
+{% set form_point = 'form1' %}
+
+{% block stylesheet %}
+    {{ include("@RakutenCard4/card_parts_style.twig")}}
+{% endblock %}
+{% block javascript %}
+    {{ include("@RakutenCard4/card_parts_js.twig")}}
+    <script>
+        $(function () {
+            $('#register_card').on('click', function (e) {
+                e.preventDefault();
+                loadingOverlay();
+
+                setTimeout(function () {
+                    // カードチェック処理など
+                    var is_valid = isValidInputCard();
+                    if (is_valid.length > 0){
+                        alert(is_valid);
+                            loadingOverlay('hide');
+                        return false;
+                    }
+
+                    // トークン取得処理
+                    execCreateToken(true);
+
+                    loadingOverlay();
+                    return false;
+                }, 100);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+
+    <div class="ec-layoutRole__main">
+        <div class="ec-mypageRole">
+            <div class="ec-pageHeader">
+                <h1>{{ 'rakuten_card4.front.mypage.title'|trans }}/{{ 'rakuten_card4.front.mypage.card.navi_title'|trans }}</h1>
+            </div>
+            {% include 'Mypage/navi.twig' %}
+        </div>
+
+        <div class="ec-mypageRole">
+            <div class="ec-cardRole">
+                {% for message in app.flashes('eccube.front.success') %}
+                    <div class="alert alert-success alert-dismissible show m-3" role="alert">
+                        <i class="fa fa-check fa-lg mr-2"></i>
+                        <span class="font-weight-bold">{{ message }}</span>
+                        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('eccube.front.danger') %}
+                    <div class="alert alert-danger alert-dismissible show m-3" role="alert">
+                        <i class="fa fa-warning fa-lg mr-2"></i>
+                        <span class="font-weight-bold">{{ message }}</span>
+                        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="ec-mypageRole">
+            <div class="ec-off1Grid">
+                <div class="ec-off1Grid__cell">
+                    <div class="ec-rectHeading">
+                        <h2>{{ 'rakuten_card4.front.mypage.card.registered_cards.title'|trans }}</h2>
+                    </div>
+                    <div class="ec-cardRole">
+                        {% if CustomerTokens|length == 0 %}
+                            <p class="ec-para-normal">{{ 'rakuten_card4.front.mypage.card.no_registered_cards'|trans }}</p>
+                        {% else %}
+                            <form id="formDelete" name="formDelete" method="post" action="{{ url('rakuten_card4_mypage_delete') }}">
+                                {{ form_widget(deleteForm._token) }}
+
+                                <div class="ec-cardList">
+                                    <table class="table" style="width:100%;">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">{{ 'rakuten_card4.front.mypage.card.delete'|trans }}</th>
+                                            <th class="text-center">{{ 'rakuten_card4.front.mypage.card.sequence_no'|trans }}</th>
+                                            <th class="text-left">{{ 'rakuten_card4.front.mypage.card.card_number'|trans }}</th>
+                                            <th class="text-center">{{ 'rakuten_card4.front.mypage.card.expire_date'|trans }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for child in deleteForm.CustomerToken.children %}
+                                                {% if CustomerTokens[child.vars.value] is defined %}
+                                                    {% set CustomerToken = CustomerTokens[child.vars.value] %}
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            {{ form_widget(child) }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {% set token_id = CustomerToken.id %}
+                                                            {{ token_id }}
+                                                        </td>
+                                                        <td class="text-left">
+                                                            {{ CustomerToken.CardNo }}
+                                                        </td>
+                                                        <td class="text-center">
+                                                            {{ CustomerToken.CardExpireDate }}
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="ec-cardRole__actions">
+                                    <button id="delete_card" class="ec-inlineBtn"  type="submit">{{ 'rakuten_card4.front.mypage.card.delete_button'|trans }}</button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ec-mypageRole">
+            <div class="ec-off1Grid">
+                <div class="ec-off1Grid__cell">
+                    <div class="ec-rectHeading">
+                        <h2>{{ 'rakuten_card4.front.mypage.card.register.title'|trans }}</h2>
+                    </div>
+                    {% if ableRegisterCard %}
+                        <form id="form1" name="form1" method="post" action="{{ url('rakuten_card4_mypage_register') }}">
+                            <div class="ec-cardRole">
+                                <div id="rakuten_card4_input_card_area">
+                                    {{ include("@RakutenCard4/card_parts_form.twig")}}
+                                </div>
+                                <div class="ec-cardRole__actions">
+                                    <a id="register_card" class="ec-inlineBtn" href="#">{{ 'rakuten_card4.front.mypage.card.register_button'|trans }}</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        {{ 'rakuten_card4.front.mypage.card.register.max_count'|trans }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

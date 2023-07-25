@@ -1,0 +1,129 @@
+# nav
+stripe_payment_gateway.admin.nav.stripe: Stripe Config
+stripe_payment_gateway.admin.nav.stripe_config: API Key
+stripe_payment_gateway.admin.nav.stripe_log: Log
+
+# flash messages
+stripe_payment_gateway.admin.save.success: Saved succesfully.
+stripe_payment_gateway.admin.save.failed: Fail saving data.
+
+# twig
+stripe_payment_gateway.admin.config.title: Stripe Config
+stripe_payment_gateway.admin.config.sub_title: API Key
+stripe_payment_gateway.admin.config.header: API Key
+stripe_payment_gateway.admin.config.save: Save
+stripe_payment_gateway.admin.config.required: Required
+stripe_payment_gateway.admin.config.back: Plugin List
+
+stripe_payment_gateway.admin.config.publishable_key: Publishable Key
+stripe_payment_gateway.admin.config.publishable_key.error.blank: Publishable key is not entered.
+stripe_payment_gateway.admin.config.publishable_key.error.regex: Please enter key that can be disclosed with half-width alphanumeric characters.
+stripe_payment_gateway.admin.config.secret_key: Secret Key
+stripe_payment_gateway.admin.config.secret_key.error.blank: Your secret key has not been entered.
+stripe_payment_gateway.admin.config.secret_key.error.regex: Please enter secret key in half size alphanumeric characters.
+stripe_payment_gateway.admin.config.is_auth_and_capture_on: Turn on Auth & Capture
+stripe_payment_gateway.admin.config.charge_method: Charge Method
+stripe_payment_gateway.admin.config.authorize: Authorize
+stripe_payment_gateway.admin.config.authorize_and_capture: Authorize & Capture
+stripe_payment_gateway.admin.config.stripe_fees_percent: Percentage of fee (refund with fee minus)
+stripe_payment_gateway.admin.config.stripe_fees_percent.error.regex: Please enter valid Stripe Fees Percentage.
+
+
+stripe_payment_gateway.admin.log.title: Stripe Config
+stripe_payment_gateway.admin.log.sub_title: Log
+stripe_payment_gateway.admin.log.create_at: Date Time
+stripe_payment_gateway.admin.log.content: Contents
+stripe_payment_gateway.admin.log.no_log: No log yet.
+
+
+#Order Details Page
+stripe_payment_gateway.admin.order.section_title: Stripe Settlement
+stripe_payment_gateway.admin.order.section_title_tooltip: You can perform operations related to Stripe settlement.
+stripe_payment_gateway.admin.order.charge_id: Payment ID
+stripe_payment_gateway.admin.order.charge_id_tooltip: Payment ID on Stripe. When clicked it will be transferred to the details of the transaction on the Stripe administration screen.
+stripe_payment_gateway.admin.order.actions: Settlement operation
+stripe_payment_gateway.admin.order.capture_action: Capture Payment
+stripe_payment_gateway.admin.order.capture_action_confirm: Are you sure you want to charge %charge_amount%?
+stripe_payment_gateway.admin.order.refund_option.full_refund: Full Refund
+stripe_payment_gateway.admin.order.refund_option.minus_fee: Minus Fee
+stripe_payment_gateway.admin.order.refund_option.partial_refund: Partial Refund
+stripe_payment_gateway.admin.order.refund_option.error.invalid: Please select valid refund option
+stripe_payment_gateway.admin.order.refund_amount.error.invalid: Please enter valid amount to refund
+stripe_payment_gateway.admin.order.refund_amount.error.exceeded: You are trying to refund amount greater than order total
+stripe_payment_gateway.admin.order.refund_action: Refund
+stripe_payment_gateway.admin.order.refund_action_confirm: are you sure you want to refund?
+stripe_payment_gateway.admin.order.refunded_amount: Refunded Amount
+stripe_payment_gateway.admin.order.error.invalid_request: Invalid Request
+stripe_payment_gateway.admin.order.error.already_captured: Payment has been already captured
+stripe_payment_gateway.admin.order.error.refunded: This payment has already been refunded
+stripe_payment_gateway.admin.order.success.capture: Payment captured successfully
+stripe_payment_gateway.admin.order.status.refunded: Refunded
+
+stripe_payment_gateway.admin.config.webhook_signature.label: Webhook Signature
+stripe_payment_gateway.admin.config.webhook_url.label: Webhook Endpoint
+
+# StripeEvent
+stripe_payment_gateway.front.card_info: Credit Card
+stripe_payment_gateway.front.card_holder: Owner
+stripe_payment_gateway.front.card_number: Number
+stripe_payment_gateway.front.security_code: Security Code
+stripe_payment_gateway.front.security_code_notice:  on the reverse side
+stripe_payment_gateway.front.expiration: Expiration
+stripe_payment_gateway.front.card_accept: Already accepted
+stripe_payment_gateway.front.card_details: brand ending with last4
+stripe_payment_gateway.front.use_card: Use brand ending with last4
+stripe_payment_gateway.front.use_another_card: Use another card
+stripe_payment_gateway.front.save_card: Save card information
+stripe.shopping.verify.error.payment_total.too_small: The payment amount is too small.
+stripe.shopping.verify.error.payment_total.too_much: The payment amount is too much.
+stripe.shopping.verify.error.unexpected_error: Unexpected Error
+
+# StripeClient
+stripe_payment_gateway.front.unexpected_error: Please use another payment method or contact the administrator.
+stripe_payment_gateway.checkout.invalid_access: Invalid Access
+stripe_payment_gateway.shopping_error: Unexpected Error
+stripe_payment_gateway.admin.config.webhook_signature_empty_error: Please enter your webhook signature
+stripe_payment_gateway.admin.config.ga_pay_check_notice: To enable Apple Pay / Google Pay, you need to register as a webhook on the Stripe management screen.
+stripe_payment_gateway.admin.config.link_stripe_dashboard: Stripe dashboard
+stripe_payment_gateway.admin.config.ga_pay_events: Please allow the following events when registering a webhook.
+
+# license
+stripe_payment_gateway.admin.license.license_key: License key
+stripe_payment_gateway.admin.license.license_key.error.blank: The license key has not been entered.
+stripe_payment_gateway.admin.license.license_key.error.regex: Please enter a valid license key.
+
+stripe_payment_gateway.admin.license.email: Email Address
+stripe_payment_gateway.admin.license.email.error.blank: Please enter your email address
+stripe_payment_gateway.admin.license.email.error.regex: Email is not valid format
+
+stripe_payment_gateway.admin.license.stripe.testkey: Enter the test Stripe key.
+stripe_payment_gateway.admin.license.failed : Activation failed.
+stripe_payment_gateway.admin.license.success: Activation was successful.
+stripe_payment_gateway.admin.license.wrong_key : The license key is incorrect.
+stripe_payment_gateway.admin.license.notyet : The license has not yet been certified.
+
+stripe_payment_gateway.admin.license.title: Activation
+stripe_payment_gateway.admin.license.header: Stripe license
+stripe_payment_gateway.admin.license.confirm: Confirm
+stripe_payment_gateway.admin.license.cancel: Cancel
+stripe_payment_gateway.admin.license.required: required
+
+stripe_payment_gateway.admin.license.error.product-key-require: You need a product license key.
+stripe_payment_gateway.admin.license.warning.product-key: You can enter the Stripe key after activation.
+
+stripe_payment_gateway.admin.license.test_setting: Test Environment
+stripe_payment_gateway.admin.license.test_setting_notice: Press the right button.
+stripe_payment_gateway.admin.license.test_setting_details: If you want to try it in a test environment, please click the "Test Environment" button above and use the test API information. For the production environment, please activate the following license and use the production API information.
+stripe_payment_gateway.admin.license.test_env: Test Environment
+stripe_payment_gateway.admin.license.test_key_elim: To remove the test key, please reinstall the plugin.
+stripe_payment_gateway.admin.license.notice.header: Notice
+
+stripe_payment_gateway.payrequest.button_label: Pay Now
+stripe_payment_gateway.payrequest.purchase_flow.error: Purchase Flow Error
+stripe_payment_gateway.payrequest.payment_intent.invalid_status: Invalid PaymentIntent Status
+stripe_payment_gateway.payrequest.pay_now_label: Pay Now
+stripe_payment_gateway.payrequest.connection_error: Error
+stripe_payment_gateway.payrequest.success: Thank you for your order.
+stripe_payment_gateway.payrequest.payment_failed: Payment Failed
+stripe_payment_gateway.payment_method.name: MultiPayment(Stripe)
+stripe_payment_gateway.payment_method.please_check_save: Please check "Save Payment Method" option

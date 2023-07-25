@@ -1,0 +1,287 @@
+
+<script>
+'use strict';
+
+var stripe = Stripe("{{ stripeConfig.publishable_key }}");
+
+function registerElements(elements, exampleName, paymentRequest) {
+  var formClass = '.' + exampleName;
+  var example = document.querySelector(formClass);
+
+  var form = example.querySelector('form');
+  var resetButton = example.querySelector('a.reset');
+  var error = form.querySelector('.error');
+  var errorMessage = error.querySelector('.message');
+
+  function enableInputs() {
+    Array.prototype.forEach.call(
+      form.querySelectorAll(
+        "input[type='text'], input[type='email'], input[type='tel']"
+      ),
+      function(input) {
+        input.removeAttribute('disabled');
+      }
+    );
+  }
+
+  function disableInputs() {
+    Array.prototype.forEach.call(
+      form.querySelectorAll(
+        "input[type='text'], input[type='email'], input[type='tel']"
+      ),
+      function(input) {
+        input.setAttribute('disabled', 'true');
+      }
+    );
+  }
+
+  function triggerBrowserValidation() {
+    // The only way to trigger HTML5 form validation UI is to fake a user submit
+    // event.
+    var submit = document.createElement('input');
+    submit.type = 'submit';
+    submit.style.display = 'none';
+    form.appendChild(submit);
+    submit.click();
+    submit.remove();
+  }
+
+  // Listen for errors from each Element, and show error messages in the UI.
+  var savedErrors = {};
+  elements.forEach(function(element, idx) {
+    element.on('change', function(event) {
+      if (event.error) {
+        error.classList.add('visible');
+        savedErrors[idx] = event.error.message;
+        errorMessage.innerText = event.error.message;
+      } else {
+        savedErrors[idx] = null;
+
+        // Loop over the saved errors and find the first one, if any.
+        var nextError = Object.keys(savedErrors)
+          .sort()
+          .reduce(function(maybeFoundError, key) {
+            return maybeFoundError || savedErrors[key];
+          }, null);
+
+        if (nextError) {
+          // Now that they've fixed the current error, show another one.
+          errorMessage.innerText = nextError;
+        } else {
+          // The user fixed the last error; no more errors.
+          error.classList.remove('visible');
+        }
+      }
+    });
+  });
+
+  var showError = function(message){
+    error.classList.add('visible');
+    errorMessage.innerText = message;
+    enableInputs();
+    example.classList.remove('submitting');
+    loadingOverlay('hide');
+  }
+
+  function stripePaymentHandler(paymentMethodId, is_existing) {
+    loadingOverlay("show");
+    var is_save_on = false;
+    if(is_save_on){
+      is_save_on = true;
+    }else{
+      is_save_on = $("input[name='is_save_on']").prop("checked");
+    }
+    $.ajax({
+        type: 'POST',
+        data: {
+            payment_method_id: paymentMethodId,
+            is_save_on: is_save_on
+        },
+        url: '{{ url("plugin_stripe_payment_gateway_payment") }}',
+        success: function(data) {
+          loadingOverlay("hide")
+          if(data.error){
+            console.log("pay handler error")
+            showError(data.message)
+          }else{
+            console.log("pay handler success")
+            stripeResponseHandler(data);
+          }
+        },
+        error: function(error) {
+          console.log(error);
+          loadingOverlay('hide');
+        }
+    });
+  }
+  
+  function stripeResponseHandler(response) {
+    switch(response.action) {
+      case 'requires_new_card':                
+          showError(response.message);
+          return;
+          break;
+      case 'requires_action':                
+          stripeCardActionHandler(response.client_secret);
+          return;
+      case 'requires_capture':                
+          stripeReadyHandler(response.payment_intent_id);
+          return;
+    }
+    
+    showError(response.message);
+  }
+  function stripeCardActionHandler(client_secret) {
+      stripe.confirmCardPayment(
+          client_secret
+      ).then( function(result) {
+          if(result.error) {
+              getStripeErrorMessage(result.error);
+              example.classList.remove('submitting')
+              enableInputs();
+          } else {
+              stripeReadyHandler(result.paymentIntent.id);
+          }
+      });
+  }
+  function stripeReadyHandler(paymentIntentId) {
+      $('input[name=payment_intent_id]').val(paymentIntentId);
+      loadingOverlay("show");
+      form.submit();
+      example.classList.add('submitted');
+  }
+  function getStripeErrorMessage(error) {
+      var message = '';
+      var type = error.type;
+      var code = error.code;
+      message = error.message;
+      
+      switch(code) {
+          case 'card_declined':
+              message = 'カードを請求できませんでした。';
+              break;
+          case 'payment_intent_authentication_failure':
+              message = 'カード認証に失敗しました。ご確認の上再度ご入力ください。';
+              break;
+      }
+      showError(message);
+  }
+  if(paymentRequest){
+    paymentRequest.on('paymentmethod', function(ev){
+        stripePaymentHandler(ev.paymentMethod.id, false);
+    })
+  }
+
+  var pay_button = $(".pay-button")
+  // Listen on the form's 'submit' handler...
+  // form.addEventListener('submit', function(e) {
+  pay_button.on('click', function(e) {
+    e.preventDefault();
+
+    // Trigger HTML5 validation UI on the form if any of the inputs fail
+    // validation.
+    var plainInputsValid = true;
+    Array.prototype.forEach.call(form.querySelectorAll('input'), function(
+      input
+    ) {
+      if (input.checkValidity && !input.checkValidity()) {
+        plainInputsValid = false;
+        return;
+      }
+    });
+    if (!plainInputsValid) {
+      triggerBrowserValidation();
+      return;
+    }
+
+    // Show a loading screen...
+    example.classList.add('submitting');
+
+    // Disable all inputs.
+    disableInputs();
+
+    // Gather additional customer data we may have collected in our form.
+    var name = form.querySelector('#' + exampleName + '-name');
+    var address1 = form.querySelector('#' + exampleName + '-address');
+    var city = form.querySelector('#' + exampleName + '-city');
+    var state = form.querySelector('#' + exampleName + '-state');
+    var zip = form.querySelector('#' + exampleName + '-zip');
+    var additionalData = {
+      name: name ? name.value : undefined,
+      address_line1: address1 ? address1.value : undefined,
+      address_city: city ? city.value : undefined,
+      address_state: state ? state.value : undefined,
+      address_zip: zip ? zip.value : undefined,
+    };
+
+    
+    stripe.createPaymentMethod({
+      type: 'card',
+      card: elements[0],
+    }).then( function (result) {
+      if ( result.error ){
+        showError(result.error.message)
+        
+      }else{
+        stripePaymentHandler(result.paymentMethod.id, false);
+        // If we received a token, show the token ID.
+        // example.querySelector('input[name=payment_token]').value = result.paymentMethod.id;
+        
+      }
+    })
+    
+  });
+  {% if stripePaymentMethodObj is defined and stripePaymentMethodObj != false %}
+    $(".pay-existing-method").on('click', function(){
+      if($("input[name='is_save_on']").prop("checked") === true){
+        stripePaymentHandler("{{ stripePaymentMethodObj.id }}", true );
+      }else{
+        showError("{{ 'stripe_payment_gateway.payment_method.please_check_save'|trans }}")
+        return false;
+      }
+    })
+    $(".btn-delete-card").on('click', function(){
+    loadingOverlay("show")
+    $.ajax({
+        type: 'POST',
+        data: {
+            payment_method_id: "{{ stripePaymentMethodObj.id }}",
+        },
+        url: '{{ url("plugin_stripe_payment_method_detach") }}',
+        success: function(data) {
+          if(data.error){
+            loadingOverlay("hide")
+            showError(data.error)
+          }else{
+            location.reload();
+          }
+        },
+        error: function(error) {
+          console.log(error);
+          loadingOverlay('hide');
+        }
+    });
+  })
+  {% endif %}
+  
+  resetButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    // Resetting the form (instead of setting the value to `''` for each input)
+    // helps us clear webkit autofill styles.
+    form.reset();
+
+    // Clear each Element.
+    elements.forEach(function(element) {
+      element.clear();
+    });
+
+    // Reset error state as well.
+    error.classList.remove('visible');
+
+    // Resetting the form does not un-disable inputs, so we need to do it separately:
+    enableInputs();
+    example.classList.remove('submitting');
+  });
+  
+}
+</script>

@@ -1,0 +1,39 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% set post_list = TabaCMSPostList({type_data_key:options.type_data_key,page_count:5}) %}
+
+{{ TabaCMSAsset('script.js','script')|raw }}
+{{ TabaCMSAsset('style.css','style')|raw }}
+
+<div class="row" style="margin-right:0px;">
+    <div class="col-xs-12">
+        <ul class="tabacms_post_list">
+            {% for post in post_list %}
+                <li class="row">
+                    <div class="col-md-3">
+                            <time>{{ post.getPublicDate|date('Y/m/d') }}</time>
+                            {% if post.getCategory is not empty %}
+                                <label class="text-nowrap tabacms_category_{{ post.getType.getDataKey }}_{{ post.getCategory.getDataKey }}" {{ post.getCategory.getTagAttributes|raw }}>{{ post.getCategory.getCategoryName }}</label>
+                            {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        {% if post.getContentDiv == constant('CONTENT_DIV_BODY',post) %}
+                            <a href="{{ post.getURI }}"><strong>{{ post.getTitle }}</strong></a>
+                        {% elseif post.getContentDiv == constant('CONTENT_DIV_LINK',post) %}
+                            <a href="{{ post.getLinkUrl }}" {% if post.getLinkTarget %}target="{{ post.getLinkTarget }}"{% endif %}><strong>{{ post.getTitle }}</strong></a>
+                        {% elseif post.getContentDiv == constant('CONTENT_DIV_TITLE',post) %}
+                            <strong>{{ post.getTitle }}</strong>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-xs-12">
+        <a href="{{ type.getListURI }}" class="pull-right">＞ {{ type.getTypeName }}一覧</a>
+    </div>
+</div>

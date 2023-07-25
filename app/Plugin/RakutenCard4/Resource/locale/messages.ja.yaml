@@ -1,0 +1,261 @@
+# nav
+rakuten_card4.admin.nav.payment_list: 決済状況一覧
+rakuten_card4.admin.nav.csv_upload: 楽天カード決済出荷CSV登録
+
+# 決済ステータス名
+rakuten_card4.payment_status_name.first: 未決済
+rakuten_card4.payment_status_name.canceled: 取消
+rakuten_card4.payment_status_name.authorized: 仮売上
+rakuten_card4.payment_status_name.captured: 実売上
+rakuten_card4.payment_status_name.pending: 保留
+rakuten_card4.payment_status_name.expired_cvs: 入金期限切れ
+rakuten_card4.payment_status_name.authorized_cvs: 申込み
+rakuten_card4.payment_status_name.captured_cvs: 入金済み
+
+# 決済操作ボタン名
+rakuten_card4.admin.order_edit.payment_action.capture: 売上確定(実売上)実行
+rakuten_card4.admin.order_edit.payment_action.reauthorized: 再オーソリ実行
+rakuten_card4.admin.order_edit.payment_action.change_price: 決済金額変更
+rakuten_card4.admin.order_edit.payment_action.cancel: 取消(返品)実行
+
+# コンビニ名称（仮） 確定次第パラメータ名を変更 kind2がバラバラになるかも
+rakuten_card4.cvs.label.kind001: セブンイレブン
+rakuten_card4.cvs.label.kind002: ローソン・ファミリーマート・ミニストップ・セイコーマート
+rakuten_card4.cvs.label.kind003: デイリーヤマザキ
+
+# クレカ設定画面
+rakuten_card4.admin.card.config.buy_api.capture: 即時売上
+rakuten_card4.admin.card.config.buy_api.authorize: 仮売上
+rakuten_card4.admin.card.config.buy_api.capture.note: 即時売上(CAPTURE)・・・カードの与信枠を確保し承認番号を得て、カード会社への売上データの作成依頼をすること。（仮売上+実売上の処理になります 。）
+rakuten_card4.admin.card.config.buy_api.authorize.note: 仮売上(AUTH)・・・カードの与信枠を確保し承認番号を得ること。※仮売上のデータ保持期間は90日です。実売上処理を行わないとカード会社への売上データが作成されません。
+
+rakuten_card4.admin.card.config.challenge_type.no_preference: デフォルトリスクベース
+rakuten_card4.admin.card.config.challenge_type.challenge_requested_mandate: チャレンジ必須
+
+rakuten_card4.admin.card.config.installments.with_bonus: ボーナス払い
+rakuten_card4.admin.card.config.installments.with_revolving: リボ払い
+rakuten_card4.admin.card.config.installments.all: '一括払い'
+rakuten_card4.admin.card.config.installments.word: '分割%count%回払い'
+rakuten_card4.admin.card.config.installments.note1: ※有効にする支払い方法を選択してください。
+rakuten_card4.admin.card.config.installments.note2: ※カード会社契約状況を確認のうえ、ご設定いただきますようお願いします。
+
+rakuten_card4.admin.config.card_max_installment: 最大分割回数
+rakuten_card4.admin.config.card_installments: 支払い方法
+rakuten_card4.admin.config.card_cvv_use: セキュリティコード
+rakuten_card4.admin.config.card_cvv_use.note: ※カード番号の裏面の3～4桁の番号を入力するようにします。
+rakuten_card4.admin.config.card_3d_secure_use: 3Dセキュア(本人認証サービス)
+rakuten_card4.admin.config.card_3d_store_name: 3Dセキュア時の店舗名
+rakuten_card4.admin.config.card_3d_secure_use.note1: ※本人認証サービスを使用するにはSSL環境が必要です。
+rakuten_card4.admin.config.card_3d_secure_use.note2: ※携帯電話(フューチャーフォン）の場合には通常の決済が実行されます。
+rakuten_card4.admin.config.card_3d_store_name.note1: |-
+  ※本人認証サービスを利用しない場合、入力は不要です。
+  設定した店舗名は、本人認証サービスのパスワード入力画面に表示する店舗名になります。
+rakuten_card4.admin.config.card_3d_store_name.note2: ※事前にご契約の加盟店名が表示されます。変更したい場合に設定します。
+rakuten_card4.admin.config.card_3d_store_name.note3: ※設定した内容が正しく表示されるか十分な検証を行っていただくことを推奨いたします。
+rakuten_card4.admin.config.card_merchant_id_visa: マーチャントID (Visa)
+rakuten_card4.admin.config.card_merchant_id_master_card: マーチャントID (MasterCard)
+rakuten_card4.admin.config.card_merchant_id.note: ※マーチャントIDは3Dセキュア用の加盟店識別IDです。
+rakuten_card4.admin.config.card_challenge_type: 3Dセキュア追加認証
+rakuten_card4.admin.config.card_challenge_type.note1: ※デフォルトリスクベース・・・注文を判定し、不審な注文のリスクの高い場合にパスワード入力が求められます。
+rakuten_card4.admin.config.card_challenge_type.note2: ※チャレンジ必須・・・常にパスワード入力が求められます。
+rakuten_card4.admin.config.card_buy_api: 処理区分
+
+rakuten_card4.admin.config.use: 利用する
+rakuten_card4.admin.config.no_use: 利用しない
+
+
+# flash messages
+rakuten_card4.admin.save.success: 登録しました。
+rakuten_card4.admin.save.failed: 登録に失敗しました。
+rakuten_card4.admin.order.authorize.success: 仮売上を行いました。
+rakuten_card4.admin.order.authorize.failed: 仮売上に失敗しました。
+rakuten_card4.admin.order.capture.success: 実売上を行いました。
+rakuten_card4.admin.order.capture.failed: 実売上に失敗しました。
+rakuten_card4.admin.order.cancel.success: 取消を行いました。
+rakuten_card4.admin.order.cancel.failed: 取消に失敗しました。
+rakuten_card4.admin.order.change_price.success: 金額変更を行いました。
+rakuten_card4.admin.order.change_price.failed: 金額変更に失敗しました。
+rakuten_card4.admin.order.cvs.capture.failed: '%name%: コンビニ決済は実売上処理できません。'
+rakuten_card4.admin.order.cvs.capture.error: '%name%: システムエラーが発生しました'
+rakuten_card4.admin.payment_status.bulk_action.success: '%count%件を処理しました。'
+
+# twig
+rakuten_card4.admin.config.title: 楽天カード決済プラグイン(4系)
+rakuten_card4.admin.config.sub_title: プラグイン一覧
+rakuten_card4.admin.config.header: 設定
+rakuten_card4.admin.config.save: 登録
+rakuten_card4.admin.config.required: 必須
+rakuten_card4.admin.config.back: プラグイン一覧
+rakuten_card4.admin.config.api_url: API URL
+rakuten_card4.admin.config.api_id: API ID
+rakuten_card4.admin.config.api_password: API パスワード
+rakuten_card4.admin.order_edit.title: 楽天カード決済サービス決済情報
+rakuten_card4.admin.order_edit.payment_card: クレジットカード決済
+rakuten_card4.admin.order_edit.payment_register_card: 登録済みクレジットカード決済
+rakuten_card4.admin.order_edit.payment_cvs: コンビニ決済
+rakuten_card4.admin.order_edit.payment_status: 取引状態
+rakuten_card4.admin.order_edit.cvs_payment_status: コンビニ決済状況
+rakuten_card4.admin.order_edit.transaction_id.label: 決済ID
+rakuten_card4.admin.order_edit.card_installment.label: 支払回数
+rakuten_card4.admin.order_edit.request_id.label: リクエストID
+rakuten_card4.admin.order_edit.amount.label: 決済金額
+rakuten_card4.admin.order_edit.amount.different: お支払い合計(%payment_total%)と異なります。
+rakuten_card4.admin.order_edit.ip_address.label: IPアドレス
+rakuten_card4.admin.order_edit.auth_date.label: 与信日
+rakuten_card4.admin.order_edit.capture_date.label: 売上日
+rakuten_card4.admin.order_edit.cancel_date.label: 取消日
+rakuten_card4.admin.order_edit.error.label: 決済エラー
+rakuten_card4.admin.order_edit.payment_log.label: 決済ログ
+rakuten_card4.admin.order_edit.payment_log.disp: 決済ログ表示・非表示
+rakuten_card4.admin.order_edit.payment_log.time: 時間
+rakuten_card4.admin.order_edit.payment_log.content: 内容
+rakuten_card4.admin.order_edit.convenience.label: 支払い先コンビニ
+rakuten_card4.admin.order_edit.convenience_number.label: 収納番号
+rakuten_card4.admin.order_edit.operate.payment: '決済操作: %name%　実行しますか？\n\n※ 受注の内容変更時は登録後に実行ください。'
+
+rakuten_card4.admin.order_edit.cvs_type: コンビニ種別
+rakuten_card4.admin.order_edit.payment_action: 決済操作
+rakuten_card4.admin.order_edit.payment_action_cancel: 取消実行
+rakuten_card4.admin.payment_status.title: 決済状況一覧
+rakuten_card4.admin.payment_status.sub_title: 受注管理
+rakuten_card4.admin.payment_status.search: 検索
+rakuten_card4.admin.payment_status.search_result_count: '検索結果：%count%件が該当しました'
+rakuten_card4.admin.payment_status.search_condition_payment: 支払方法
+rakuten_card4.admin.payment_status.search_condition_order_status: 対応状況
+rakuten_card4.admin.payment_status.search_condition_payment_status: 決済状況
+rakuten_card4.admin.payment_status.invalid_condition: 検索条件に誤りがあります
+rakuten_card4.admin.payment_status.no_result: 検索条件に合致するデータが見つかりませんでした
+rakuten_card4.admin.payment_status.change_condition: 検索条件を変えて、再度検索をお試しください。
+rakuten_card4.admin.payment_status.display_count: '%count%件'
+rakuten_card4.admin.payment_status.col_order_date: 受注日時
+rakuten_card4.admin.payment_status.col_order_no: 注文番号
+rakuten_card4.admin.payment_status.col_order_name: お名前
+rakuten_card4.admin.payment_status.col_order_payment: 支払方法
+rakuten_card4.admin.payment_status.col_order_price: 購入金額
+rakuten_card4.admin.payment_status.col_order_staus: 対応状況
+rakuten_card4.admin.payment_status.bulk_label: 一括操作
+rakuten_card4.admin.payment_status.bulk_submit: 決定
+rakuten_card4.admin.payment_status.bulk_modal_title: 一括操作の確認
+rakuten_card4.admin.payment_status.bulk_modal_body: 複数の項目を変更します。実行してよろしいですか
+rakuten_card4.admin.payment_status.bulk_modal_action_exec: 実行
+rakuten_card4.admin.payment_status.bulk_modal_action_cancel: キャンセル
+rakuten_card4.admin.payment_status.bulk_alert: 選択されていません
+rakuten_card4.shopping.checkout.error: カード決済に失敗しました。
+rakuten_card4.shopping.verify.error: 注文情報が存在しません。カート画面に戻ってやり直してください。
+rakuten_card4.shopping.verify.error.cvs: コンビニ決済を利用することができません。
+rakuten_card4.shopping.cvs.label: コンビニ選択
+rakuten_card4.shopping.cvs.error: コンビニ決済に失敗しました。
+rakuten_card4.shopping.cvs.invalid.word.error: |-
+  お客様情報の氏名にシステム上で利用できない文字が含まれております。
+  恐れ入りますが、代用漢字・ひらがな・カタカナなどへの変更をお願い致します。
+rakuten_card4.shopping.cvs.message: お支払いをするコンビニを選択してください。
+rakuten_card4.admin.order_index.payment_status.table_header: 決済状況
+rakuten_card4.admin.order_edit.payment_status.label: 決済状況
+rakuten_card4.admin.order.change_status: 決済状況の変更
+
+rakuten_card4.admin.shipping_csv_upload.title: 楽天カード決済出荷CSV登録
+rakuten_card4.admin.shipping_csv_upload.note: |-
+  お問い合わせ番号、出荷日を一括登録し、受注の対応状況を出荷済みに変更します。
+  受注のお支払い方法が楽天カード決済プラグインのクレジットカード決済の場合
+  売上確定処理を実行します。
+  ※ 出荷CSVにて発送済みとなったものを対象に売上確定が実行されます。
+rakuten_card4.admin.shipping_csv_upload.result.register.label: '出荷CSV登録結果'
+rakuten_card4.admin.shipping_csv_upload.result.non: なし
+rakuten_card4.admin.shipping_csv_upload.capured.label: クレジットカード決済 売上確定結果
+rakuten_card4.admin.shipping_csv_upload.order_no.label: '受注番号%name%'
+rakuten_card4.admin.shipping_csv_upload.registerd: '%name%: 内容を反映しました。'
+rakuten_card4.admin.shipping_csv_upload.shipped: '%name%: 発送済みに変更しました。'
+rakuten_card4.admin.shipping_csv_upload.non_rakuten_skip: '%name%: 楽天カード決済の受注ではないため、処理をスキップしました。'
+rakuten_card4.admin.shipping_csv_upload.non_rakuten_skip.not_able_capture: '%name%: 決済状況から売上確定できないため、処理をスキップしました。'
+rakuten_card4.admin.shipping_csv_upload.change_payment_status.failure: '%name%: 売上確定に失敗しました。詳細は受注ページをご覧ください。'
+rakuten_card4.admin.shipping_csv_upload.change_payment_status.success: '%name%: 売上確定を行いました。'
+rakuten_card4.admin.order_index.select.label: 楽天カード決済一括操作
+rakuten_card4.admin.order_index.change_status: 楽天カード決済対応状況の変更
+
+# config画面
+rakuten_card4.admin.config.note1: 楽天カード決済プラグイン(4系)をご利用頂く為には楽天カード株式会社とご契約いただく必要があります。
+rakuten_card4.admin.config.note2: オンライン決済サービスについて
+rakuten_card4.admin.config.note2_url: https://www.rakuten-card.co.jp/merchant/paymentservice/
+rakuten_card4.admin.config.note3: お問い合わせはこちらから
+rakuten_card4.admin.config.note3_url: https://www.rakuten-card.co.jp/apply-form/merchant-inquiry/input.xhtml
+rakuten_card4.admin.config.col1: 接続先
+rakuten_card4.admin.config.card_header: クレジットカード設定
+rakuten_card4.admin.config.cvs_header: コンビニ設定
+rakuten_card4.admin.config.col1.label1: テスト環境
+rakuten_card4.admin.config.col1.label2: 本番環境
+
+
+rakuten_card4.admin.config.card_service_id: サービスID
+rakuten_card4.admin.config.card_auth_key: 認証キー
+
+rakuten_card4.admin.config.cvs_service_id: サービスID
+rakuten_card4.admin.config.cvs_auth_key: 認証キー
+rakuten_card4.admin.config.cvs_sub_service_id_seven: サブサービスID (セブンイレブン)
+rakuten_card4.admin.config.cvs_sub_service_id_lawson: サブサービスID (ローソン他)
+rakuten_card4.admin.config.cvs_sub_service_id_lawson.note: ※ローソン他・・・利用できるコンビニはローソン・ファミリーマート・ミニストップ・セイコーマートです。
+rakuten_card4.admin.config.cvs_sub_service_id_yamazaki: サブサービスID (デイリーヤマザキ)
+rakuten_card4.admin.config.cvs_kind: 利用コンビニ種類
+rakuten_card4.admin.config.cvs_kind.note: ※ご契約していて利用出来るコンビニを選択して下さい。
+rakuten_card4.admin.config.cvs_limit_day: 支払期限
+rakuten_card4.admin.config.cvs_limit_day.note: ※支払期限は60日まで設定できます。
+rakuten_card4.admin.config.cvs_limit_day_valid_message: ※ 支払い期限は最大%max_day%日まで設定可能です。
+
+# api response failure message
+rakuten_card4.front.card.error.now_no_use: 現在使用できません。時間を置いて再度お試しください。
+rakuten_card4.front.card.error.no_completed: 決済が完了できませんでした。該当のカードをご利用いただけない場合には、カード会社にお問い合わせいただくか、別のクレジットカードをご利用ください。
+rakuten_card4.front.card.error.aborted: 決済処理が中断されました。最初からやり直してください。
+rakuten_card4.front.card.error.maintenance: 決済システムが現在メンテナンス中のため利用できません。
+
+rakuten_card4.admin.card.error.system_error: システムエラーが発生しました。楽天カードへ連絡してください。
+rakuten_card4.admin.card.error.now_no_use_later: 現在使用できません。時間を置いて、ユーザーに再決済を依頼してください。
+rakuten_card4.admin.card.error.mistake_no_completed: 有効期限、またはセキュリティコードが誤っていたために、決済を完了できませんでした。
+rakuten_card4.admin.card.error.aborted_payment: 決済処理が中断されました。
+rakuten_card4.admin.card.error.maintenance: 決済システムが現在メンテナンス中のため利用できません。
+
+# api response failure message
+rakuten_card4.front.card.error.purchase_error: |-
+  決済が完了できませんでした。
+  恐れ入りますが、マイページの購入履歴や本サイトからの注文メールが届いていないかをご確認ください。
+  いずれもない場合、サイトにお問い合わせください。
+
+# front message
+rakuten_card4.front.shopping.card.authorize_html.message: クレジットカードの与信処理を行います。
+rakuten_card4.front.shopping.card.authorize_html.message_notice: 画面が切り替わるまで、そのままお待ちください。
+rakuten_card4.front.shopping.card.input.card_no.title: クレジットカード番号
+rakuten_card4.front.shopping.card.input.card_expiration.title: カード有効期限
+
+rakuten_card4.front.card.payvault.card_error: 正しいクレジットカード番号を入力してください。
+rakuten_card4.front.card.payvault.expiration_error: 正しい有効期限月・年を入力してください。
+rakuten_card4.front.card.payvault.cvv_error: 正しいセキュリティコードを入力してください。
+
+rakuten_card4.front.shopping.card.register.title: カード情報登録
+rakuten_card4.front.shopping.card.register.message: このクレジットカードを登録する。
+rakuten_card4.front.shopping.card.register.confirm.yes: 登録する
+rakuten_card4.front.shopping.card.register.confirm.no: 登録しない
+rakuten_card4.front.shopping.card.register.card_select: 選択
+rakuten_card4.front.shopping.card.register.select_notice: お支払いで利用するカードをご選択ください。
+rakuten_card4.front.shopping.card.register.regiter_notice: ご登録すると、次回よりクレジットカード番号の入力なしでご購入いただけます。
+rakuten_card4.front.shopping.card.register.max_notice: |-
+  カード情報が既に%count%個登録されています。
+  これ以上は新規で登録出来ません。
+  新たに登録したい場合は、大変お手数ですが後ほどマイページにて編集して下さい。
+rakuten_card4.front.shopping.card.cvv.note: 主にカード裏面の署名欄に記載されている末尾３桁～４桁の数字をご記入下さい。
+
+rakuten_card4.front.card.expire.date: '%year%年%month%月'
+rakuten_card4.front.mypage.card.delete.none: 削除対象のクレジットカードがありません。
+rakuten_card4.front.mypage.card.delete.failure: クレジットカードの削除に失敗しました。
+rakuten_card4.front.mypage.card.delete.success: クレジットカードの削除に成功しました。
+rakuten_card4.front.mypage.card.register.failure: クレジットカードの登録に失敗しました。
+rakuten_card4.front.mypage.card.register.success: クレジットカードの登録に成功しました。
+rakuten_card4.front.mypage.card.register.max_count: クレジットカードの登録が上限に達しました。
+rakuten_card4.front.mypage.card.navi_title: カード情報編集
+rakuten_card4.front.mypage.title: マイページ
+rakuten_card4.front.mypage.card.registered_cards.title: 登録済みクレジットカード一覧
+rakuten_card4.front.mypage.card.no_registered_cards: 登録済みクレジットカードはありません。
+rakuten_card4.front.mypage.card.register.title: クレジットカード登録
+rakuten_card4.front.mypage.card.delete: 削除
+rakuten_card4.front.mypage.card.sequence_no: 番号
+rakuten_card4.front.mypage.card.card_number: カード番号
+rakuten_card4.front.mypage.card.expire_date: 有効期限
+rakuten_card4.front.mypage.card.delete_button: 選択したクレジットカードを削除
+rakuten_card4.front.mypage.card.register_button: 入力したクレジットカードを登録

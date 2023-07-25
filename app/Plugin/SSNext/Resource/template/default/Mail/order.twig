@@ -1,0 +1,47 @@
+注文コード：{{ Order.order_no }}
+注文日時：{{ Order.create_date|date('Y年m月d日 H時i分s秒') }}
+■注文者の情報
+氏名：{{ Order.name01 }} {{ Order.name02 }}
+氏名（フリガナ）：{{ Order.kana01 }} {{ Order.kana02 }}
+郵便番号：{{ Order.order_zip01 }}-{{ Order.order_zip02 }}
+住所：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}
+電話番号：{{ Order.phone_number }}
+Ｅメールアドレス：{{ Order.email }}
+■支払方法
+支払方法：{{ Order.payment_method }}
+■注文内容
+{% for OrderItem in Order.MergedProductOrderItems %}
+------------------------------------------------------------
+商品番号：{{ OrderItem.product_code }}
+注文商品名：{{ OrderItem.product_name }}
+商品オプション：{{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }}
+単価：￥{{ OrderItem.price_inc_tax|number_format }}
+数量：{{ OrderItem.quantity|number_format }}
+小計：￥{{ OrderItem.total_price|number_format }}
+{% endfor %}
+------------------------------------------------------------
+商品合計：￥{{ Order.subtotal|number_format }}
+税金：￥{{ Order.tax|number_format }}
+送料：￥{{ Order.delivery_fee_total|number_format}}
+手数料：￥{{ Order.charge|number_format }}
+その他費用：￥0
+ポイント利用額：▲￥{{ point_price|number_format }}({{ Order.usePoint|number_format }}ポイント)
+------------------------------------------------------------
+合計金額(税込)：￥{{ Order.payment_total|number_format }}
+------------------------------------------------------------
+■届け先の情報
+{%  for Shipping in Order.Shippings %}
+[送付先{{ loop.index }}]
+　送付先{{ loop.index }}氏名：{{ Shipping.name01 }} {{ Shipping.name02 }}
+　送付先{{ loop.index }}氏名（フリガナ）：{{ Shipping.kana01 }} {{ Shipping.kana02 }}
+　送付先{{ loop.index }}郵便番号：{{ Shipping.postal_code }}
+　送付先{{ loop.index }}住所：{{ Shipping.Pref.name }}{{ Shipping.addr01 }}{{ Shipping.addr02 }}
+　送付先{{ loop.index }}電話番号：{{ Shipping.phone_number }}
+　送付先{{ loop.index }}のし・ギフト包装：
+　送付先{{ loop.index }}お届け方法：{{ Shipping.shipping_delivery_name }}
+　送付先{{ loop.index }}お届け希望日：{{ Shipping.shipping_delivery_date is empty ? '指定なし' : Shipping.shipping_delivery_date|date_day }}
+　送付先{{ loop.index }}お届け希望時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}
+{% endfor %}
+■通信欄
+{{ Order.message }}
+

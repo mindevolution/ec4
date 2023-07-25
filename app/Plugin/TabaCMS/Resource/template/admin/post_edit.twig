@@ -1,0 +1,477 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+{% use "bootstrap_4_layout.html.twig" %}
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% set const = TabaCMSConstants %}
+{% set menus = [constant('PLUGIN_CATEGORY_ID',const),constant('PLUGIN_CODE_LC',const),constant('PLUGIN_CODE_LC',const)~'_post_'~type.typeId] %}
+{% set bind_prefix = constant('ADMIN_BIND_PREFIX',const) %}
+{% set tag_id_prefix = constant('PLUGIN_CODE_LC',const)~'_post_edit' %}
+{% set trans_prefix = constant('PLUGIN_CODE_LC',const)~'.admin' %}
+{% set include_prefix = constant('PLUGIN_CODE',const)~'/Resource/template/admin/' %}
+{% set body_class = constant('PLUGIN_CODE_LC',const)~'_page' %}
+{% block title %}{{ constant('PAGE_TITLE',const)|raw }}{% endblock %}
+{% block sub_title %}{{ type.typeName }} - {{ (trans_prefix~'.title.post_edit')|trans }}{% endblock %}
+{% set userConfig = TabaCMSUserConfig %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ path(bind_prefix~'_assets',{file:'css/sw-html-editor.css'}) }}">
+<link rel="stylesheet" href="{{ path(bind_prefix~'_assets',{file:'css/bootstrap-datetimepicker.min.css'}) }}">
+<link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload.css', 'admin') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload-ui.css', 'admin') }}">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ path(bind_prefix~'_assets',{file:'js/moment-with-locales.min.js'}) }}"></script>
+<script src="{{ path(bind_prefix~'_assets',{file:'js/bootstrap-datetimepicker.min.js'}) }}"></script>
+<script src="{{ asset('assets/js/vendor/fileupload/vendor/jquery.ui.widget.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/fileupload/jquery.iframe-transport.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-process.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-validate.js', 'admin') }}"></script>
+<script>var bootstrapTooltip = $.fn.tooltip.noConflict();</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>$.fn.tooltip = bootstrapTooltip;</script>
+<script src="{{ path(bind_prefix~'_assets',{file:'js/sw-html-editor.js'}) }}"></script>
+<script>
+$(function() {
+    if ($("#{{ form.body.vars.id }}")[0]) {
+        $("#{{ form.body.vars.id }}").trumbowyg({
+            lang: 'ja',
+            {% if userConfig.get('editor') is empty or userConfig.get('editor').semantic is not defined %}
+                semantic: {'div':'div','i':'i'},
+            {% else %}
+                {% if userConfig.get('editor').semantic is iterable %}
+                    semantic: {
+                        {% for row in userConfig.get('editor').semantic %}{% for key in row|keys %}
+                            '{{ key }}': '{{ attribute(row,key) }}',
+                        {% endfor %}{% endfor %}
+                    },
+                {% elseif userConfig.get('editor').semantic == true %}
+                    semantic: true,
+                {% else %}
+                    semantic: {'div':'div','i':'i'},
+                {% endif %}
+            {% endif %}
+            {% if userConfig.get('editor') is empty or (userConfig.get('editor').script is not defined or (userConfig.get('editor').script is not empty and userConfig.get('editor').script == true)) %}tagsToRemove: ['script'],{% endif %}
+       });
+    }
+
+    // 投稿区分により入力フィールドの表示を制御します。
+    var content_div_element = "input[name={{ form.content_div.vars.full_name|replace({'[':'\\\\['})|replace({']':'\\\\]'}) }}]";
+    function content_div_show() {
+        $('#{{ form.body.vars.id }}_box').hide();
+        $('#{{ form.link_url.vars.id }}_box').hide();
+        $('#url_box').hide();
+        if ($(content_div_element + ':checked').val() == '1') {
+            $('#{{ form.body.vars.id }}_box').show();
+            $('#url_box').show();
+        } else if ($(content_div_element + ':checked').val() == '2') {
+        	$('#{{ form.link_url.vars.id }}_box').show();
+        }
+    }
+    $(content_div_element).on('click',function(event) {
+        content_div_show();
+    });
+    content_div_show();
+    // 日時設定
+    $('#{{ form.public_date.vars.id }}').datetimepicker({
+        locale: 'ja',
+        format: 'YYYY-MM-DD HH:mm',
+        useCurrent: false,
+        showTodayButton: true
+    });
+    // ファイルアップロード処理ここから ----------------------------------------
+    var upload_input_id = '#{{ form.thumbnail_file.vars.id }}';
+    var upload_name_id = '#{{ form.thumbnail.vars.id }}';
+    var upload_uri =  '{{ url(bind_prefix~'_post_thumbnail_upload') }}';
+    var uploaded_img_tag = ''
+        + '<div class="c-form__fileUploadThumbnail" style="background-image:url(\'__path__\');">'
+        + '<a class="delete-image"><i class="fa fa-times" aria-hidden="true"></i></a>'
+        + '</div>';
+    {% if post.thumbnail is not empty %}
+        {% if image_edited %}
+            $img_tag = $(uploaded_img_tag.replace(/__path__/g,'{{ asset(post.thumbnail,'temp_image') }}'));
+        {% else %}
+            $img_tag = $(uploaded_img_tag.replace(/__path__/g,'{{ asset(post.thumbnail,'save_image') }}'));
+        {% endif %}
+        $('#thumb').html($img_tag);
+    {% endif %}
+    // アイコン表示制御
+    var toggleUploadIcon = function () {
+        if ($("#thumb li").length > 0) {
+            $("#icon_no_image").css("display","none");
+        } else {
+            $("#icon_no_image").css("display","");
+        }
+    };
+    // 削除
+    $("#thumb").on("click",".delete-image",function () {
+        $('#thumb').html("");
+        $(upload_name_id).val('');
+    });
+    // アップロード
+    $(upload_input_id).fileupload({
+        url: upload_uri,
+        type: "post",
+        sequentialUploads: true,
+        formData: [{ name:"{{ constant('Eccube\\Common\\Constant::TOKEN_NAME') }}",value:"{{ csrf_token }}" }],
+        dataType: 'json',
+        done: function (e, data) {
+            $('#progress').hide();
+            if (data.result.file) {
+                var path = '{{ asset("",'temp_image') }}' + data.result.file;
+                var $img_tag = $(uploaded_img_tag.replace(/__path__/g,path));
+                $('#thumb').html($img_tag);
+                $(upload_name_id).val(data.result.file);
+            }
+            toggleUploadIcon();
+        },
+        fail: function (e, data) {
+            alert('アップロードに失敗しました。');
+        },
+        always: function (e, data) {
+            $('#progress').hide();
+            $('#progress .progress-bar').width('0%');
+        },
+        start: function (e, data) {
+            $('#progress').show();
+        },
+         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+         maxFileSize: 10000000,
+         maxNumberOfFiles: 10,
+         progressall: function (e, data) {
+             $('#progress .progress-bar').css('width',(parseInt(data.loaded / data.total * 100, 10)) + '%');
+         },
+         processalways: function (e, data) {
+             if (data.files.error) {
+                 alert("画像ファイルサイズが大きいか画像ファイルではありません。");
+             }
+         }
+     });
+     // ファイル選択ボタン
+     $('#file_upload').on('click', function () {
+         $(upload_input_id).click();
+     });
+     toggleUploadIcon();
+     // ファイルアップロード処理ここまで ----------------------------------------
+});
+</script>
+{% endblock %}
+
+{% block main %}
+
+    <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data" novalidate>
+        {{ form_row(form._token) }}
+
+        <div class="c-contentsArea__cols">
+
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+
+                    <!-- メイン -->
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="d-inline-block"><span class="card-title">{{ (trans_prefix~'.title.post_edit')|trans }}</span></div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#{{ tag_id_prefix }}_main" aria-expanded="false" aria-controls="{{ tag_id_prefix }}_main"><i class="fa fa-angle-up fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div><!-- /card-header -->
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_main">
+                            <div class="card-body">
+
+                                {% if post.getPostId is not empty %}
+                                    <div class="row mb-3">
+                                        <div class="col-3">
+                                            <div class="d-inline-block"><span>URL</span></div>
+                                        </div>
+                                        <div class="col-9">
+                                            <div>
+                                                {% if post.isPublic and type.publicDiv == 1 %}
+                                                    <a href="{{ post.getURL }}" target="_blank"><i class="fa fa-external-link text-secondary"></i> {{ post.getURL }}</a>
+                                                {% else %}
+                                                    <a style="cursor: not-allowed;"><i class="fa fa-external-link text-secondary"></i> {{ post.getURL }}</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.content_div} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.title} %}
+                                <div class="row mb-3" id="{{ form.body.vars.id }}_box">
+                                    <div class="col">
+                                        <div>
+                                            {{ form_widget(form.body) }}
+                                            {{ form_errors(form.body) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3" id="{{ form.link_url.vars.id }}_box">
+                                        <div class="col-3">
+                                            <div class="d-inline-block"><span>リンク</span></div>
+                                        </div>
+                                    <div class="col">
+                                        <div>
+                                            <span class="small">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.link_url} %}</span>
+                                            {{ form_widget(form.link_url) }}
+                                            {{ form_errors(form.link_url) }}
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <span class="small">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.link_target} %}</span>
+                                        <div>
+                                            {{ form_widget(form.link_target) }}
+                                            {{ form_errors(form.link_target) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /card-body -->
+                        </div><!-- /ec-cardCollapse -->
+                    </div><!-- /card -->
+                    <!-- /メイン -->
+
+                    <!-- meta設定 -->
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="d-inline-block"><span class="card-title">{{ (trans_prefix~'.title.post_edit_meta')|trans }}</span></div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#{{ tag_id_prefix }}_meta" aria-expanded="false" aria-controls="{{ tag_id_prefix }}_meta"><i class="fa fa-angle-up fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div><!-- /card-header -->
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_meta">
+                            <div class="card-body">
+
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.meta_author} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.meta_description} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.meta_keyword} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.meta_robots} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.meta_tags} %}
+
+                            </div><!-- /card-body -->
+                        </div><!-- /ec-cardCollapse -->
+                    </div><!-- /card -->
+                    <!-- /meta設定 -->
+
+                    <!-- 高度な設定 -->
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="d-inline-block"><span class="card-title">{{ (trans_prefix~'.title.post_edit_setting')|trans }}</span></div>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#{{ tag_id_prefix }}_misc" aria-expanded="false" aria-controls="{{ tag_id_prefix }}_misc"><i class="fa fa-angle-up fa-lg"></i></a>
+                                </div>
+                            </div>
+                        </div><!-- /card-header -->
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_misc">
+                            <div class="card-body">
+
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.overwrite_route} %}
+                                {% include include_prefix~'common/form_render_row.twig' with {form_element:form.script} %}
+
+                            </div><!-- /card-body -->
+                        </div><!-- /ec-cardCollapse -->
+                    </div><!-- /card -->
+                    <!-- /高度な設定 -->
+
+                </div><!-- /c-primaryCol -->
+            </div><!-- /c-contentsArea__primaryCol -->
+
+            <div class="c-contentsArea__secondaryCol">
+
+                <div class="c-secondaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10"><span class="card-title">公開</span></div>
+                                <div class="col-2 text-right"><a data-toggle="collapse" href="#{{ tag_id_prefix }}_public" aria-expanded="false" aria-controls="update"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_public">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-5"><span>公開</span></div>
+                                    <div class="col">
+                                            {{ form_widget(form.public_div,{'label_attr':{'class':'radio-inline'}}) }}
+                                            {{ form_errors(form.public_div) }}
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-5">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.public_date} %}</div>
+                                    <div class="col">
+                                            {{ form_widget(form.public_date) }}
+                                            {{ form_errors(form.public_date) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-secondaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.data_key} %}</div>
+                                <div class="col-2 text-right"><a data-toggle="collapse" href="#{{ tag_id_prefix }}_data_key" aria-expanded="false" aria-controls="update"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_data_key">
+                        <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                            {{ form_widget(form.data_key) }}
+                                            {{ form_errors(form.data_key) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-secondaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.category} %}</div>
+                                <div class="col-2 text-right"><a data-toggle="collapse" href="#{{ tag_id_prefix }}_data_key" aria-expanded="false" aria-controls="update"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_data_key">
+                        <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                            {{ form_widget(form.category) }}
+                                            {{ form_errors(form.category) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-secondaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.thumbnail} %}</div>
+                                <div class="col-2 text-right"><a data-toggle="collapse" href="#{{ tag_id_prefix }}_thumbnail" aria-expanded="false" aria-controls="{{ tag_id_prefix }}_thumbnail"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_thumbnail">
+                        <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                            <div class="text-center w-100 py-3 border-ec-dashed mb-2 rounded">
+                                                <i class="fa fa-cloud-upload fa-2x text-ec-lightGray" aria-hidden="true"></i>
+                                                <p class="font-weight-bold text-ec-gray">{{ 'admin.common.drag_and_drop_image_description'|trans }}</p>
+                                                {{ form_widget(form.thumbnail_file,{attr:{accept:'image/*',style:'display:none;'}}) }}
+                                                <a class="btn btn-ec-regular mr-2" onclick="$('#{{ form.thumbnail_file.vars.id }}').click()">{{ 'admin.common.file_select'|trans }}</a>
+                                                {{ form_widget(form.thumbnail) }}
+                                                {{ form_errors(form.thumbnail_file) }}
+                                                {{ form_errors(form.thumbnail) }}
+                                            </div>
+                                            <div id="thumb" class="c-form__fileUploadThumbnails"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-secondaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-10">{% include include_prefix~'common/form_render_label.twig' with {form_element:form.memo} %}</div>
+                                <div class="col-2 text-right"><a data-toggle="collapse" href="#{{ tag_id_prefix }}_memo" aria-expanded="false" aria-controls="{{ tag_id_prefix }}_memo"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="{{ tag_id_prefix }}_memo">
+                        <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col">
+                                            {{ form_widget(form.memo) }}
+                                            {{ form_errors(form.memo) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if post.getPostId is not empty %}
+                    <div class="c-secondaryCol">
+                        <div class="card rounded border-0 mb-4">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-10"><span class="card-title">登録日・更新日</span></div>
+                                    <div class="col-2 text-right"><a data-toggle="collapse" href="#update" aria-expanded="false" aria-controls="update"> <i class="fa fa-angle-up fa-lg"></i></a></div>
+                                </div>
+                            </div>
+                            <div class="collapse show ec-cardCollapse" id="update">
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col"><i class="fa fa-flag mr-1"></i><span>登録日</span></div>
+                                        <div class="col"><span>：{{ post.createDate|date('Y/m/d H:i') }}</span></div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col"><i class="fa fa-refresh mr-1"></i><span>更新日</span></div>
+                                        <div class="col"><span>：{{ post.updateDate|date('Y/m/d H:i') }}</span></div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col"><i class="fa fa-user mr-1"></i><span>最終更新者</span></div>
+                                        <div class="col"><span>：{{ post.member.name }}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink" href="{{ path(bind_prefix~'_post_list',{type_id:type.getTypeId}) }}">
+                                <i class="fa fa-backward" aria-hidden="true"></i><span>{{ (trans_prefix~'.title.post_list')|trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5" type="submit">
+                                    {{ 'common.registration'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /c-conversionArea__container -->
+        </div><!-- /c-conversionArea -->
+
+    </form>
+
+{% endblock %}

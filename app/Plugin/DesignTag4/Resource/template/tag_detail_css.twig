@@ -1,0 +1,10 @@
+{# タグ #}
+<style>
+    {% for Tag in DesignTags %}
+    .ec-productRole__tag.tag_{{ Tag.id }}{
+    {% if Tag.text_color %}color: {{ Tag.text_color }};{% endif %}
+    {% if Tag.background_color %}background-color: {{ Tag.background_color }};{% endif %}
+    {% if Tag.border_color %}border-color: {{ Tag.border_color }};{% endif %}
+    }
+    {% endfor %}
+</style>

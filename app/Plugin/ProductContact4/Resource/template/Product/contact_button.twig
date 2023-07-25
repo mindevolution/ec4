@@ -1,0 +1,11 @@
+<script>
+    $(function () {
+        $('#form1 .ec-productRole__btn').filter(":last").after('<div class="ec-productRole__btn">\n' +
+            '          <button type="button" class="ec-blockBtn--cancel contact">{{ contact_button_label }}</button>\n' +
+            '         </div>')
+        
+        $('body').on('click','.ec-productRole__btn .contact', function () {
+            location.href = "{{ url('contact') }}?product={{ Product.id }}"
+        })
+    })
+</script>

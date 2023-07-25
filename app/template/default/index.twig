@@ -1,0 +1,149 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+
+{% block stylesheet %}
+    <style>
+.ec-sliderRole.page-width {
+    max-width: 1110px !important;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 60px;
+}
+        .slick-slider {
+            margin-bottom: 30px;
+        }
+
+        .slick-dots {
+            position: absolute;
+            bottom: -45px;
+            display: block;
+            width: 100%;
+            padding: 0;
+            list-style: none;
+            text-align: center;
+        }
+
+        .slick-dots li {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 0 5px;
+            padding: 0;
+
+            cursor: pointer;
+        }
+
+        .slick-dots li button {
+            font-size: 0;
+            line-height: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+            padding: 5px;
+            cursor: pointer;
+            color: transparent;
+            border: 0;
+            outline: none;
+            background: transparent;
+        }
+
+        .slick-dots li button:hover,
+        .slick-dots li button:focus {
+            outline: none;
+        }
+
+        .slick-dots li button:hover:before,
+        .slick-dots li button:focus:before {
+            opacity: 1;
+        }
+
+        .slick-dots li button:before {
+            content: " ";
+            line-height: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12px;
+            height: 12px;
+            text-align: center;
+            opacity: .25;
+            background-color: black;
+            border-radius: 50%;
+
+        }
+
+        .slick-dots li.slick-active button:before {
+            opacity: .75;
+            background-color: black;
+        }
+
+        .slick-dots li button.thumbnail img {
+            width: 0;
+            height: 0;
+        }
+.slick-arrow {
+  position: absolute;
+  cursor: pointer;
+  color: #000;
+  font-size: 42px;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.slick-next.slick-arrow {
+    right: -40px;
+}
+.slick-prev.slick-arrow {
+    left: -40px;
+}
+@media (max-width: 1200px) {
+    .slick-next.slick-arrow {
+        right: 20px;
+    }
+    .slick-prev.slick-arrow {
+        left: 20px;
+    }
+}
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(function() {
+            $('.main_visual').slick({
+                dots: true,
+                arrows: true,
+                autoplay: true,
+                speed: 300,
+                prevArrow: '<div class="slick-prev"><i class="fas fa-angle-left"></i></div>',
+                nextArrow: '<div class="slick-next"><i class="fas fa-angle-right"></i></div>'
+            });
+        });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="ec-sliderRole page-width">
+        <div class="main_visual">
+            <div class="item slick-slide"><a href="/help/member"><img src="{{ asset('assets/img/top/001.png') }}"></div></a>
+            <div class="item slick-slide"><a href="/products/list?name=chrischristensen"><img src="{{ asset('assets/img/top/CC001.jpg') }}"></div></a>
+            <div class="item slick-slide"><a href="/products/list?name=freezedryaustralia"><img src="{{ asset('assets/img/top/FDA001.jpg') }}"></div></a>
+            <div class="item slick-slide"><a href="/products/list?name=animalayurveda"><img src="{{ asset('assets/img/top/animalayurveda.png') }}"></div></a>
+            <div class="item slick-slide"><a href="/help/pro_member"><img src="{{ asset('assets/img/top/Pro_toppage001.png') }}"></div></a>
+            
+            
+        </div>
+    </div>
+{% endblock %}

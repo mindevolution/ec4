@@ -1,0 +1,216 @@
+{% if form.rakuten_card4 is defined %}
+    {% set formRc4 = form.rakuten_card4 %}
+    {% set form_register_card = formRc4.card_use_kind[1] %}
+    {% set form_input_card = formRc4.card_use_kind[0] %}
+
+    {% set card_point = 'rakuten_card4_card_number' %}
+    {% set month_point = 'rakuten_card4_expiration_month' %}
+    {% set year_point = 'rakuten_card4_expiration_year' %}
+    {% set cvv_point = 'rakuten_card4_cvv' %}
+    {% set input_card_cvv_area = 'rakuten_card4_input_card_cvv_area' %}
+    {% set form_point = 'shopping-form' %}
+
+    {{ include("@RakutenCard4/card_parts_style.twig")}}
+    {{ include("@RakutenCard4/card_parts_js.twig")}}
+
+    <script>
+        $(function () {
+            // クレジット入力フォームを支払い方法のあとに記載
+            // $('#shopping-form > div > div.ec-orderRole__detail > div.ec-orderPayment').eq(0).after($('#rakuten_card4_credit_form'));
+            $('#rakuten_card4_credit_form').insertBefore($('#shopping-form > div > div.ec-orderRole__detail > div.ec-orderConfirm'));
+            if (isCardUseRegisterOnLoad()){
+                $('#{{ form_register_card.vars.id }}').prop('checked', true);
+            }else{
+                $('#{{ form_input_card.vars.id }}').prop('checked', true);
+            }
+            displayCardArea();
+
+            $("input[name='{{ formRc4.card_use_kind.vars.full_name }}']").on('click', function () {
+                displayCardArea();
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#shopping-form > div > div.ec-orderRole__summary > div > div.ec-totalBox__btn > button').on('click', function (e) {
+                e.preventDefault();
+                loadingOverlay();
+                setTimeout(function () {
+                    // カードチェック処理など
+                    var is_valid = '';
+                    if (isCardUseRegister()){
+                        is_valid = isValidRegisterCard();
+                    }else{
+                        is_valid = isValidInputCard();
+                    }
+                    if (is_valid.length > 0){
+                        alert(is_valid);
+                        loadingOverlay('hide');
+                        return false;
+                    }
+
+                    // トークン取得処理
+                    if (isCardUseRegister()){
+                        execCreateToken(false);
+                    }else{
+                        execCreateToken(true);
+                    }
+
+                    return false;
+                }, 100);
+            });
+        });
+
+        function existRegister()
+        {
+            return document.getElementById("{{ form_register_card.vars.id }}") != null;
+        }
+
+        function isCardUseRegisterOnLoad()
+        {
+            {% if formRc4.card_use_kind.vars.data == constant('Plugin\\RakutenCard4\\Common\\ConstantCard::USE_KIND_INPUT') %}
+                return false;
+            {% else %}
+                return existRegister();
+            {% endif %}
+        }
+
+        function isCardUseRegister()
+        {
+            $use_kind = $("input[name='{{ formRc4.card_use_kind.vars.full_name }}']:checked");
+            return $use_kind.val() == '{{ constant('Plugin\\RakutenCard4\\Common\\ConstantCard::USE_KIND_REGISTER') }}';
+        }
+
+        {% set register_card_area = 'rakuten_card4_register_card_area' %}
+        {% set register_card_cvv_area = 'rakuten_card4_register_card_cvv_area' %}
+        function displayCardArea()
+        {
+            $register_area = $('#{{ register_card_area }}');
+            $only_card_contents = $('.only_card_contents');
+            $selected_input_card = $('#selected_input_card');
+            $no_selecet_input_card = $('#no_select_input_card');
+            $input_card_title = $('#input_card_title');
+            if (!existRegister()){
+                $only_card_contents.show();
+            }else{
+                if (isCardUseRegister()){
+                    $input_card_title.appendTo($no_selecet_input_card);
+                    $only_card_contents.hide();
+                    $register_area.show();
+                }else{
+                    $input_card_title.appendTo($selected_input_card);
+                    $register_area.hide();
+                    $only_card_contents.show();
+                }
+            }
+        }
+
+    </script>
+
+    <style>
+        #rakuten_card4_credit_form h2 label{
+            display: inline;
+        }
+        #rakuten_card4_register_card_area dl{
+            display: flex;
+            align-content: space-between;
+            margin-bottom: 10px;
+        }
+        #rakuten_card4_register_card_area dl dt{
+            font-weight: normal;
+        }
+        #rakuten_card4_register_card_area dl dt,
+        #rakuten_card4_register_card_area dl dd
+        {
+            padding-bottom: 10px;
+            border-bottom: 1px dotted #ccc;
+        }
+        #rakuten_card4_register_card_area dl .card_select{
+            flex-basis: 20%;
+        }
+        #rakuten_card4_register_card_area dl .card_number{
+            flex-basis: 40%;
+        }
+        #rakuten_card4_register_card_area dl .card_expire{
+            flex-basis: 30%;
+        }
+        #rakuten_card4_register_card_area dl .ec-select{
+            margin-bottom: 0;
+        }
+    </style>
+
+    <div id="rakuten_card4_credit_form" class="ec-orderPayment">
+        {% if formRc4.CustomerToken is defined %}
+            <div class="ec-rectHeading">
+                <h2>{{ form_widget(form_register_card) }}</h2>
+            </div>
+            <div id="{{ register_card_area }}" style="display:none;">
+                <p>{{ 'rakuten_card4.front.shopping.card.register.select_notice'|trans }}</p>
+                <div class="dl_table">
+                    <dl>
+                        <dt class="align-middle text-center card_select">{{ 'rakuten_card4.front.shopping.card.register.card_select'|trans }}</dt>
+                        <dt class="align-middle text-left card_number">{{ 'rakuten_card4.front.mypage.card.card_number'|trans }}</dt>
+                        <dt class="align-middle text-center card_expire">{{ 'rakuten_card4.front.mypage.card.expire_date'|trans }}</dt>
+                    </dl>
+                    {% for child in formRc4.CustomerToken.children %}
+                        {% if CustomerTokens[child.vars.value] is defined %}
+                            {% set CustomerToken = CustomerTokens[child.vars.value] %}
+                            <dl>
+                                <dd class="align-middle text-center card_select">
+                                    {{ form_widget(child) }}
+                                </dd>
+                                <dd class="align-middle text-left card_number">
+                                    {{ CustomerToken.CardNo }}
+                                </dd>
+                                <dd class="align-middle text-center card_expire">
+                                    {{ CustomerToken.CardExpireDate }}
+                                </dd>
+                            </dl>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="ec-input">
+                        {{ form_errors(formRc4.CustomerToken) }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <div id="selected_input_card">
+            <div id="input_card_title" class="ec-rectHeading">
+                <h2>{{ form_widget(form_input_card) }}</h2>
+            </div>
+        </div>
+        <div id="rakuten_card4_input_card_area">
+            {{ include("@RakutenCard4/card_parts_form.twig")}}
+            <div class="rakuten_card4_input_area">
+                <dl>
+                    <dt class="save_pay_methods">{{ 'rakuten_card4.admin.config.card_installments'|trans }}</dt>
+                    <dd>
+                        <div class="ec-select">
+                            {{ form_widget(formRc4.card_installment, { 'attr': { 'class': 'form-control'}}) }}
+                            {{ form_errors(formRc4.card_installment) }}
+                        </div>
+                    </dd>
+                </dl>
+
+                {% if Order.Customer is not empty %}
+                    <dl class="only_card_contents">
+                        <dt>{{ 'rakuten_card4.front.shopping.card.register.title'|trans }}</dt>
+                        <dd>
+                            {% if able_register_card() %}
+                                <div class="ec-checkbox">
+                                    {{ form_widget(formRc4.card_check_register) }}
+                                    {{ form_errors(formRc4.card_check_register) }}
+                                </div>
+                                {{ 'rakuten_card4.front.shopping.card.register.regiter_notice'|trans|nl2br }}
+                            {% else %}
+                                {{ 'rakuten_card4.front.shopping.card.register.max_notice'|trans({ '%count%': eccube_config['rakuten_card4.card_register_count'] })|nl2br }}
+                            {% endif %}
+                        </dd>
+                    </dl>
+                {% endif %}
+            </div>
+        </div>
+        <div id="no_select_input_card">
+        </div>
+    </div>
+{% endif  %}

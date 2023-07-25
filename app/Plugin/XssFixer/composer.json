@@ -1,0 +1,1 @@
+{"name":"ec-cube\/XssFixer","version":"1.0.0","description":"XSS\u8106\u5f31\u6027\u4fee\u6b63\u30d7\u30e9\u30b0\u30a4\u30f3","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.7"},"extra":{"code":"XssFixer","id":2253}}

@@ -1,0 +1,69 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+{% use "bootstrap_4_layout.html.twig" %}
+
+{% set const = TabaCMSConstants %}
+{% set menus = [constant('PLUGIN_CATEGORY_ID',const),constant('PLUGIN_CODE_LC',const),constant('PLUGIN_CODE_LC',const)~'_category_'~type.typeId] %}
+{% set bind_prefix = constant('ADMIN_BIND_PREFIX',const) %}
+{% set tag_id_prefix = constant('PLUGIN_CODE_LC',const)~'_type_list' %}
+{% set trans_prefix = constant('PLUGIN_CODE_LC',const)~'.admin' %}
+{% set include_prefix = constant('PLUGIN_CODE',const)~'/Resource/template/admin/' %}
+{% set body_class = constant('PLUGIN_CODE_LC',const)~'_page' %}
+{% block title %}{{ constant('PAGE_TITLE',const)|raw }}{% endblock %}
+{% block sub_title %}{{ type.typeName }} - {{ (trans_prefix~'.title.category_edit')|trans }}{% endblock %}
+
+{% block main %}
+    <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data" novalidate>
+
+        <div class="c-outsideBlock">
+            <div class="c-outsideBlock__contents">
+                <div class="card rounded border-0 mb-4">
+
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="d-inline-block">
+                                    <span class="card-title">{{ (trans_prefix~'.title.category_edit')|trans }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body mb-lg-5">
+                        {% include include_prefix~'common/form_render.twig' with {form:form} %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink" href="{{ path(bind_prefix~'_category_list',{type_id:type.typeId}) }}">
+                                <i class="fa fa-backward" aria-hidden="true"></i><span>{{ (trans_prefix~'.title.category_list')|trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5" type="submit">
+                                    {{ 'common.registration'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

@@ -1,0 +1,237 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% autoescape false %}
+{{ Order.name01 }} {{ Order.name02 }} 様
+
+この度はご注文いただき誠にありがとうございます。下記ご注文内容にお間違えがないかご確認下さい。
+
+************************************************
+お支払いにつきまして
+************************************************
+{% if Order.Payment.id == 2 %}
+
+【QR決済】を選択いただいた方
+
+下記のURLにアクセスし、お買い上げ総合計金額をQRコードをスキャンしてお支払いしていただくようお願い致します。
+
+https://ecnext.jp/html/pay.html
+
+操作手順　https://ecnext.jp/html/ecnext_data/qr.pdf
+{% endif %}
+{% if Order.Payment.id == 7 %}
+【クレジットカード決済】を選択いただいた方
+
+発送の準備をさせていただきます。
+在庫商品限り、14時までに入金確認で即日発送致します。
+{% endif %}
+
+{% if Order.Payment.id == 3 %}
+【銀行振込】を選択いただいた方
+
+お買い上げ総合計金額を、下記いずれかの口座へお振込いただくようお願いいたします。
+在庫商品限り、14時までに入金確認で即日発送致します。
+
+ーーーーー
+
+★銀行名：PayPay銀行 (ペイペイ銀行・旧称ジャパンネット銀行）
+支店名：すずめ支店(002)
+預金種類：普通預金
+口座番号：5737778
+口座名義：カ）ア
+
+★銀行名：三井住友銀行
+支店名：大分(おおいた)支店(721)
+預金種類：普通預金
+口座番号：1285944
+口座名義：カ
+
+★銀行名：楽天銀行
+支店名：第二営業支店(252)
+預金種類：普通預金
+口座番号：7046389
+口座名義：カ
+
+ーーーーー
+●振込手数料はお客様負担でお願いします。
+●お申込者とお振込時のお名前が異なる場合は、入金確認が遅延する場合がございます。
+  注文情報入力画面の【備考】欄で、必ずお振込時のお名前をご記入ください。
+
+
+ご入金が確認でき次第、商品を発送いたします。
+{% endif %}
+
+
+{% if Order.Payment.id == 1 %}
+【郵便振替】を選択いただいた方
+
+お買い上げ総合計金額を、以下の口座にお振替いただくようお願いいたします。
+在庫商品限り、14時までに入金確認で即日発送致します。
+
+ーーーーー
+記号：17230
+番号：24087411
+名義：カ
+ーーーーー
+
+ご入金が確認でき次第、商品を発送いたします。
+{% endif %}
+
+{% if Order.Payment.id == 6 %}
+
+【WEBコンビニ決済】を選択いただいた方
+
+WEB上で表示される番号を控えて、3日以内にコンビニにて端末やレジで手続き、お支払い期限までお支払いいただくようお願いいたします。
+
+お客様がコンビニエンスストアでお支払いされる際の利用方法をご案内します。
+https://www.econtext.jp/support/cvs/6brand.html
+
+コンビニ決済では、24時間簡単にお支払いが可能です。
+お支払い期限が切れた場合は再注文する必要がありますので、ご了承ください。
+
+ご入金が確認でき次第、商品を発送いたします。
+在庫商品限り、14時までに入金確認で即日発送致します。
+{% endif %}
+
+{% if Order.Payment.id == 4 %}
+-------------------------------------------------------------------------
+【代金引換】を選択いただいた方
+
+発送の準備をさせていただきます。
+在庫商品限り、14時までのご注文で即日発送致します。
+
+※当社指定の配送会社が商品をお届けした際に商品代金および代金引換手数料をお支払いください。
+※配送会社から領収書をお受け取りください。 領収書の宛名には、ご注文者様のお名前が記載されます。宛名の変更はできません。
+※代金引換の場合、理由のいかんを問わず、領収書の再発行はできません。 領収書はお客様ご自身で大切に保管してください。 弊社からの領収書の発行・再発行は、一切承れません。ご了承ください。
+※現金以外のお支払い（クレジットカード、デビットカード、電子マネーなど）はご利用できません。
+※出荷準備開始後のお届け先およびお届け時間の変更はおこなえません。
+※代金引換手数料は1回の発送ごとにかかります。 ただし、当社の配送上の理由により、ご注文商品を分割して発送させていただいた場合は追加の手数料はかかりません。
+※配送業者よりご注文商品をお届けする際に、お客様がご不在の場合、配送業者が不在票を投函し、商品を1週間程お預かりしております。 万が一、お客様のご不在が続き、配送業者の保管期限が過ぎてしまいますと、商品のお届けができず返品となりますので十分にご注意ください。
+{% endif %}
+
+{% if Order.Payment.id == 9 %}
+-------------------------------------------------------------------------
+【代金引換(現金のみ・手数料330円)】を選択いただいた方
+
+発送の準備をさせていただきます。
+在庫商品限り、14時までのご注文で即日発送致します。
+
+※当社指定の配送会社が商品をお届けした際に商品代金および代金引換手数料をお支払いください。
+※配送会社から領収書をお受け取りください。 領収書の宛名には、ご注文者様のお名前が記載されます。宛名の変更はできません。
+※代金引換の場合、理由のいかんを問わず、領収書の再発行はできません。 領収書はお客様ご自身で大切に保管してください。 弊社からの領収書の発行・再発行は、一切承れません。ご了承ください。
+※現金以外のお支払い（クレジットカード、デビットカード、電子マネーなど）はご利用できません。
+※出荷準備開始後のお届け先およびお届け時間の変更はおこなえません。
+※代金引換手数料は1回の発送ごとにかかります。 ただし、当社の配送上の理由により、ご注文商品を分割して発送させていただいた場合は追加の手数料はかかりません。
+※配送業者よりご注文商品をお届けする際に、お客様がご不在の場合、配送業者が不在票を投函し、商品を1週間程お預かりしております。 万が一、お客様のご不在が続き、配送業者の保管期限が過ぎてしまいますと、商品のお届けができず返品となりますので十分にご注意ください。
+{% endif %}
+
+商品発送が完了しましたら、メールにてお知らせいたします。
+ご不明な点などがございましたら、お気軽にお知らせください。
+
+************************************************
+　ご請求金額
+************************************************
+
+ご注文日時：{{ Order.order_date|date_sec }}
+ご注文番号：{{ Order.order_no }}
+お支払い合計：{{ Order.payment_total|price}}
+お支払い方法：{{ Order.payment_method }}
+{% if BaseInfo.isOptionPoint and Order.Customer is not null %}
+ご利用ポイント：{{ Order.usePoint|number_format }} pt
+加算ポイント：{{ Order.addPoint|number_format }} pt
+{% endif %}
+連絡事項：{{ Order.message }}
+
+
+************************************************
+　ご注文商品明細
+************************************************
+
+{% set isShowReducedTaxMess = false %}
+{% for OrderItem in Order.MergedProductOrderItems %}
+商品コード：{{ OrderItem.product_code }}
+商品名：{{ OrderItem.product_name }}  {{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }} {{ OrderItem.classcategory_name2 }}{% if is_reduced_tax_rate(OrderItem) %}※{% set isShowReducedTaxMess = true %}{% endif %}
+
+単価：{{ OrderItem.price_inctax|price }}
+数量：{{ OrderItem.quantity|number_format }}
+
+{% endfor %}
+{% if isShowReducedTaxMess %}※は軽減税率対象商品です。
+{% endif %}
+-------------------------------------------------
+小　計：{{ Order.subtotal|price }}
+手数料：{{ Order.charge|price }}
+送　料：{{ Order.delivery_fee_total|price}}
+{% if Order.taxable_discount < 0 %}
+値引き：{{ Order.taxable_discount|price }}
+{% endif %}
+-------------------------------------------------
+合　計：{{ Order.taxable_total|price }}
+    {% for rate, total in Order.taxable_total_by_tax_rate %}
+    ({{ rate }} %対象：{{ total|price }})
+    {% endfor %}
+{% for item in Order.tax_free_discount_items %}
+-------------------------------------------------
+{{ item.product_name }}：{{ item.total_price|price }}
+{% endfor %}
+============================================
+お支払い合計：{{ Order.payment_total|price }}
+
+************************************************
+　ご注文者情報
+************************************************
+お名前：{{ Order.name01 }} {{ Order.name02 }} 様
+お名前(カナ)：{{ Order.kana01 }} {{ Order.kana02 }} 様
+{% if Order.company_name %}
+会社名：{{ Order.company_name }}
+{% endif %}
+郵便番号：〒{{ Order.postal_code }}
+住所：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}
+電話番号：{{ Order.phone_number }}
+メールアドレス：{{ Order.email }}
+
+************************************************
+　配送情報
+************************************************
+
+{%  for Shipping in Order.Shippings %}
+◎お届け先{% if Order.multiple %}{{ loop.index }}{% endif %}
+
+お名前：{{ Shipping.name01 }} {{ Shipping.name02 }} 様
+お名前(カナ)：{{ Shipping.kana01 }} {{ Shipping.kana02 }} 様
+{% if Shipping.company_name %}
+会社名：{{ Shipping.company_name }}
+{% endif %}
+郵便番号：〒{{ Shipping.postal_code }}
+住所：{{ Shipping.Pref.name }}{{ Shipping.addr01 }}{{ Shipping.addr02 }}
+電話番号：{{ Shipping.phone_number }}
+
+配送方法：{{ Shipping.shipping_delivery_name }}
+お届け日：{{ Shipping.shipping_delivery_date is empty ? '指定なし' : Shipping.shipping_delivery_date|date_day }}
+お届け時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}
+
+{%  for OrderItem in Shipping.productOrderItems %}
+商品コード：{{ OrderItem.product_code }}
+商品名：{{ OrderItem.product_name }}  {{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }}
+数量：{{ OrderItem.quantity|number_format }}
+
+{% endfor %}
+{% endfor %}
+
+{% if Order.complete_mail_message is not empty %}
+{{ Order.complete_mail_message }}
+{% endif %}
+
+============================================
+
+このメッセージはお客様へのお知らせ専用ですので、
+このメッセージへの返信としてご質問をお送りいただいても回答できません。
+ご了承ください。
+{% endautoescape %}

@@ -1,0 +1,186 @@
+<script>
+var stripe = Stripe("{{ stripeConfig.PublishableKey }}");
+
+var registerPayButton = function(option){
+
+    var _DEFAULT = {
+        button_id : "payment-request-button",
+        shipping_fetch_url : '{{ url("plugin_stripe_pr_shipping") }}',
+        pay_url   : "{{ url('plugin_stripe_pr_pay') }}",
+        getData     : null,
+
+        onSuccess   :   null,
+
+        request_data: {
+            country     :   "JP",
+            currency    :   "jpy",
+            total       :   {
+                label: "{{ 'stripe_payment_gateway.payrequest.pay_now_label'|trans }}",
+                amount: 0
+            },
+            requestPayerName    : true,
+            requestPayerEmail   : true,
+            requestPayerPhone   : true,
+            requestShipping     : true
+        }
+    }
+    option = Object.assign(_DEFAULT, option )
+
+    var is_apple = false;
+
+    var paymentRequest = stripe.paymentRequest(option.request_data)
+    
+    var elements = stripe.elements();
+    var prButton = elements.create('paymentRequestButton', {
+        paymentRequest: paymentRequest,
+    });
+    
+    paymentRequest.canMakePayment().then(function(result) {
+        if (result) {
+            prButton.mount('#' + option.button_id);
+            if(result.applePay){
+                is_apple = true;
+            }
+        } else {
+            document.getElementById(option.button_id).style.display = 'none';
+        }
+    });
+
+    var shippingOptions = null;
+    var selectedShipping = null;
+    var currentAmount = 0;
+
+    paymentRequest.on('shippingaddresschange', function(ev){
+        if(ev.shippingAddress.country !== 'JP'){
+            ev.updateWith({status: 'invalid_shipping_address'});
+        }else{
+            console.log(ev.shippingAddress);
+            $.ajax({
+                type: 'POST',
+                data: {
+                    shippingAddress : ev.shippingAddress,
+                    data            :   option.getData()
+                },
+                url: option.shipping_fetch_url,
+                success: function(result) {
+                    if(result.status && result.status == "success"){
+                        shippingOptions = result.shippingOptions;
+                        if (!shippingOptions.length) {
+                            ev.updateWith({ status: 'invalid_shipping_address' })
+                        }
+                        shippingOptions = result.shippingOptions;
+                        selectedShipping = shippingOptions[0];
+                        currentAmount = result.amount;
+
+                        ev.updateWith({
+                            status  :   'success',
+                            shippingOptions :   shippingOptions,
+                            total   : {
+                                label: option.request_data.total.label,
+                                amount: result.amount + selectedShipping.amount
+                            },
+                            displayItems : [
+                                {
+                                    label: "小計",
+                                    amount: result.amount
+                                },
+                                {
+                                    label: "送料 (" + selectedShipping.label + ")",
+                                    amount: selectedShipping.amount
+                                }
+                            ]
+                        })
+
+                    }else{
+                        ev.updateWith({ status: 'invalid_shipping_address' })
+                    }
+                },
+                error: function(error) {
+                    ev.updateWith({ status: 'invalid_shipping_address' })
+                }
+            });
+        }
+    })
+    paymentRequest.on("shippingoptionchange", function(ev) {
+        ev.updateWith({
+            status: 'success',
+            shippingOptions: shippingOptions,
+            total: {
+                label: option.request_data.total.label,
+                amount: currentAmount + ev.shippingOption.amount
+            },
+            displayItems : [
+                {
+                    label: "小計",
+                    amount: currentAmount
+                },
+                {
+                    label: "送料 (" + ev.shippingOption.label + ")",
+                    amount: ev.shippingOption.amount
+                }
+            ]
+        })
+    })
+    paymentRequest.on('paymentmethod', function(ev){
+        var data = option.getData()
+        console.log(ev);
+        ev['data'] = data;
+        ev['applePay'] = is_apple;
+        ev.complete('success');
+        loadingOverlay('show');
+        $.ajax({
+            type    :   "POST",
+            data    :   ev,
+            url     :   option.pay_url,
+            success: function(result) {
+                handleServerResponse(result)
+            },
+            error: function(error) {
+                alert("{{ 'stripe_payment_gateway.payrequest.connection_error'|trans }}");
+                loadingOverlay('hide');
+            }
+        })
+    })
+    function handleServerResponse(response) {
+        if (response.status === "success") {
+            // Show success message
+            if(option.onSuccess){
+                option.onSuccess();
+            }else{
+                loadingOverlay('hide');
+                alert("{{ 'stripe_payment_gateway.payrequest.success'|trans }}")
+            }
+        } else if (response.status === "requires_action") {
+            // Use Stripe.js to handle required card action
+            loadingOverlay('hide');
+
+            stripe.handleCardAction(
+                response.secret
+            ).then(handleStripeJsResult);
+        } else {
+            // Show error from server on payment form
+            alert("{{ 'stripe_payment_gateway.payrequest.payment_failed'|trans }}")
+            loadingOverlay('hide');
+        }
+        
+    }
+    function handleStripeJsResult(result) {
+        if (result.error) {
+            // Show error in payment form
+        } else {
+            // The card action has been handled
+            // The PaymentIntent can be confirmed again on the server
+            loadingOverlay('show');
+
+            $.ajax({
+                type    :   "POST",
+                data    : { payment_intent_id: result.paymentIntent.id },
+                url     :   option.pay_url,
+                
+            }).then(handleServerResponse);
+        }
+    }
+
+    return paymentRequest;
+}
+</script>

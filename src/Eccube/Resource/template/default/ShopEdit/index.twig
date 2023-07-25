@@ -1,0 +1,191 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'registration_page' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block javascript %}
+    <!-- <script src="//yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script> -->
+{% endblock javascript %}
+
+{% block main %}
+    <div class="ec-registerRole">
+        <div class="ec-pageHeader">
+            <h1>{{ '新規プロ会員申込'|trans }}</h1>
+        </div>
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <form method="post" action="{{ url('entryShop') }}" novalidate class="h-adr">
+                    <span class="p-country-name" style="display:none;">Japan</span>
+                    {{ form_widget(form._token) }}
+                    <div class="ec-borderedDefs">
+                        <dl>
+                            <dt>
+                                {{ form_label(form.shop_name, '会社/店舗/事業所の名称', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.shop_name) ? ' error'}}">
+                                    {{ form_widget(form.shop_name, { 'attr': { 'placeholder': '会社/店舗/事業所の名称' }}) }}
+                                    {{ form_errors(form.shop_name) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.manager1, '代表者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.manager1) ? ' error'}}">
+                                    {{ form_widget(form.manager1, { 'attr': { 'placeholder': '代表者' }}) }}
+                                    {{ form_errors(form.manager1) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.address, '所在地', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.address) ? ' error' }}">
+                                    {{ form_widget(form.address) }}
+                                    {{ form_errors(form.address) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.tel, '電話番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.tel) ? ' error' }}">
+                                    {{ form_widget(form.tel) }}
+                                    {{ form_errors(form.tel) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.email, 'E-mail', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.email) ? ' error' }}">
+                                    {{ form_widget(form.email) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.page, 'ホームページ', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.page) ? ' error' }}">
+                                    {{ form_widget(form.page) }}
+                                    {{ form_errors(form.page) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.manager2, '担当者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.manager2) ? ' error' }}">
+                                    {{ form_widget(form.manager2) }}
+                                    {{ form_errors(form.manager2) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.job, '業種', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.job) ? ' error' }}">
+                                    {{ form_widget(form.job, { 'attr': { 'placeholder': '卸業者/ブリーダー/サロン/ショップ/その他' }}) }}
+                                    {{ form_errors(form.job) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.code, '法人番号/営業届番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.code) ? ' error' }}">
+                                    {{ form_widget(form.code) }}
+                                    {{ form_errors(form.code) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        
+                        <dl>
+                            <dt>
+                                {{ form_label(form.register_date, '設立/登録の年月日', { 'label_attr': {'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-birth{{ has_errors(form.register_date) ? ' error' }}">
+                                    {{ form_widget(form.register_date.year) }}<span>/</span>
+                                    {{ form_widget(form.register_date.month) }}<span>/</span>
+                                    {{ form_widget(form.register_date.day) }}
+                                    {{ form_errors(form.register_date) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.effective_date, '有効期限', { 'label_attr': {'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-birth{{ has_errors(form.effective_date) ? ' error' }}">
+                                    {{ form_widget(form.effective_date.year) }}<span>/</span>
+                                    {{ form_widget(form.effective_date.month) }}<span>/</span>
+                                    {{ form_widget(form.effective_date.day) }}
+                                    {{ form_errors(form.effective_date) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.upload_file, '登記簿/営業届アップロード', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.upload_file) ? ' error' }}">
+                                    {{ form_widget(form.upload_file) }}
+                                    {{ form_errors(form.upload_file) }}
+                                </div>
+                            </dd>
+                        </dl>
+
+
+                    </div>
+                    <div class="ec-registerRole__actions">
+                        <div class="ec-off4Grid">
+                            <div class="ec-off4Grid__cell">
+                                <div class="ec-checkbox{{ has_errors(form.user_policy_check) ? ' error' }}">
+                                    <label>
+                                        {{ form_widget(form.user_policy_check) }}
+                                        {{ '<a class="ec-link" href="%url%" target="_blank">利用規約</a>に同意してお進みください'|trans({ '%url%': url('help_agreement') })|raw }}
+                                    </label>
+                                    {{ form_errors(form.user_policy_check) }}
+                                </div>
+                                <button class="ec-blockBtn--action" type="submit" name="mode" value="complete">{{ 'プロ会員を申込する'|trans }}</button>
+                                <a class="ec-blockBtn--cancel" href="{{ url('homepage') }}">{{ '戻る'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

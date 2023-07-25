@@ -1,0 +1,1 @@
+{"name":"ec-cube\/AdminSecurity4","version":"1.0.2","description":"\u7ba1\u7406\u753b\u9762\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3\u5bfe\u7b56 for EC-CUBE4","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.7"},"extra":{"code":"AdminSecurity4","id":2009}}

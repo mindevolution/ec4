@@ -1,0 +1,339 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}{{ 'rakuten_card4.admin.config.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'rakuten_card4.admin.config.sub_title'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+    <style>
+        #{{ form.card_installments_ex.vars.id }} .form-check{
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block main %}
+    <form role="form" method="post">
+
+        {{ form_widget(form._token) }}
+
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <span>{{ 'rakuten_card4.admin.config.note1'|trans }}</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div class="col mb-2">
+                                        <a target="_blank" rel="noopener noreferrer" href="{{ 'rakuten_card4.admin.config.note2_url'|trans }}">{{ 'rakuten_card4.admin.config.note2'|trans }}</a>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <a target="_blank" rel="noopener noreferrer" href="{{ 'rakuten_card4.admin.config.note3_url'|trans }}">{{ 'rakuten_card4.admin.config.note3'|trans }}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span>{{ 'rakuten_card4.admin.config.header'|trans }}</span></div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.col1'|trans }}</span>
+                                    <span class="badge badge-primary ml-1">{{ 'rakuten_card4.admin.config.required'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.connection_mode) }}
+                                    {{ form_errors(form.connection_mode) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_service_id'|trans }}</span>
+                                    <span class="badge badge-primary ml-1">{{ 'rakuten_card4.admin.config.required'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.card_service_id) }}
+                                    {{ form_errors(form.card_service_id) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_auth_key'|trans }}</span>
+                                    <span class="badge badge-primary ml-1">{{ 'rakuten_card4.admin.config.required'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.card_auth_key) }}
+                                    {{ form_errors(form.card_auth_key) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span>{{ 'rakuten_card4.admin.config.card_header'|trans }}</span></div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_buy_api'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                    {{ form_widget(form.card_buy_api) }}
+                                    {{ form_errors(form.card_buy_api) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.card.config.buy_api.capture.note'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.card.config.buy_api.authorize.note'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_installments'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.card_installments_ex) }}
+                                    </div>
+                                    <div class="col mb-2">
+                                        {{ form_errors(form.card_installments_ex) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-3"></div>
+                                <div class="col">
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.card.config.installments.note1'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.card.config.installments.note2'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_cvv_use'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.card_cvv_use) }}
+                                        {{ form_errors(form.card_cvv_use) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col">
+                                            <span>{{ 'rakuten_card4.admin.config.card_cvv_use.note'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_3d_secure_use'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.card_3d_secure_use) }}
+                                        {{ form_errors(form.card_3d_secure_use) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_3d_secure_use.note1'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_3d_secure_use.note2'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_3d_store_name'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.card_3d_store_name) }}
+                                        {{ form_errors(form.card_3d_store_name) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_3d_store_name.note1'|trans|nl2br }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_3d_store_name.note2'|trans }}</span>
+                                        </div>
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_3d_store_name.note3'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_merchant_id_visa'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.card_merchant_id_visa) }}
+                                    {{ form_errors(form.card_merchant_id_visa) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_merchant_id_master_card'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.card_merchant_id_master_card) }}
+                                        {{ form_errors(form.card_merchant_id_master_card) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_merchant_id.note'|trans|nl2br }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.card_challenge_type'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.card_challenge_type) }}
+                                        {{ form_errors(form.card_challenge_type) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.card_challenge_type.note1'|trans|nl2br }}</span>
+                                        </div>
+{#                                        <div class="col mb-2">#}
+{#                                            <span>{{ 'rakuten_card4.admin.config.card_challenge_type.note2'|trans|nl2br }}</span>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span>{{ 'rakuten_card4.admin.config.cvs_header'|trans }}</span></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.cvs_sub_service_id_seven'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.cvs_sub_service_id_seven) }}
+                                    {{ form_errors(form.cvs_sub_service_id_seven) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.cvs_sub_service_id_lawson'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.cvs_sub_service_id_lawson) }}
+                                    {{ form_errors(form.cvs_sub_service_id_lawson) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.cvs_sub_service_id_yamazaki'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.cvs_sub_service_id_yamazaki) }}
+                                        {{ form_errors(form.cvs_sub_service_id_yamazaki) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.cvs_sub_service_id_lawson.note'|trans|nl2br }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.cvs_kind'|trans }}</span>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_widget(form.cvs_kind) }}
+                                        {{ form_errors(form.cvs_kind) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.cvs_kind.note'|trans|nl2br }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>{{ 'rakuten_card4.admin.config.cvs_limit_day'|trans }}</span>
+                                </div>
+                                <div class="col-1 mb-2">
+                                    {{ form_widget(form.cvs_limit_day) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        {{ form_errors(form.cvs_limit_day) }}
+                                    </div>
+                                    <div class="col mb-2 small">
+                                        <div class="col mb-2">
+                                            <span>{{ 'rakuten_card4.admin.config.cvs_limit_day.note'|trans|nl2br }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink"
+                               href="{{ url('admin_store_plugin') }}">
+                                <i class="fa fa-backward" aria-hidden="true"></i>
+                                <span>{{ 'rakuten_card4.admin.config.back'|trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5"
+                                        type="submit">{{ 'rakuten_card4.admin.config.save'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

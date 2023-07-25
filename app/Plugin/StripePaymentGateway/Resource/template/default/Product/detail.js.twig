@@ -1,0 +1,113 @@
+<script>
+    function detailRequestButton (){
+        var $form = $('#form1');
+        var $cat_sel1 = $form.find('select[name=classcategory_id1]');
+        var $cat_sel2 = $form.find('select[name=classcategory_id2]');
+        var $quantity = $form.find('input[name="quantity"]');
+
+        // add wrapper
+        var $cart_wrapper = $form.find('.ec-productRole__btn')
+        $("<div id='payment-request-button'></div>").insertBefore($cart_wrapper)
+
+        var getProduct = function(){
+            return $form.find('input[name=product_id]').val() || null;
+        }
+        var getProductClass = function(){
+            return $form.find('input[name=ProductClass]').val() || null;
+        }
+        var getQuantity = function(){
+            return $form.find("input[name='quantity']").val() || 0;
+        }
+        
+        var getPrice = function(){
+            var classcat_id1 = $cat_sel1.val() || "__unselected2";
+            var classcat_id2 = $cat_sel2.val() || "";
+            classcat2 = undefined
+
+            if (eccube.hasOwnProperty('productsClassCategories')) {
+                // 商品一覧時
+                classcat2 = eccube.productsClassCategories[product_id][classcat_id1]['#' + classcat_id2];
+            } else {
+                // 詳細表示時
+                if (typeof eccube.classCategories[classcat_id1] !== 'undefined') {
+                    classcat2 = eccube.classCategories[classcat_id1]['#' + classcat_id2];
+                }
+            }
+            var quantity = $quantity.val();
+            if(quantity < 0){
+                return 0;
+            }
+            if(classcat2 == undefined){
+                return 0
+            }else if(classcat2.price02_inc_tax){
+                return parseInt(classcat2.price02_inc_tax.replace(",", "")) * quantity;
+            }else{
+                return 0;
+            }
+        }
+
+        // register paybutton
+        var paymentRequest = registerPayButton({
+                // shipping_fetch_url : 'https://279a4a530961.ngrok.io/plugin/stripe_payment_gateway/pr_shipping',
+                // pay_url            : "https://279a4a530961.ngrok.io/plugin/stripe_payment_gateway/pr_pay",
+                getData            :   function() {
+                    return [
+                            {
+                                "product"   :   getProduct(),
+                                "productClass" : getProductClass(),
+                                "quantity"  :   getQuantity(),
+                            }
+                        ];
+                    
+                },
+                request_data: {
+                    country     :   "JP",
+                    currency    :   "{{ payrequest.currency_code }}",
+                    total       :   {
+                        label: "{{ payrequest.label }}",
+                        amount: {{ payrequest.amount }}
+                    },
+                    requestPayerName    : true,
+                    requestPayerEmail   : true,
+                    requestShipping     : true,
+                    requestPayerPhone   : true,
+                },
+                onSuccess   :   function(){
+                    location.href = "{{ url('shopping_complete') }}"
+                }
+            })
+
+        var onUpdatePayment = function(){
+            var price = getPrice() || 0;
+            
+            paymentRequest.update({
+                total   :   {
+                    label   :   "{{ payrequest.label }}",
+                    amount  :   price
+                }
+            })
+        }
+
+        $cat_sel2.on('change', onUpdatePayment)
+        $cat_sel1.on('change', onUpdatePayment)
+        $quantity.on('change', onUpdatePayment)
+
+        return paymentRequest;
+    };
+detailRequestButton();  
+</script>
+<style>
+
+#payment-request-button{
+    width: 60%;
+    margin-bottom: 16px;
+    width: 100%;
+}
+@media (min-width: 768px){
+    #payment-request-button{
+        width: 60%;
+        margin-bottom: 16px;
+        min-width: 350px;
+    }
+}
+</style>

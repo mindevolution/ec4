@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>領収書 | {{ BaseInfo.shop_name }}</title>
+    <style>
+        .container {
+            width: 900px !important;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .logo {
+            float: left;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .inshi {
+            border: 2px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            margin-right: 5%;
+        }
+
+    </style>
+    <style media="print">
+        #print-footer {
+            display: none;
+        }
+
+        input[type="text"] {
+            outline: 0;
+            border: none;
+        }
+
+        button,
+        #edit,
+        #mod {
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/vendor/printThis.js') }}"></script>
+    <script>
+        $(function() {
+
+            $('#print').click(function() {
+                $('body').printThis({
+                    importStyle: true
+                });
+            });
+
+            $('#edit').click(function() {
+                var name = $('.print_name').text();
+                var input = $('<input type="text" id="input-name">').val(name);
+                $('.print_name').empty().append(input);
+                $('#edit').hide();
+                $('#mod').show();
+            });
+
+            $('#mod').click(function() {
+                var newname = $('#input-name').val();
+                $('.print_name').empty().text(newname);
+                $('#input-name').remove();
+                $('#edit').show();
+                $('#edit').removeAttr('style');
+                $('#mod').hide();
+                showEx();
+            });
+
+            function showEx() {
+                var tmp = $('.print_name').text();
+
+                if (tmp == '') {
+                    $('.print_name_ex').hide();
+                } else {
+                    $('.print_name_ex').show();
+                }
+            }
+
+        })
+    </script>
+
+
+
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/css/modaal.min.css">
+<link rel="stylesheet" type="text/css" href="/html/template/default/assets/css/modal-open.css">
+
+
+</head>
+<body>
+<div class="container">
+{#    <div class="logo">
+        <!-- {{ BaseInfo.shop_name }} -->
+        <img class="" src="{{ asset('assets/img/logo.png') }}" alt="" style="width:150px;">
+
+    </div>
+#}
+    <div class="text-end">注文No. {{ Order.order_no }}</div>
+    <div class="text-end">注文日 : {{ Order.order_date|date_format(null, 'Y年m月d日') }}</div>
+    <h1 class="text-center">領収書</h1>
+    <div class="row">
+        <div class="col-7">
+            <h2 id="name"><span class="print_name">{% if Order.company_name %}{{ Order.company_name }} 御中{% else %}{{ Order.name01 }} {{ Order.name02 }} </span><span class="print_name_ex"> 様</span>{% endif %}</h2>
+            <button type="button" id="edit">宛先変更</button>
+            <button type="button" id="mod" style="display: none;">適用</button>
+        </div>
+    </div>
+    <hr>
+
+
+    <table class="table text-center">
+        <tbody>
+        <tr>
+            <td class="h3">{{ Order.payment_total|price }}-(税込)</td>
+        </tr>
+        <tr>
+            <td>商品購入代として、上記正に領収いたしました。</td>
+        </tr>
+        <tr>
+            <td>決済方法：{{ Order.payment_method }}{% if Order.Payment.id == 4 %}【代金引換】の場合はこの領収書が無効です。配送会社から領収書をお受け取りください。{% endif %}{% if Order.Payment.id == 6 %}【WEBコンビニ決済】の場合はこの領収書が無効です。コンビニから領収書をお受け取りください。{% endif %}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="shop-footer">
+        <div class="row">
+            <div class="col-2">
+                <div class="inshi">
+                    電子領収書<br>につき<br>印紙不要
+                </div>
+            </div>
+            <div class="col-7">
+{#                <div class="inkan">
+#}
+                {% if BaseInfo.company_name %}
+                    {{ BaseInfo.company_name }}　(押印省略)　
+　　　　　           {% endif %}
+                {{ BaseInfo.shop_name }}<br>
+〒810-0054 福岡県福岡市中央区<br>
+今川2-3-54 エスペランサ今川 2F<br>
+TEL:05035706788｜ MAIL:support@ecnext.jp
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="print-footer" class="text-center mt-5">
+        <button type="button" id="print">プリントアウトする</button>
+        <button onclick="window.close();">閉じる</button>
+
+<!--リンク元のHTMLリンク先は表示させたいエリアのid名を指定します。-->
+<p><center><a href="#info" class="modal-open">お知らせを開く</a></center></p>
+
+<!--表示エリアのHTML。id 名にリンク先と同じ名前を指定します。※表示エリアはHTML の変更が可能なので、レイアウトを自由に変更できます。-->
+<section id="info">
+<h2>お知らせ</h2>
+<p>電子帳簿保存法改正(https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/12.htm)により、2022年1月以降電子発行された領収書は印刷した場合でもデータを削除せず保存することを強くお勧めします。</p>
+</section>
+
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/js/modaal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<!--自作のJS-->
+<script src="/html/template/default/assets/js/modal-open.js"></script>
+
+</body>
+</html>

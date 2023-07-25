@@ -1,0 +1,17 @@
+{% autoescape false %}
+
+{{ title }}
+下記の情報をご確認いただき
+{{ alert_message }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+詳細情報：{{ error }}
+{% if contents_data.paymentId is defined %}
+決済ID：{{ contents_data.paymentId }}
+{% endif %}
+{% if contents_data.order_no is defined %}
+注文番号：{{ contents_data.order_no }}
+{% endif %}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{% endautoescape %}

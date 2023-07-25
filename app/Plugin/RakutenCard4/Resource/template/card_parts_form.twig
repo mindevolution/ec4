@@ -1,0 +1,32 @@
+<div class="rakuten_card4_input_area">
+    <dl class="only_card_contents">
+        <dt>{{ 'rakuten_card4.front.shopping.card.input.card_no.title'|trans }}</dt>
+        <dd>
+            <div id="{{ card_point }}" class="input_card_area">
+            </div>
+        </dd>
+    </dl>
+    <dl class="input_card_expire_area only_card_contents">
+        <dt>{{ 'rakuten_card4.front.shopping.card.input.card_expiration.title'|trans }}</dt>
+        <dd>
+            <div id="{{ month_point }}" class="input_card_area">
+            </div>
+            <div>月/</div>
+            <div id="{{ year_point }}" class="input_card_area">
+            </div>
+            <div>年</div>
+        </dd>
+    </dl>
+    {% if is_cvv_use() %}
+        <div id="{{ input_card_cvv_area }}">
+            <dl>
+                <dt>{{ 'rakuten_card4.admin.config.card_cvv_use'|trans }}</dt>
+                <dd>
+                    <div id="{{ cvv_point }}" class="input_card_area">
+                    </div>
+                    {{ 'rakuten_card4.front.shopping.card.cvv.note'|trans }}
+                </dd>
+            </dl>
+        </div>
+    {% endif %}
+</div>

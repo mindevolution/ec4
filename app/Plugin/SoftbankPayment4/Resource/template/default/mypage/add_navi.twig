@@ -1,0 +1,5 @@
+<script>$(function() { $("ul.ec-navlistRole__navlist").first().append($('#sbps_card_info'))})</script>
+
+<li class="ec-navlistRole__item {% if mypageno|default('') == 'sbps_card_info' %}active{% endif %}" id="sbps_card_info">
+    <a href="{{ url('sbps_credit_list') }}">{{ 'カード情報管理'|trans }}</a>
+</li>

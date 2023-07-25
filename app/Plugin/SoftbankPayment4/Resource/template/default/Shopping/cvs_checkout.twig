@@ -1,0 +1,42 @@
+{#
+SoftbankPayment for EC-CUBE4
+Copyright(c) 2019 IPLOGIC CO.,LTD. All Rights Reserved.
+
+http://www.iplogic.co.jp/
+
+This program is not free software.
+It applies to terms of service.
+#}
+
+{% extends 'default_frame.twig' %}
+
+
+{% block main %}
+
+<div class="container">
+    <div class="ec-role">
+        <div class="ec-pageHeader">
+            <h1>コンビニ選択画面</h1>
+        </div>
+    </div>
+    <form id="credit-form" method="post" action="{{ url('sbps_api_cvs_checkout') }}">
+        <div>
+            <div class="ec-rectHeading" id="sbps_credit_form">
+                <h2>コンビニ選択</h2>
+                <dl>
+                    <dd>
+                        <div id="sbps_cvs_type">{{ form_widget(form.cvs_type) }}</div>
+                        {{ form_errors(form.cvs_type) }}
+                    </dd>
+                </dl>
+            </div>
+            {{ form_widget(form._token) }}
+            <div class="ec-totalBox__btn">
+                <button type="submit" class="ec-blockBtn--action">確認する</button>
+                <a href="{{ url('shopping') }}" class="ec-blockBtn--cancel">戻る</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

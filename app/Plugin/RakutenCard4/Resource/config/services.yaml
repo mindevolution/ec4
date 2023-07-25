@@ -1,0 +1,111 @@
+# パラメータ定義
+parameters:
+  # 各種APIのURL
+  # クレジットカードAPI　本番
+  rakuten_card4.api_url.card.prod.authorize: "https://payment.global.rakuten.com/gp/Payment/V1/Authorize"
+  rakuten_card4.api_url.card.prod.authorize_and_capture: "https://payment.global.rakuten.com/gp/Payment/V1/AuthorizeAndCapture"
+  rakuten_card4.api_url.card.prod.authorize.html: "https://payment.global.rakuten.com/gp/Payment/V2/Authorize/HTML"
+  rakuten_card4.api_url.card.prod.authorize_and_capture.html: "https://payment.global.rakuten.com/gp/Payment/V2/AuthorizeAndCapture/HTML"
+  rakuten_card4.api_url.card.prod.find: "https://payment.global.rakuten.com/gphc/Payment/V1/Find"
+  rakuten_card4.api_url.card.prod.modify: "https://payment.global.rakuten.com/gp/Payment/V1/Modify"
+  rakuten_card4.api_url.card.prod.capture: "https://payment.global.rakuten.com/gp/Payment/V1/Capture"
+  rakuten_card4.api_url.card.prod.cancel_or_refund: "https://payment.global.rakuten.com/gp/Payment/V1/CancelOrRefund"
+
+  # クレジットカードAPI　ステージング
+  rakuten_card4.api_url.card.stg.authorize: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Authorize"
+  rakuten_card4.api_url.card.stg.authorize_and_capture: "https://payment-stg.global.rakuten.com/gp/Payment/V1/AuthorizeAndCapture"
+  rakuten_card4.api_url.card.stg.authorize.html: "https://payment-stg.global.rakuten.com/gp/Payment/V2/Authorize/HTML"
+  rakuten_card4.api_url.card.stg.authorize_and_capture.html: "https://payment-stg.global.rakuten.com/gp/Payment/V2/AuthorizeAndCapture/HTML"
+  rakuten_card4.api_url.card.stg.find: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Find"
+  rakuten_card4.api_url.card.stg.modify: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Modify"
+  rakuten_card4.api_url.card.stg.capture: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Capture"
+  rakuten_card4.api_url.card.stg.cancel_or_refund: "https://payment-stg.global.rakuten.com/gp/Payment/V1/CancelOrRefund"
+
+  # コンビニAPI　本番
+  rakuten_card4.api_url.cvs.prod.authorize: "https://payment.global.rakuten.com/gp/Payment/V1/Authorize"
+  rakuten_card4.api_url.cvs.prod.cancel_or_refund: "https://payment.global.rakuten.com/gp/Payment/V1/CancelOrRefund"
+  rakuten_card4.api_url.cvs.prod.find: "https://payment.global.rakuten.com/gphc/Payment/V1/Find"
+
+  # コンビニAPI　ステージング
+  rakuten_card4.api_url.cvs.stg.authorize: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Authorize"
+  rakuten_card4.api_url.cvs.stg.cancel_or_refund: "https://payment-stg.global.rakuten.com/gp/Payment/V1/CancelOrRefund"
+  rakuten_card4.api_url.cvs.stg.find: "https://payment-stg.global.rakuten.com/gp/Payment/V1/Find"
+
+  # ペイボルト　本番
+  rakuten_card4.javascript_url.payvault.prod.token: "https://static-content.payment.global.rakuten.com/pv/payvault/V7/7.2/payvault.js"
+
+  # ペイボルト　ステージング
+  rakuten_card4.javascript_url.payvault.stg.token: "https://stg-static-content.payment.global.rakuten.com/pv/payvault/V7/7.2/payvault.js"
+
+  # クレジットカードパラメータ
+  rakuten_card4.card_installments_kind: "2,3,5,6,10,12,15,18,20,24"
+  rakuten_card4.card_register_count: 5
+  rakuten_card4.card_3d_store_name_len: 18
+  rakuten_card4.card_mypage_3d_use: 0 # 1で利用
+  rakuten_card4.card_3d_challenge_type_all: 0 # 1で選択肢2つ利用
+
+  # コンビニパラメータ
+  rakuten_card4.cvs_items_name: 'ご注文商品一式'
+  rakuten_card4.cvs_items_id: 'A'
+
+  # コンビニ支払先コード
+  rakuten_card4.cvs.code1: "001"
+  rakuten_card4.cvs.code2: "002"
+  rakuten_card4.cvs.code3: "003"
+
+  # エラーコード共通　他にない場合
+  rakuten_card4.front_error_common: 'rakuten_card4.front.card.error.now_no_use'
+  rakuten_card4.admin_error_common: 'rakuten_card4.admin.card.error.system_error'
+
+  # エラーコードクレジットカード
+  # フロント
+  rakuten_card4.front_error_list_card:
+    'invalid_request_parameter': 'rakuten_card4.front.card.error.now_no_use'
+    'system_error':  'rakuten_card4.front.card.error.now_no_use'
+    'unacceptable_request':  'rakuten_card4.front.card.error.now_no_use'
+    'not_found':  'rakuten_card4.front.card.error.now_no_use'
+    'already_completed':  'rakuten_card4.front.card.error.now_no_use'
+    'cvv_token_unavailable':  'rakuten_card4.front.card.error.now_no_use'
+    'temporarily_unavailable':  'rakuten_card4.front.card.error.now_no_use'
+    'agency_unavailable':  'rakuten_card4.front.card.error.now_no_use'
+    'invalid_payment_method': 'rakuten_card4.front.card.error.no_completed'
+    'aborted_payment': 'rakuten_card4.front.card.error.aborted'
+    'unauthorized_access':  'rakuten_card4.front.card.error.now_no_use'
+    'under_maintenance': 'rakuten_card4.front.card.error.maintenance'
+
+  # 管理
+  rakuten_card4.admin_error_list_card:
+    'invalid_request_parameter':  'rakuten_card4.admin.card.error.system_error'
+    'system_error':  'rakuten_card4.admin.card.error.system_error'
+    'unacceptable_request':  'rakuten_card4.admin.card.error.system_error'
+    'not_found':  'rakuten_card4.admin.card.error.system_error'
+    'already_completed':  'rakuten_card4.admin.card.error.system_error'
+    'cvv_token_unavailable':  'rakuten_card4.admin.card.error.system_error'
+    'temporarily_unavailable':  'rakuten_card4.admin.card.error.now_no_use_later'
+    'agency_unavailable':  'rakuten_card4.admin.card.error.now_no_use_later'
+    'invalid_payment_method': 'rakuten_card4.admin.card.error.mistake_no_completed'
+    'aborted_payment': 'rakuten_card4.admin.card.error.aborted_payment'
+    'unauthorized_access':  'rakuten_card4.admin.card.error.system_error'
+    'under_maintenance': 'rakuten_card4.admin.card.error.maintenance'
+
+# コンテナ定義
+#services:
+
+
+# ログ定義
+monolog:
+  channels:
+    - 'RakutenCard4'
+  handlers:
+    RakutenCard4:
+      type: fingers_crossed
+      action_level: info
+      passthru_level: info
+      handler: RakutenCard4_rotating_file
+      channels: ['RakutenCard4']
+    RakutenCard4_rotating_file:
+      type: rotating_file
+      max_files: 90
+      path: '%kernel.logs_dir%/%kernel.environment%/RakutenCard4.log'
+      formatter: eccube.log.formatter.line
+      level: info

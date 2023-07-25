@@ -1,0 +1,85 @@
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'point' %}
+{% set body_class = 'mypage' %}
+{% block stylesheet %}
+    <style>
+       .ec-mypageRole{
+            max-width: 1600px;
+            margin:  0 auto;
+            }
+    </style>
+{% endblock %}
+
+{% block main %}
+    <div class="ec-layoutRole__main">
+        <div class="ec-mypageRole dddd">
+            <div class="ec-pageHeader">
+                <h1>{{ 'マイページ'|trans }}/{{ 'ポイント履歴'|trans }}</h1>
+            </div>
+            {% include 'Mypage/navi.twig' %}
+        </div>
+    <div class="ec-mypageRole">
+        <table class="table table-bordered" style="width:90%" align="center">
+            <thead class="thead-light">
+            <tr class="text-center">
+                <th class="text-nowrap">日付</th>
+                <th class="text-nowrap">ご注文番号</th>
+                <th class="text-nowrap">利用・獲得</th>
+                <th class="text-nowrap">ポイント数</th>
+            </tr>
+            </thead>
+            <tbody class="text-center" style="width:90%">
+            {% for history in pagination %}
+                <tr>
+                    <td data-title="日付">
+                        {{ history.create_date|date_day }}
+                    </td>
+                    <td data-title="ご注文番号">
+                        {% if history.order is not null %}
+                            <a href="{{ url('mypage_history', {'order_no': history.order.order_no}) }}">
+                                {{ history.order.order_no }}
+                            </a>
+                        {% endif %}
+                        &nbsp;
+                    </td>
+                    <td data-title="利用・獲得">
+                        {% if history.record_event == 1 %}
+                            {% if history.record_type == 1 %}
+                                獲得
+                            {% elseif history.record_type == 2 %}
+                                利用
+                            {% endif %}
+                        {% elseif history.record_event == 2 %}
+                            会員登録 特典
+                        {% elseif history.record_event == 3 %}
+                            ご注文取り消し
+                        {% elseif history.record_event == 4 %}
+                            調整
+                        {% elseif history.record_event == 5 %}
+                            期限切れのため失効
+                        {% elseif history.record_event == 6 %}
+                            ポイント移行
+                        {% elseif history.record_event == 7 %}
+                            レビューポイント
+                        {% endif %}
+                    </td>
+                    <td data-title="ポイント数">{{ history.point|number_format }}</td>
+                </tr>
+            {% endfor %}
+
+            {# ポイントの履歴がない場合はその旨を表示する #}
+            {% if pagination.totalItemCount == 0 %}
+                <tr>
+                    <td>ポイントの獲得・利用の履歴がありません。</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% include "pager.twig" with {'pages': pagination.paginationData} %}
+        </div>
+        </div>
+        </div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+services:
+    plg_stripe_payment.service.util:
+        public: true
+        class: Plugin\StripePaymentGateway\Service\UtilService
+        arguments:
+            - '@service_container'
+    plg_stripe_payment.pr_service:
+        public: true
+        class: Plugin\StripePaymentGateway\Service\PrService
+        arguments:
+            - '@service_container'
+            - '@security.encoder_factory'
+            - '@security.token_storage'
+            - '@eccube.purchase.flow.shopping'
+            - '@Eccube\Common\EccubeConfig'
+            # - '@mobile_detect.mobile_detector'

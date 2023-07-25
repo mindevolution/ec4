@@ -1,0 +1,56 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{# 投稿リストの取得 #}
+{% set post_list = TabaCMSPostList() %}
+
+{% block javascript %}
+{{ TabaCMSAsset('script.js','script')|raw }}
+{% endblock javascript %}
+
+{% block stylesheet %}
+{{ TabaCMSAsset('style.css','style')|raw }}
+{% endblock stylesheet %}
+
+{% block main %}
+<div class="ec-pageHeader"><h1>{{ type.getTypeName }}</h1></div>
+<div class="row" style="margin-right:0px;">
+	<div class="col-md-9">
+		<ul class="tabacms_post_list">
+			{% for post in post_list %}
+			<li class="row">
+				<div class="col-md-4">
+					<time>
+						{{ post.getPublicDate|date('Y/m/d') }}
+					</time>
+					{% if post.getCategory is not empty %}
+					<label class="text-nowrap tabacms_category_{{ post.getType.getDataKey }}_{{ post.getCategory.getDataKey }}" {{ post.getCategory.getTagAttributes|raw }}>{{ post.getCategory.getCategoryName }}</label>
+					{% endif %}
+				</div>
+				<div class="col-md-8">
+					{% if post.getContentDiv == constant('CONTENT_DIV_BODY',post) %}
+					<a href="{{ post.getURI }}"><strong>{{ post.getTitle }}</strong></a>
+					{% elseif post.getContentDiv == constant('CONTENT_DIV_LINK',post) %}
+					<a href="{{ post.getLinkUrl }}" {% if post.getLinkTarget %} target="{{ post.getLinkTarget }}" {% endif %}><strong>{{ post.getTitle }}</strong></a>
+					{% elseif post.getContentDiv == constant('CONTENT_DIV_TITLE',post) %}
+					<strong>{{ post.getTitle }}</strong>
+					{% endif %}
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+		{% if post_list.totalItemCount > 0 %}
+		{% include "pager.twig" with {'pages':post_list.paginationData} %}
+		{% endif %}
+	</div>
+	<div class="col-md-3">
+		{{ TabaCMSWidget('category')|raw }}
+	</div>
+</div>
+{% endblock %}
+

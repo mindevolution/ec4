@@ -1,0 +1,106 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['customer', 'customer_level_detail_master'] %}
+
+{% block title %}{{ 'admin.customer.customer_level_detail'|trans }}{% endblock %}
+{% block sub_title %}{{ 'admin.customer.customer_management'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload.css', 'admin') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload-ui.css', 'admin') }}">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ asset('assets/js/vendor/fileupload/vendor/jquery.ui.widget.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.iframe-transport.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-process.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-validate.js', 'admin') }}"></script>
+    <script>var bootstrapTooltip = $.fn.tooltip.noConflict();</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    
+{% endblock %}
+
+{% block main %}
+    <form role="form" class="form-horizontal" name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
+        {{ form_widget(form._token) }}
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header"><span>一般会員ステージ</span></div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3"><span>ステージ</span></div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.level) }}
+                                    {{ form_errors(form.level) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"><span>Mix</span></div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.min) }}
+                                    {{ form_errors(form.min) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"><span>Max</span></div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.max) }}
+                                    {{ form_errors(form.max) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3"><span>ポイント還元率%</span></div>
+                                <div class="col mb-2">
+                                    {{ form_widget(form.discount) }}
+                                    {{ form_errors(form.discount) }}
+                                </div>
+                            </div>
+
+
+
+                            
+                            
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink" href="{{ url('admin_customer_level_detail') }}">
+                                <i class="fa fa-backward" aria-hidden="true"></i><span>一般会員ステージ</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="ex-conversion-action" class="row align-items-center justify-content-end">
+                            
+                            <div class="col-auto">
+                                <button class="btn btn-ec-conversion px-5" type="submit">{{ 'admin.common.registration'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

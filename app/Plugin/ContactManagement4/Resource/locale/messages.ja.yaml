@@ -1,0 +1,38 @@
+contact.title: お問い合わせ管理
+contact.status: 対応状況
+contact.contact_id: ID
+contact.contact_date: 日時
+
+admin.contact.not_required: 任意
+admin.contact.multi_search_label: お問い合わせID・メールアドレス・お名前
+tooltip.contact.shop_memo: 店舗用のメモ欄です。フロント画面には表示されません。
+admin.contact.contact_list: お問い合わせ一覧
+
+tooltip.contact.contact_id: 自動的に採番されるお問い合わせIDです。
+tooltip.contact.customer_id: ログインユーザーのお問い合わせのみ表示されます。
+tooltip.contact.product: 問い合わせ対象の商品が表示されます。
+tooltip.customer.contact_history: 会員の問い合わせ履歴が表示されます。
+
+admin.contact.contact_status: お問い合わせ状況
+admin.contact.index.title: お問い合わせ一覧
+admin.contact.new.title: お問い合わせ登録
+admin.contact.contact_id: お問い合わせID
+admin.contact.contact_date: お問い合わせ日時
+admin.contact.customer_id: 会員ID
+admin.contact.product: お問い合わせ商品
+admin.contact.contact_registration: お問い合わせ登録
+admin.contact.contact_management: お問い合わせ管理
+admin.contact.contact_info: お問い合わせ情報
+admin.contact.contents: お問い合わせ内容
+admin.contact.edit.select: 選択
+
+# 会員編集画面
+admin.customer.contact_history: お問い合わせ履歴
+admin.customer.no_contact_history: お問い合わせ履歴がありません
+
+#admin.contact.reply.reply_person: 回答者名
+#admin.contact.reply.reply_method: 回答方法
+admin.contact.reply.reply_date: 回答日時
+admin.contact.reply.contents: 回答内容
+admin.contact.reply.email: 送信先
+admin.contact.reply.mail_subject: 題名

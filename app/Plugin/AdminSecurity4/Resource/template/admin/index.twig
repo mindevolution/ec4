@@ -1,0 +1,278 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['admin_record', 'admin_record_login_record'] %}
+
+{% block title %}{{ 'admin.login_record.index.title'|trans }}{% endblock %}
+{% block sub_title %}{{ 'admin_record.title'|trans }}{% endblock %}
+
+{% form_theme searchForm '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css', 'admin') }}">
+{% endblock stylesheet %}
+
+{% block javascript %}
+<script src="{{ asset('assets/js/vendor/moment.min.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/moment-ja.js', 'admin') }}"></script>
+<script src="{{ asset('assets/js/vendor/bootstrap-datetimepicker.min.js', 'admin') }}"></script>
+
+<script>
+$(function() {
+
+    var inputDate = document.createElement('input');
+    inputDate.setAttribute('type', 'date');
+    if (inputDate.type !== 'date') {
+        $('input[id$=_date_start]').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+
+        $('input[id$=_date_end]').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+
+    $('#admin_search_contact_birth_start').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+
+    $('#admin_search_contact_birth_end').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+
+    $('#admin_search_contact_last_buy_start').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+
+    $('#admin_search_contact_last_buy_end').datetimepicker({
+            locale: 'ja',
+            format: 'YYYY-MM-DD',
+            useCurrent: false,
+            showTodayButton: true
+        });
+    }
+
+    (function($, f) {
+        //フォームがないページは処理キャンセル
+        var $ac = $(".accpanel");
+        if (!$ac) {
+            console.log('cancel');
+            return false
+        }
+
+        //フォーム内全項目取得
+        var c = f();
+        if (c.formState()) {
+            if ($ac.css("display") == "none") {
+                $ac.siblings('.toggle').addClass("active");
+                $ac.slideDown(0);
+            }
+        } else {
+            $ac.siblings('.toggle').removeClass("active");
+            $ac.slideUp(0);
+        }
+    })($, formPropStateSubscriber);
+});
+
+function fnChangeActionSubmit(action) {
+    document.search_form.action = action;
+    document.search_form.submit();
+}
+</script>
+{% endblock javascript %}
+
+{% block main %}
+<form name="search_form" id="search_form" method="post" action="">
+    {{ form_widget(searchForm._token) }}
+    <div class="c-outsideBlock">
+        <div class="c-outsideBlock__contents">
+            <div class="row justify-content-start">
+                <div class="col-6">
+                    <div class="mb-2">
+                        <label class="col-form-label">{{ 'admin.admin_record.multi_search_label'|trans }}</label>
+                        {{ form_widget(searchForm.multi) }}
+                        {{ form_errors(searchForm.multi) }}
+                    </div>
+                    <div class="d-inline-block mb-3 collapsed" data-toggle="collapse" href="#searchDetail" aria-expanded="false" aria-controls="searchDetail"><a><i class="fa font-weight-bold mr-1 fa-plus-square-o"></i><span class="font-weight-bold">{{ 'admin.common.search_detail'|trans }}</span></a></div>
+                </div>
+            </div>
+        </div>
+        <div class="c-subContents ec-collapse collapse{{ has_errors ? ' show' }}" id="searchDetail">
+            <div class="row mb-2">
+                <div class="col">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <p class="col-form-label">{{ 'admin.admin_record.user_name'|trans }}</p>
+                            {{ form_widget(searchForm.user_name) }}
+                            {{ form_errors(searchForm.user_name) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <label>{{ 'admin.admin_record.client_ip'|trans }}</label>
+                        {{ form_widget(searchForm.client_ip) }}
+                        {{ form_errors(searchForm.client_ip) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+
+                <div class="col">
+                    <div>
+                        <label>{{ 'admin.admin_record.create_date'|trans }}</label>
+                        <div class="form-row align-items-center">
+                            <div class="col">
+                                {{ form_widget(searchForm.create_date_start) }}
+                                {{ form_errors(searchForm.create_date_start) }}
+                            </div>
+                            <div class="col-auto text-center"><span>{{ 'admin.common.separator__range'|trans }}</span></div>
+                            <div class="col">
+                                {{ form_widget(searchForm.create_date_end) }}
+                                {{ form_errors(searchForm.create_date_end) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div>
+                        <label>{{ 'admin.admin_record.success_or_failure'|trans }}</label>
+                        {{ form_widget(searchForm.status, { 'label_attr': { 'class': 'checkbox-inline'}}) }}
+                        {{ form_errors(searchForm.status) }}
+                    </div>
+                </div>
+            </div>
+
+            {# エンティティ拡張の自動出力 #}
+            {% for f in searchForm if f.vars.eccube_form_options.auto_render %}
+                <div class="row mb-2">
+                    {% if f.vars.eccube_form_options.form_theme %}
+                        {% form_theme f f.vars.eccube_form_options.form_theme %}
+                        {{ form_row(f) }}
+                    {% else %}
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>{{ f.vars.label|trans }}</label>
+                                {{ form_widget(f) }}
+                                {{ form_errors(f) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="c-outsideBlock__contents mb-5">
+        <button type="submit" class="btn btn-ec-conversion px-5">{{ 'admin.common.search'|trans }}</button>
+        {% if pagination %}
+            <span class="font-weight-bold ml-2">{{ 'admin.common.search_result'|trans({'%count%':pagination.totalItemCount}) }}</span>
+        {% endif %}
+    </div>
+    <div class="c-outsideBlock__contents mb-5">
+        {{ include('@admin/search_items.twig', { 'form': searchForm }, ignore_missing = true) }}
+    </div>
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+                {% if pagination and pagination.totalItemCount %}
+                    <div class="row justify-content-between mb-2">
+                        <div class="col-6"></div>
+
+                        <div class="col-5 text-right">
+                            {#Dropdown page count#}
+                            <div class="d-inline-block mr-2">
+                                <select class="custom-select" onchange="location = this.value;">
+                                    {% for pageMax in pageMaxis %}
+                                        <option {% if pageMax.name == page_count %} selected {% endif %}
+                                                value="{{ path('plg_admin_record_login_record_page', {'page_no': 1, 'page_count': pageMax.name }) }}">
+                                            {{ 'admin.common.count'|trans({ '%count%': pageMax.name }) }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="d-inline-block">
+                                <div class="btn-group" role="group"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-body p-0">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="border-top-0 pt-2 pb-3 pl-3">{{ 'admin.common.id'|trans }}</th>
+                                        <th class="border-top-0 pt-2 pb-3">{{ 'admin.admin_record.user_name'|trans }}</th>
+                                        <th class="border-top-0 pt-2 pb-3 pl-3">{{ 'admin.admin_record.client_ip'|trans }}</th>
+                                        <th class="border-top-0 pt-2 pb-3">{{ 'admin.admin_record.create_date'|trans }}</th>
+                                        <th class="border-top-0 pt-2 pb-3">{{ 'admin.admin_record.success_or_failure'|trans }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for LoginRecord in pagination %}
+                                    <tr>
+                                        <td class="align-middle pl-3">{{ LoginRecord.id }}</td>
+                                        <td class="align-middle">
+                                            {{ LoginRecord.user_name }}
+                                        </td>
+                                        <td class="align-middle">
+                                                {{ LoginRecord.client_ip }}
+                                        </td>
+                                        <td class="align-middle">
+                                                {{ LoginRecord.create_date|date_format('','Y/m/d H:i:s') }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {% if LoginRecord.success_flg %}
+
+                                                <span class="badge badge-ec-blue" style="background-color: #fff; color: #25B877; border-color: #25B877">成功</span>
+                                            {% else %}
+                                                <span class="badge badge-ec-blue" style="background-color: #fff; color: #C04949; border-color: #C04949">失敗</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="row justify-content-md-center mb-4">
+                                {% if pagination.totalItemCount > 0 %}
+                                    {% include "@admin/pager.twig" with { 'pages' : pagination.paginationData, 'routes' : 'plg_admin_record_login_record_page' } %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% elseif has_errors %}
+                    <div class="card rounded border-0">
+                        <div class="card-body p-4">
+                            <div class="text-center text-muted mb-4 h5">{{ 'admin.common.search_invalid_condition'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_change_condition'|trans }}</div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card rounded border-0">
+                        <div class="card-body p-4">
+                            <div class="text-center text-muted mb-4 h5">{{ 'admin.common.search_no_result'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_change_condition'|trans }}</div>
+                            <div class="text-center text-muted">{{ 'admin.common.search_try_advanced_search'|trans }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <p style="font-size: 18px;">管理画面への禁止IPアドレスを登録するには<a href="{{ url('plg_admin_record_config') }}">拒否IPアドレス</a>をご設定ください</p>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

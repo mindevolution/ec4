@@ -1,0 +1,1 @@
+{"name":"ec-cube\/shippingaddressmax","version":"4.0.0","description":"\u304a\u5c4a\u3051\u5148\u4f4f\u6240\u767b\u9332\u6570\u5909\u66f4\u30d7\u30e9\u30b0\u30a4\u30f3","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.6 || ^2.0"},"extra":{"code":"ShippingAddressMax","id":2375}}

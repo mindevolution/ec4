@@ -1,0 +1,414 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+
+<style>
+.display-sm {
+  display: none;
+}
+#page_help_member .ec-layoutRole .ec-layoutRole__main {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.member-page-nav {
+    padding: 0;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.member-page-nav a {
+    padding: 10px 20px;
+    background-color: #525263;
+    color: #fff;
+    border-radius: 35px;
+    display: block;
+    margin: 0 15px 15px 0;
+}
+.member-page-nav a:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+.member-page-nav i {
+    margin-left: 5px;
+}
+.member-page-box {
+  padding: 60px 0 100px;
+}
+.member-page-box:first-child {
+  padding-bottom: 0;
+}
+.member-page-box h2 {
+  text-align: center;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 42px;
+  margin-bottom: 50px;
+}
+.member-page-box h3 {
+  margin-top: 24px;
+  color: #006DBE;
+  line-height: 2;
+  font-family:"noto-sans-cjk-jp,sans-serif";
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+.member-page-box h4 {
+  margin-top: 24px;
+  color: black;
+  line-height: 2;
+  font-family:"noto-sans-cjk-jp,sans-serif";
+  font-weight: medium;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+.member-page-box p {
+  font-weight: 400;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.5;
+  vertical-align: middle;
+  margin-bottom: 24px;
+}
+.member-page-box p.text-small {
+  font-size: 14px;
+}
+.member-page-box p.attention-text {
+  margin: 30px 0 10px;
+  font-weight: bold;
+}
+.member-page-box .color-red {
+  color: red;
+  font-weight: bold;
+}
+.member-page-box table {
+  border-spacing: 2px;
+}
+.member-page-box table thead th {
+  padding: 12px 24px;
+  text-align: center;
+}
+.member-page-box table.table-lg thead th {
+  padding: 18px 24px;
+  text-align: center;
+}
+.member-page-box tbody th {
+  background-color: #f3f3f3 !important;
+  color: #222 !important;
+}
+.member-page-box table tbody th,
+.member-page-box table tbody td {
+  padding: 18px 24px;
+  border: 1px solid #eee;
+}
+.member-page-box table.table-lg tbody th,
+.member-page-box table.table-lg tbody td {
+    padding: 16px 16px;
+    border: 1px solid #eee;
+    font-size: 16px !important;
+}
+.member-page-box table.table-lg .icon-center {
+    text-align: center;
+}
+.member-page-box table.table-lg td i.fa-check-circle {
+    font-size: 24px;
+    color: #036bbe;
+}
+.member-page-box table.table-lg td i.fa-times-circle {
+    font-size: 24px;
+    color: #aaa;
+}
+.member-page-box table th {
+  background-color: #3272bc;
+  color: #fff;
+}
+.member-page-box table td {
+  color: #222;
+  background-color: #fff;
+}
+.member-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  margin-top: 40px;
+}
+.member-feature__icon {
+    color: #11A3E6;
+    text-align: center;
+    height: 50px;
+}
+.member-feature__icon i {
+    font-size: 50px;
+}
+.member-feature__title {
+  text-align: center;
+  font-weight: bold !important;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
+}
+.member-feature__text {
+  margin-top: 20px !important;
+  margin-bottom: 0 !important;
+  font-size: 16px !important;
+}
+.member-feature small {
+  margin-top: 5px;
+  display: block;
+}
+
+.member-flow {
+  margin-bottom: 30px;
+}
+.member-flow__box {
+  border-radius: 3px;
+  padding: 20px 20px;
+  background-color: #f3f3f3;
+  margin-top: 20px;
+  display: flex;
+}
+.member-flow__num {
+  background-color: #3272bc;
+  align-self: self-start;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 24px;
+  border-radius: 50%;
+}
+.member-flow__body {
+  margin-left: 24px;
+}
+.member-flow__title {
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+.member-flow__text {
+  margin: 0 !important;
+  font-size: 16px !important;
+}
+.member-flow .arrow-down {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 0; 
+  height: 0; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #3272bc;
+}
+
+
+@media (max-width: 640px) {
+  .display-sm {
+    margin-top: 5px;
+    display: block;
+  }
+  .member-table-wrap {
+    position: relative;
+    overflow-x: scroll;
+  }
+  .member-page-box table {
+    min-width: 500px;
+  }
+  .member-page-box table.table-lg {
+    min-width: 800px;
+  }
+  .member-feature {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+a.btn--orange {
+  color: #fff;
+  background-color: #006DBE;
+}
+
+a.btn--orange:hover {
+  color: #fff;
+  background: #f74b57;
+}
+
+a.btn-c {
+  font-size: 1.8rem;
+  position: relative;
+  padding: 1.5rem 2rem 1.5rem 2rem;
+  border-radius: 100vh;
+}
+
+a.btn-c i.fa {
+  margin-right: 1rem;
+}
+</style>
+
+
+
+
+    <div class="ec-role">
+{#        <div class="ec-pageHeader">
+            <h1>{{ 'FAQ'|trans }}</h1>
+        </div>
+
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <p>
+                    
+                </p>
+            </div>
+        </div>#}
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <div class="ec-heading-bold"></div>
+<div class="member-page-box">
+<h2>よくあるご質問（FAQ）</h2>
+<hr>
+<p>                 
+<h3>【Q】入会金や年会費は掛かりますか。</h3>
+<h4>【A】入会金や年会費は掛からず、無料でご利用いただけます。</h4>
+<hr>
+<h3>【Q】法人や個人事業主での登録は可能でしょうか。</h3>
+<h4>【A】可能です。まず、ユーザー会員に登録をしていただきます。
+<br>登録完了後マイページからペットビジネス関連の法人又は個人事業主向けのプロ会員への申請をしていただきます。
+<br>申請が承認されれば、プロ会員としてご利用いただくことが可能です。
+</h4>
+<hr>
+<h3>【Q】パスワードが分からずログインできません。どうしたらいいですか。</h3>
+<h4>【A】トップページより、パスワードの再発行が可能です。
+<br>
+         ログインページの「ログイン情報をお忘れですか？」をクリックして頂き、現在ご登録いただいているメールアドレスを入力し、「次へ」をクリックして下さい。
+         <br>
+         パスワード再設定用のメールをお送りします。
+         <br>
+         メールが届きましたら、メールの内容をご確認の上、新しいパスワードを登録してください。</h4>
+<hr>
+<h3>【Q】会員登録情報の変更の仕方を教えてください。</h3>
+<h4>【A】会員登録情報の変更につきましては、マイページにログインしていただき、会員情報編集より変更が可能でございます。</h4>
+<hr>
+<h3>【Q】会員を退会したいです。方法を教えてください。</h3>
+<h4>【A】退会をご希望される場合は、マイページにログインしていただき、退会手続きから退会可能でございます。退会手続きが完了した時点で、現在保存されている購入履歴やお届け先等の情報は、すべて削除されますのでご注意ください。
+<br>※退会手続き前にご注文いただいた未発送の商品は、退会完了後に発送される場合がございます。その場合、出荷をお知らせするメールが送信される場合がございます。
+<br>※手続きの関係上、退会後1週間ほどの間すでに予約されたメールマガジンが配信される場合がございます。あらかじめご了承ください。</h4>
+<hr>
+<h3>【Q】ご注文完了メールなどの手続き完了メールが届きません。</h3>
+<h4>【A】ご登録のメールアドレスはお間違いないでしょうか。
+<br>また迷惑メール設定をされている場合、「support@ecnext.jp」からのメールを受け取れるよう受信設定をお願いいたします。
+</h4>
+<hr>
+<h3>【Q】発送する荷物のサイズ・重さを教えて頂けますか。</h3>
+<h4>【A】恐れ入りますが、弊社では荷物の重さ調整等のサービスを行っておりませんので、ご対応出来かねます。ご了承下さい。</h4>
+<hr>
+<h3>【Q】注文内容の確認はできますか。</h3>
+<h4>【A】	「マイページ」の「購入履歴」よりご確認いただけます。</h4>
+<hr>
+<h3>【Q】支払い方法は何がありますか。</h3>
+<h4>【A】以下のお支払いがご利用いただけます。
+<br>
+<br>◇ユーザー会員
+<br>
+<br>  ・代金引換（代引手数料無料）※支払期限：配達日から3日以内　
+<br> ・WEBコンビニ支払い（前払い/支払手数料有料）※支払期限：注文から3日以内　
+<br> ・銀行振込（前払い/振込手数料有料）※支払期限：注文から3日以内
+<br> ・郵便振替（前払い/振込手数料有料）※支払期限：注文から3日以内
+<br>・クレジットカード決済（決済手数料無料）
+<br> ・QR決済（決済手数料無料）※支払期限：配達日から3日以内
+<br> ・全ポイント支払い
+<br>
+<br>◇プロ会員
+<br>
+<br> ・代金引換（代引き手数料330円）※支払期限：配達日から3日以内
+<br> ・銀行振込（前払い/振込手数料有料）※支払期限：注文から7日以内
+<br> ・郵便振替（前払い/振込手数料）※支払期限：注文から7日以内
+<br> ・クレジットカード決済（決済手数料有料）
+<br> ・QR決済（決済手数料無料）※支払期限：注文から3日以内</h4>
+<hr>
+<h3>【Q】お届け先の変更はできますか。</h3>
+<h4>【A】「マイページ」の「お届け先一覧」より新規お届け先の追加を行うことができます。</h4>
+<hr>
+<h3>【Q】注文をしたのですが、いつ発送となりますか。</h3>
+<h4>【A】入金確認後早くて当日から遅くても10日以内に出荷いたします。
+<br>配達指定日がある場合はその日に配達。（在庫が無い場合や取り寄せ商品がある場合は商品入荷後出荷いたします。）
+<br>※在庫状況や運送会社の混雑状況や繁盛期等配達に通常よりお時間を頂く可能性が有ります。ご了承ください。
+</h4>
+<hr>
+<h3>【Q】海外へ発送できますか？</h3>
+<h4>【A】申し訳ございませんが、海外発送は行っておりません。弊社は日本国内のみとさせて頂いております。</h4>
+<hr>
+<h3>【Q】配送業者はどちらの業者をお使いでしょうか。</h3>
+<h4>【A】配送業者はヤマト運輸、佐川急便、日本郵便、福山通運でございます。
+<br>なお、当方で最適な輸送方法にてお送りさせていただきます。</h4>
+<hr>
+<h3>【Q】配送状況の確認方法について</h3>
+<h4>【A】お荷物出荷後、お荷物番号を記載した出荷完了メールをお送りさせて頂きます。
+<br>配送業者サイトからお荷物番号の追跡をお願い致します。</h4>
+<hr>
+<h3>【Q】商品、注文の返品交換はどうすれば？</h3>
+<h4>【A】
+<br>◇ユーザー会員<br>
+<br>·フードやおやつ以外の商品は、新品未開封品のみ返品交換を承ります。お届日より７日以内にお電話又はメールにてご連絡ください。
+<br>お客様の都合による返品交換の場合には、決済手数料、振込手数料および往復送料はお客様のご負担とさせていただきます。
+<br>※PLATINUMステージ、DIAMONDステージの会員様の返品手数料は無料です。
+<br>·フードやおやつの返品交換については原則承りません。
+<br>·お買い上げ商品に初期不良があった場合、商品が万が一ご注文商品と違う場合には返品交換に応じます。
+<br>その場合、商品到着から7日以内にお電話又はメールにてご連絡下さい。不良品、ご注文商品と違う場合の交換手数料につきましては、当方で負担いたします。
+<br>
+<br>◇プロ会員<br>
+<br>·返品交換については原則承りません。
+<br>·お買い上げ商品に初期不良があった場合、商品が万が一ご注文商品と違う場合には返品交換に応じます。
+<br>その場合、商品到着確認後7日以内にお電話又はメールにてご連絡下さい。不良品の交換手数料につきましては、当方で負担いたします。
+</h4>
+<hr>
+<h3>【Q】送料はいくらかかりますか。</h3>
+<h4>【A】
+<br>◇ ユーザー会員<br>
+<br>5,500円（税抜）以上商品ご購入のお客様は、送料無料となります。
+<br>・ご購入金額が5,500円（税込）未満のお客様は一律1,000円（税込）となります。　
+<br>※沖縄県及び一部離島へのお届けは送料無料の対象外です。ご購入金額にかかわらず1,500円（税込）となります。
+<br>
+<br>◇プロ会員<br>
+<br>・ご購入金額が11,000円以上（税込）の場合、送料は日本全国無料となります。
+<br>・ご購入金額が11,000円未満（税込）の場合、送料は日本全国一律1,000円（税込）となります。
+<br>※沖縄県及び一部離島へのお届けは送料無料の対象外です。ご購入金額にかかわらず1,500円（税込）となります。。</h4>
+<hr>
+<h3>【Q】請求書、納品書の発行は可能ですか。</h3>
+<h4>【A】
+<br>◇ユーザー会員
+<br>お買い上げ明細書（納品書）を同封させていただきます。
+<br>◇プロ会員
+<br>請求書（納品書）を同封させていただきます。</h4>
+<hr>
+<h3>【Q】領収書の発行はできますか。</h3>
+<h4>【A】
+<br>銀行振込、郵便振替、クレジットカード決済、QR決済の場合。
+<br>商品配送後にマイページ内のご注文履歴から発行することが可能です。
+<br>代金引換の場合。
+<br>商品受け取りの際に、配送会社から領収書をお受け取りください。 
+<br>領収書の宛名には、ご注文者様のお名前が記載されます。
+<br>領収書の宛名をあらかじめご注文者様のお名前に設定してください。
+<br>コンビニ支払いの場合。
+<br>料金お支払いの際に、コンビニから領収書をお受け取りください。</h4>
+<hr>
+<h3>【Q】電話またはＦＡＸで注文はできますか。</h3>
+<h4>【A】誠に申し訳ございませんが、ご注文はネットのみとなっております。</h4>
+<hr>
+
+<br>
+<a href="/contact" class="btn btn--orange btn-c"><i class="fa fas fa-envelope"></i>その他のお問い合わせはこちら</a>
+
+
+</p>
+</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

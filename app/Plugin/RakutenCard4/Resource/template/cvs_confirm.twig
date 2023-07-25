@@ -1,0 +1,26 @@
+{% if Order.Payment.getMethodClass matches '{Plugin\\\\RakutenCard4\\\\.*}' %}
+    {% if Order.Payment.getMethodClass == 'Plugin\\RakutenCard4\\Service\\Method\\Convenience' %}
+        <script>
+            $(function () {
+                // お問い合わせ欄の直前に追加
+                $('#rakuten_card4_cvs_confirm_form').insertBefore($('#shopping-form > div > div.ec-orderRole__detail > div.ec-orderConfirm'));
+            });
+        </script>
+
+        <div id="rakuten_card4_cvs_confirm_form" class="ec-orderPayment">
+            <div class="ec-rectHeading">
+                <h2>{{ 'rakuten_card4.shopping.cvs.label'|trans }}</h2>
+            </div>
+            <div class="dl_table">
+                <dl>
+                    <dd>
+                        <div>
+                            {{ Order.getRc4OrderPayment.getCvsKindLabel }}
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+

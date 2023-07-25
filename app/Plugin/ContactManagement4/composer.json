@@ -1,0 +1,1 @@
+{"name":"ec-cube\/contactmanagement4","version":"1.1.0","description":"\u304a\u554f\u3044\u5408\u308f\u305b\u7ba1\u7406 for EC-CUBE4","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.6 || ^2.0"},"extra":{"code":"ContactManagement4","id":2004}}

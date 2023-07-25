@@ -1,0 +1,1 @@
+{"name":"ec-cube\/maker4","version":"4.1.0","description":"\u30e1\u30fc\u30ab\u30fc\u7ba1\u7406\u30d7\u30e9\u30b0\u30a4\u30f3","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.6 || ^2.0"},"extra":{"code":"Maker4","id":1758}}

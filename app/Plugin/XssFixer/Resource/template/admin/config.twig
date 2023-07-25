@@ -1,0 +1,85 @@
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['store', 'plugin', 'plugin_list'] %}
+
+{% block title %}XSS脆弱性修正プラグイン{% endblock %}
+{% block sub_title %}プラグイン一覧{% endblock %}
+
+{% block stylesheet %}{% endblock stylesheet %}
+
+{% block javascript %}{% endblock javascript %}
+
+{% block main %}
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header"><span>このプラグインについて</span></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col mb-2">
+                                <p>
+                                    <a href="https://www.ec-cube.net/news/detail.php?news_id=383" target="_blank">【重要】EC-CUBE 4.0系における緊急度「高」の脆弱性発覚と対応のお願い</a>で公開された、EC-CUBEのXSS脆弱性を修正するプラグインです。
+                                </p>
+                                <ul>
+                                    <li>プラグイン有効化のタイミングで、修正ファイルをapp/template/admin/Order/mail_confirm.twigに設置します。</li>
+                                    <li>修正ファイルが適用できているかどうかは、修正ファイル適用ステータスをご確認ください。</li>
+                                    <li>適用された修正ファイルをダウンロードし、修正内容のご確認をいただくことも可能です。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header"><span>修正ファイル適用ステータス</span></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col mb-2">
+                                {% if success %}
+                                    <p>修正ファイルは正常に適用されました。</p>
+                                    <p>
+                                        <a href="https://www.ec-cube.net/news/detail.php?news_id=383" target="_blank">【重要】EC-CUBE 4.0系における緊急度「高」の脆弱性発覚と対応のお願い</a>を参照し、攻撃された可能性の確認の実施を御願いいたします。
+                                    </p>
+                                {% else %}
+                                    <p>修正ファイルの適用に失敗しています。</p>
+                                    <p>プラグインを無効化し、再度有効化してください。<br>解決しない場合は、お問い合わせフォームまでご相談ください。</p>
+                                    <p>
+                                        お問合せフォーム：<a href="https://www.ec-cube.net/contact/" target="_blank">https://www.ec-cube.net/contact/</a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if success %}
+                <div class="card rounded border-0 mb-4">
+                    <div class="card-header"><span>確認</span></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col mb-2">
+                                <a href="{{ url('xss_fixer_admin_config_download') }}">適用された修正ファイルをダウンロードする</a><br><br>
+                                <a href="https://www.ec-cube.net/info/weakness/20210507/#diff" target="_blank">EC-CUBE 4.0系: クロスサイトスクリプティング脆弱性について</a>にて公開されている修正差分が反映されているかご確認ください。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="c-conversionArea">
+        <div class="c-conversionArea__container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-6">
+                    <div class="c-conversionArea__leftBlockItem">
+                        <a class="c-baseLink"
+                           href="{{ url('admin_store_plugin') }}">
+                            <i class="fa fa-backward" aria-hidden="true"></i>
+                            <span>プラグイン一覧</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

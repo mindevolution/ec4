@@ -1,0 +1,11 @@
+{# タグ #}
+<ul class="ec-shelfRole__tags">
+{% if Product is defined %}
+{% for Tag in Product.Tags %}
+    {% if Tag.show_product_list_flg %}
+        <li class="ec-shelfRole__tag tag_{{ Tag.id }}"
+        >{{ Tag.name }}</li>
+    {% endif %}
+{% endfor %}
+{% endif %}
+</ul>

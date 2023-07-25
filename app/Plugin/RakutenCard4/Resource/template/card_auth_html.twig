@@ -1,0 +1,23 @@
+{% extends 'default_frame.twig' %}
+
+{% block javascript %}
+<script>
+  $(function () {
+    loadingOverlay();
+    $('#form1').submit();
+  });
+</script>
+{% endblock javascript %}
+
+{% block main %}
+  <div style="width: 80%; margin: 50px auto; font-size: 110%;">
+    <p>{{ 'rakuten_card4.front.shopping.card.authorize_html.message'|trans }}</p>
+    <span class="text-danger">{{ 'rakuten_card4.front.shopping.card.authorize_html.message_notice'|trans }}</span>
+  </div>
+
+  <form id="form1" name="form1" action="{{ send_url }}" method="POST">
+    {% for key, value in post_data %}
+      <input type="hidden" name="{{ key }}" value="{{ value }}" />
+    {% endfor %}
+  </form>
+{% endblock %}

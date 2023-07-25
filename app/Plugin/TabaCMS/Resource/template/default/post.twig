@@ -1,0 +1,53 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+{% set body_class = 'tabacms_post_page' %}
+
+{# 投稿データの取得 #}
+{% set post = TabaCMSPost() %}
+
+{% block javascript %}
+{{ TabaCMSAsset('script.js','script')|raw }}
+{{ post.getScript|raw }}
+{% endblock javascript %}
+
+{% block stylesheet %}
+{{ TabaCMSAsset('style.css','style')|raw }}
+{% endblock stylesheet %}
+
+{% block main %}
+<div class="container">
+    <div class="row" style="margin-right:0px;">
+        <article class="col-xs-12 col-md-9 tabacms_post">
+            <header class="row tabacms_header">
+                {% if post.getCategory is not empty %}
+                    <div class="col-xs-12">
+                        <label class="text-nowrap tabacms_category_{{ post.getType.getDataKey }}_{{ post.getCategory.getDataKey }}" {{ post.getCategory.getTagAttributes|raw }}>{{ post.getCategory.getCategoryName }}</label>
+                    </div>
+                {% endif %}
+                <h1 class="col-xs-12 ec-pageHeader">{{ post.getTitle|raw }}</h1>
+                <time class="col-xs-12 text-right">
+                    {{ post.getPublicDate|date('Y/m/d') }}
+                </time>
+            </header>
+            <section class="row tabacms_body">
+                {% if post.getThumbnail is not empty %}
+                    <div class="col-xs-12 col-sm-offset-1 col-sm-10">
+                        <img src="{{ asset(post.getThumbnail,'save_image') }}" class="img-responsive center-block">
+                    </div>
+                {% endif %}
+                <div class="col-xs-12">
+                    {{ post.getBody|raw }}
+                </div>
+            </section>
+        </article>
+        <div class="col-xs-12 col-md-3">
+            {{ TabaCMSWidget('category')|raw }}
+        </div>
+    </div>
+</div>
+{% endblock %}

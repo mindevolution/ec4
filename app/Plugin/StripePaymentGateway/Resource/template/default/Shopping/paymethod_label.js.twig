@@ -1,0 +1,30 @@
+<script>
+    $(function(){
+        {% if stripe_pay_id is defined %}
+            var stripe_method = $("label[for='shopping_order_Payment_{{stripe_pay_id}}'] span");
+            if (stripe_method.length) {
+                {% if checkout_ga_enable %}
+                var ga_pay_icons = `<span class="mr-3"><i class="fab fa-cc-apple-pay"></i></span><span class="mr-3"><i class="fab fa-google-pay"></i></span>`;
+                {% else %}
+                var ga_pay_icons = ""
+                {% endif %}
+                var icons = `<span class="mr-3"><i class="fas fa-credit-card"></i></span>` + ga_pay_icons;
+                stripe_method.html(`{{ stripe_method_name }}` + icons);
+            }
+        {% endif %}
+
+        {% if stripe_konbini_pay_id is defined %}
+            var konbini_method = $("label[for='shopping_order_Payment_{{stripe_konbini_pay_id}}'] span");
+            if (konbini_method.length) {
+                var icons = `<span class="mr-3"><i class="fas fa-store-alt"></i></span>`
+                konbini_method.html(`{{ konbini_method_name }}` + icons);
+            }
+        {% endif %}
+
+    })
+</script>
+<style>
+.mr-3{
+    margin-left: 10px;
+}
+</style>

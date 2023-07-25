@@ -1,0 +1,13 @@
+<div id="xss_fixer_alert" class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+    <i class="fa fa-warning fa-lg mr-2"></i>
+    <span class="font-weight-bold">XSS脆弱性が残っている可能性があります。<a href="{{ url('xss_fixer_admin_config') }}">修正ファイルの適用状況</a>をご確認ください。</span>
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<script>
+    $(function () {
+        var xss_fixer_selector = '#page_admin_homepage > div.c-container > div.c-contentsArea > div.c-pageTitle'
+        $(xss_fixer_selector).after($('#xss_fixer_alert'));
+    });
+</script>

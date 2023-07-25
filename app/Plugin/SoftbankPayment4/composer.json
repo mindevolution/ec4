@@ -1,0 +1,1 @@
+{"name":"ec-cube\/softbankpayment4","version":"1.2.3","description":"SoftbankPayment4","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.6 || ^2.0"},"extra":{"code":"SoftbankPayment4","id":2063}}

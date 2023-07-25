@@ -1,0 +1,13 @@
+{
+  "name": "ec-cube/stripepaymentgateway",
+  "version": "2.2.2",
+  "description": "Stripe 決済プラグイン",
+  "type": "eccube-plugin",
+  "require": {
+    "stripe/stripe-php":"~7.27.3",
+    "ec-cube/plugin-installer": "~0.0.6 || ^2.0"
+  },
+  "extra": {
+    "code": "StripePaymentGateway"
+  }
+}

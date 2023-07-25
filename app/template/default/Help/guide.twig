@@ -1,0 +1,335 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.member-page-nav {
+  padding: 0;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.member-page-nav a {
+  padding: 10px 20px;
+  background-color: #006CB8;
+  color: #fff;
+  border-radius: 35px;
+  display: block;
+  margin: 0 15px 15px 0;
+}
+.member-page-nav a:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+.member-page-nav i {
+  margin-left: 5px;
+}
+.guide-page-box {
+  padding: 0 0 100px;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.guide-page-box h1 {
+  text-align: center;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+.guide-page-box h2 {
+  margin-top: 60px;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+.guide-page-box h3 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 24px;
+}
+.guide-page-box h4 {
+  margin-top: 30px;
+  font-weight: bold;
+}
+.guide-page-box p {
+  font-weight: 400;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+  vertical-align: middle;
+  margin-bottom: 24px;
+}
+.guide-page-box img {
+  width: 70%;
+  margin: 20px 0 20px;
+  display: block;
+  border: 1px solid #eee;
+}
+.guide-sm img {
+  width: 45%;
+}
+@media (max-width: 640px) {
+  .guide-page-box img {
+    width: 100%;
+  }
+  .guide-sm img {
+    width: 100%;
+  }
+}
+</style>
+
+<div class="ec-role">
+  <div class="ec-off1Grid">
+    <div class="ec-off1Grid__cell">
+      <div class="guide-page-box">
+        <h1>ご利用ガイド</h1>
+        <aside id="guideNavi">
+        <ul class="member-page-nav">
+          <li><a href="#ippan">ユーザー会員の新規登録方法<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#pro">プロ会員の登録方法<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#remove">会員の退会方法<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#search">商品を探す<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#detail">商品の詳細をみる<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#favorite">お気に入りについて<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#point">ポイントについて<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#stage">会員ステージについて<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#flow">注文から発送までの流れ<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#checkout">お支払いについて<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#delivery">配送について<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#box">梱包について<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#big">大口のご注文について<i class="fas fa-chevron-down"></i></a></li>
+          <li><a href="#postage">送料について<i class="fas fa-chevron-down"></i></a></li>
+        </ul>
+      </aside>
+        <p>
+          <br>●イーシーネクストは、会員制のペット用品オンラインショッピングサイトです。自社取り扱いブランドを中心とした全世界から集めた逸品を幅広く取り揃えています。たくさんの商品の中から、お探しの商品を見つけられるようにさまざまな探し方をご用意しています。
+          <br>当サービスをご利用する際は、まず会員登録をお願いいたします。（入会金、年会費無料）
+          <br>
+          <br>●会員登録について
+          <br>会員には、下記の２種類あります。
+          <br>ユーザー会員…イーシーネクストで商品を購入希望される一般のお客様向けの会員
+          <br>プロ会員…ペットビジネス関連の法人又は個人事業主向けの会員
+          <br>
+          <h2 id="ippan">ユーザー会員の新規登録方法</h2>
+          <h3>PC版</h3>
+          ①	画面右上の「会員登録」をクリックしてください。
+          <br>②	個人情報を入力してください。
+          <img src="/html/template/default/assets/img/guide/member_pc2.png" >
+          <br>③	メールマガジンの希望有無を入力してください。
+          <br>④	利用規約を読んでいただき、同意の上で「同意する」をクリックしてください。
+          <img src="/html/template/default/assets/img/guide/member_pc34.png">
+          <br>⑤	新規登録確認画面が表示されるので、内容を確認の上、「会員登録をする」をクリックしてください。
+          <img src="/html/template/default/assets/img/guide/member_pc5.png">
+          <br>⑥	現在、仮会員の状態です。ご入力いただいたメールアドレス宛に、ご本人様確認用のメールが届きます。
+          <br>⑦	メール本文内のURLをクリックすると、本会員登録が完了となります。
+          <img src="/html/template/default/assets/img/guide/member_pc67.png">
+          <br>
+          <div class="guide-sm">
+            <h3>スマートフォン、iPhone版</h3>
+            ①	画面左上の「≡」を押してください。
+            <img src="/html/template/default/assets/img/guide/member_sp1.png">
+            <br>②	一番上に新規会員登録というボタンを押してください。
+            <img src="/html/template/default/assets/img/guide/member_sp2.png">
+            <br>③	個人情報を入力してください。
+            <img src="/html/template/default/assets/img/guide/member_sp3.png">
+            <br>④	メールマガジンの希望有無を入力してください。
+            <br>⑤	利用規約を読んでいただき、同意の上で「同意する」をクリックしてください。
+            <img src="/html/template/default/assets/img/guide/member_sp45.png">
+            <br>⑥	新規登録確認画面が表示されるので、内容を確認の上、「会員登録をする」をクリックしてください。
+            <img src="/html/template/default/assets/img/guide/member_sp6.png">
+            <br>⑦	現在、仮会員の状態です。ご入力いただいたメールアドレス宛に、ご本人様確認用のメールが届きます。
+            <br>⑧	メール本文内のURLをクリックすると、本会員登録が完了となります。
+            <img src="/html/template/default/assets/img/guide/member_sp78.png">
+            <br>
+          </div>
+          
+          <h2 id="pro">プロ会員の登録方法</h2>
+          ①まず初めに、店舗としてイーシーネクストに一般会員登録をお願いします。
+          <br>②店舗として登録後、マイページの「プロ会員申込」から申込資格、利用規約を確認の上、店舗情報や動物取扱業者様の証明となる資料をアップロードお願いいたします。
+          <img src="/html/template/default/assets/img/guide/promember_2.png">
+          <br>③送っていただいた情報をもとに、弊社で審査と承認手続きをいたします。
+          <br>④承認が完了次第、メールにてご案内いたします。
+          <br>⑤申込承認をもって、登録完了です。
+          <img src="/html/template/default/assets/img/guide/pro-5.png">
+          <br><br>
+          <h3 id="remove">●会員の退会方法</h3>
+          ①	まず、イーシーネクストにログインしていただきます。
+          <br>②	マイページの「退会手続き」押してください。
+          <br>③	退会手続き前の確認事項を読んだ上で、「退会手続きへ」を押してください。
+          <img src="/html/template/default/assets/img/guide/withdrawl123.png">
+          <br>④	退会手続きを実行してよろしいですか？と表示されますので、確認の上、「はい、退会します」を押してください。　※退会手続きが完了した時点で、現在保存されている購入履歴やお届け先等の情報は、すべて削除されますのでご注意ください。
+          <img src="/html/template/default/assets/img/guide/withdrawl4.png">
+          <br>⑤	退会が完了しましたという内容のメールが登録されたメールアドレスに届くので、これをもって、退会完了となります。
+          <img src="/html/template/default/assets/img/guide/withdrawl_5.png">
+          <br>
+          <br>※退会手続き前にご注文いただいた未発送の商品は、退会完了後に発送される場合がございます。その場合、出荷をお知らせするメールが送信される場合がございます。
+          <br>※手続きの関係上、退会後1週間ほどの間すでに予約されたメールマガジンが配信される場合がございます。あらかじめご了承ください。
+          <br><br>
+          <h3 id="search">●商品を探す</h3>
+          ①	カテゴリから探す
+          <br>カテゴリ別に商品を探すことができます。グルーミング用品、ケア用品、フード・おやつ、その他からお探しのアイテム分類を選ぶと、該当する商品の一覧ページへ移動します。
+          <br>②	キーワードで探す　
+          <br>ページ上部にあるキーワード検索窓では、自由なキーワードで検索することができます。入力欄にキーワードや、商品名、ブランド名などを入力して、検索ボタンをクリックしてください。
+          <br>③	ブランドから探す
+          <br>ページ下部にあるブランドから探すでは、商品のブランドごとに検索することができます。
+          <br>④「特集バナー」「おすすめ商品」「人気ランキング」「最近チェックした商品」から探す
+          <br>知らなかったアイテムや人気アイテムに出会えたり、お得な情報をゲットできたり、商品探しに役立つ情報満載です。是非ページ内に掲載されている特集バナーをクリックしてみてください。
+          <br>
+          <h3 id="detail">●商品の詳細をみる</h3>
+          検索した商品を詳しくみる場合は、商品画像や商品名をクリックします。すると、商品詳細ページへ移動します。
+          <br>・別の角度や拡大した画像・使い方・商品の仕様や特徴サイズ詳細・保存方法やお手入れ方法などから、商品についてより詳しく知ることができます。
+          <br>
+          <h3 id="favorite">●お気に入りについて</h3>
+          気になる商品を「お気に入り」に保存しておけば、いつでも素早く「お気に入り」から確認することができます。「お気に入りに追加」ボタンをクリックすると、その商品の情報はお気に入りに保存され、お気に入りページに移動します。
+          <br>
+          <h3 id="point">●ポイントについて（ユーザー会員のみ適応）</h3>
+          「1ポイント＝1円」として、次回ご購入時から１ポイントから当サイトのみご利用いただけます。会員ステージによって、ポイント還元率は変動します。
+          <br>最大で20％ポイント還元となっています。
+          <br>ポイントについての詳細は、「会員サービス」に記載しておりますので、そちらをご確認ください。
+          <br>
+          <h3 id="stage">●会員ステージについて（ユーザー会員のみ適応）</h3>
+          年間購入金額に応じて6つの会員ステージが設定されます。会員ステージがアップすると、ポイント還元率や特典のグレードアップ、限定セールのご案内もあります。会員ステージについての詳細は、「会員サービス」に記載しておりますので、そちらをご確認ください。
+          <br><br>
+          <h3 id="flow">●注文から発送までの流れ</h3>
+          ①	購入する商品のサイズ、カラーが決まったら、数量を選択し、「カートに入れる」を押します。
+          <img src="/html/template/default/assets/img/guide/purchase-1.png">
+          <br>②	買い物を続ける場合は、「お買い物を続ける」を選択。
+          <br>お会計をする場合は、「カートへ進む」を選択してください。
+          <img src="/html/template/default/assets/img/guide/purchase-2.png">
+          <br>③	「カートへ進む」を選択した場合、ショッピングカートのページに移動します。お会計をする場合は、「レジに進む」を押してください。
+          <img src="/html/template/default/assets/img/guide/purchase-3.png">
+          <br>④	「レジに進む」を押すと、ご注文手続きのページに移動します。お客様情報と配送情報を確認し、希望があればお届け日、お届け時間を入力してください。
+          <br>※新規で配送先を追加する場合は、「配送先の変更・追加はこちら」からご登録ください。
+          <br>⑤	次に、お支払方法の選択をしてください。お支払方法について詳しくは、下記を参照ください。
+          <img src="/html/template/default/assets/img/guide/purchase-45.png">
+          <br>⑥	次に、ポイント、クーポンを利用する方は、利用するポイントの数とクーポンコードを入力してください。
+          <br>⑦	領収書等を必要とされる方は、連絡事項欄に領収証希望と記載してください。
+          <br>⑧	すべて入力したら「確認する」を押してください。すると、ご注文内容のご確認のページに移動します。
+          <img src="/html/template/default/assets/img/guide/purchase-678.png">
+          <br>⑨	入力いただいた内容と、お支払金額合計を確認の上、「注文する」を押してください。
+          <img src="/html/template/default/assets/img/guide/purchase-9.png">
+          <br>⑩	ご注文が完了すると、ご登録いただいているメールアドレス宛に登録完了メールが届きます。
+          <img src="/html/template/default/assets/img/guide/purchase_10.png">
+          <br>⑪	それぞれの方法で入金、お支払いが完了したのち商品を出荷いたします。（代金引換の場合は、注文完了後）<br>
+          出荷が完了したら、追跡番号、発送方法を記載した発送完了メールがご登録いただいているメールアドレス宛に登録完了メールが届きます。
+          <br>
+          <br>
+          <h3 id="checkout">●お支払いについて</h3>
+          <h4>・クレジットカード</h4>
+          クレジットカード決済の場合は承認確認後出荷となります。
+          <br>下記クレジットカードがご利用可能です。
+          <br>Mastercard、VISA、JCB、DinersClub、AmericanExpress
+          <br>◇ユーザー会員（決済手数料無料）
+          <br>◇プロ会員（決済手数料有料）
+          <br>※デビットカードご利用注意点について
+          <br>金融機関が発行し預金口座に直結した「即時決済型」のカードです。
+          <br>決済をしたタイミングで、代金が即時口座から引き落としされます。
+          <br>・キャンセル・欠品による弊社側金額変更を行った際、一時的に２重で引き落としになったり、一度返金されても再度引き落としになる可能性があります。
+          <br>・データ送信の関係上、金融機関によってはスケジュールが異なります。（約1～2週間）あくまで目安であることをご了承ください。
+          <br>
+          <h4>・代金引換</h4>
+          代金引換の場合は購入確定後出荷となります。
+          <br>商品お受け取り時にお支払いください。※支払いは現金のみとなります。
+          <br>◇ユーザー会員（代引き手数料無料）
+          <br>◇プロ会員（代引き手数料330円税込）配達から3日以内にお支払いください。
+          <br>※プロ会員は、お支払い方法が代金引換の場合はお支払合計金額（商品代金（税込）＋送料（税込））によって、代引手数料が別途必要となります。
+          <br>「商品代金（税込）＋送料（税込）＋代引手数料（税込）」がお支払合計金額となります。
+          <br>
+          <h4>・WEBコンビニ支払い</h4>
+          ご注文完了後、受付番号が発行されます。
+          <br>（ご注文端末への画面表示、またはお客様がご入力されたメールアドレス宛に送信されます）
+          <br>各コンビニにてお支払期限までにお支払いください。
+          <br>ご入金確認後の出荷となります。
+          <br>◇ユーザー会員（支払手数料無料）
+          <br>◇プロ会員は利用できません
+          <br>下記コンビニエンスストアにてお支払いください。
+          <br>ローソン、ファミリーマート、ミニストップ、セイコーマート
+          <br>
+          <h4>・銀行振込</h4>
+          ご入金確認後の出荷となります。ご注文後7日以内にお振込みください。
+          <br>下記銀行にて振り込みをお願いします。
+          <br>PayPay銀行、三井住友銀行、楽天銀行
+          <br>◇ユーザー会員　（振込手数料有料）　
+          <br>◇プロ会員　（振込手数料有料）
+          <br>
+          <h4>・郵便振替</h4>
+          ご入金確認後の出荷となります。ご注文後7日以内にお振込みください。
+          <br>◇ユーザー会員　（振込手数料有料）　
+          <br>◇プロ会員　（振込手数料有料）
+          <br>
+          <h4>・QR決済</h4>
+          QR決済の場合は入金確認後出荷となります。
+          <br>下記決済がご利用可能です。
+          <br>PayPay、LINEPay、楽天Pay、AUPAY
+          <br>◇ユーザー会員（決済手数料無料）
+          <br>◇プロ会員（決済手数料無料）
+          <br>
+          <h4>支払い上の注意点</h4>
+          ※高額金額の場合は、代金引換、WEBコンビニ支払いをお断りさせて頂く場合がございますので、その際は弊社からご連絡を致します。
+          <br>(銀行振込等でご変更して頂く流れとなります。)
+          <br>※代金引換の利用金額は合計金額10万円（税込）までとさせて頂きます。合計金額を超えますとご購入できませんのでご了承ください。10万円（税込）以上のご購入をご検討されている場合は、【代金引換】以外の決済方法をご利用下さい。
+          <br>
+          <h4>領収書について</h4>
+          ・銀行振込、郵便振替、クレジットカード決済、QR決済の場合。
+<br>商品配送後にマイページ内のご注文履歴から発行することが可能です。
+<br>・代金引換の場合。
+<br>商品受け取りの際に、配送会社から領収書をお受け取りください。
+<br>領収書の宛名には、ご注文者様のお名前が記載されます。
+<br>領収書の宛名をあらかじめご注文者様のお名前に設定してください。
+<br>・コンビニ支払いの場合。
+<br>料金お支払いの際に、コンビニから領収書をお受け取りください。
+          <br>
+          <br>
+          <h3 id="delivery">●配送について</h3>
+          ・入金確認後、10日以内に出荷いたします。（フードを除く）
+          <br>（在庫が無い場合や取り寄せ商品がある場合は商品入荷後出荷いたします。）
+          <br>※在庫状況、運送会社の混雑状況や繁盛期等配達に通常よりお時間を頂く可能性が有ります。ご了承ください。
+          <br>・配送業者については佐川急便、日本郵便、ヤマト運輸、福山通運を利用させていただいています。配送業者に関しては、こちらで指定させていただきます。
+          <br>・お客様のご都合にあわせて、日時指定が可能です。
+          <br>・追跡番号については、出荷完了時に送信するメールにてご確認ください。
+          <br>※日時指定のない場合は最短にて発送致します。
+          <br>※在庫状況、入金状況によりご希望に沿えない場合がございます。
+          <br>※ご注文時に備考欄に注文商品のご質問・ご相談があった場合、出荷を見合わせる場合がございますので、ご不明な点がございましたら予めメールにてお問い合わせをお願い致します。
+          <br>※お客様のご都合による出荷後のキャンセル、受け取り拒否、長期不在の場合、送料はお客様のご負担となります。延着等による二次的に発生する事由による一切の責は負いかねます。商品代金と送料以上の損害賠償はお受けできません。
+          <br>※予告なく成分・パッケージが変更になることがございますので、予めご了承ください。
+          <br>
+          <h3 id="box">●梱包について</h3>
+          ・資源の有効活用による環境保護への取り組みとしてエコ梱包を実施しています。
+          <br>・梱包用の段ボールにつきまして、別商品の段ボールを使用することがあります。
+          <br>・包装資材を少なくして簡易包装とさせて頂くことがあります。
+          <br>
+          <h3 id="big">●大口のご注文について</h3>
+          単品大量のご注文に関しましては、弊社在庫でなくメーカー在庫を引き当てさせて頂きます。
+          <br>その際はご連絡を致します。納品までに日数を要しますので、予めご了承ください。
+          <br>
+          <h3 id="postage">●送料について</h3>
+          <h4>◇ユーザー会員</h4>
+          ・5,500円（税込）以上商品ご購入のお客様は、送料無料となります。
+          <br>・ご購入金額が5,500円（税込）未満のお客様は一律1,000円（税込）となります。　
+           <br>※沖縄県及び一部離島へのお届けは送料無料の対象外です。ご購入金額にかかわらず1,500円（税込）となります。
+          <br>
+          <h4>◇プロ会員</h4>
+          ・ご購入金額が11,000円以上（税込）の場合、送料は日本全国無料となります。
+          <br>・ご購入金額が11,000円未満（税込）の場合、送料は日本全国一律1,000円となります。
+           <br>※沖縄県及び一部離島へのお届けは送料無料の対象外です。ご購入金額にかかわらず1,500円（税込）となります。
+          <br>
+          <br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

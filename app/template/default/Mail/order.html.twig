@@ -1,0 +1,279 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<body bgcolor="#F0F0F0" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top:0;margin-bottom:0;margin-right:0;margin-left:0;padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+<br>
+<br>
+<div align="center"><a href="{{ url('homepage') }}" style="font-family:Helvetica, Arial, sans-serif;font-size:30px;color:#333333;text-decoration:none;">{{ BaseInfo.shop_name }}</a></div>
+<!-- 100% background wrapper (grey background) -->
+<table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#F0F0F0" style="border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+    <tr>
+        <td align="center" valign="top" bgcolor="#F0F0F0" style="background-color:#F0F0F0;border-collapse:collapse;">
+            <br>
+            <!-- 600px container (white background) -->
+            <table id="html-mail-table1" border="0" width="600px" cellpadding="10" cellspacing="0" class="container" style="border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+                <tr>
+                    <td class="container-padding content" align="left" style="border-collapse:collapse;padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px;background-color:#ffffff;">
+                        <br>
+                        <div class="title" style="font-family:Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;text-align:left;color:#333333;">この度はご注文いただき誠にありがとうございます。</div>
+                        <br>
+                        <div class="body-text" style="font-family:Helvetica, Arial, sans-serif;font-size:14px;line-height:20px;text-align:left;color:#333333;">
+                            {{ Order.name01 }} {{ Order.name02 }} 様<br/>
+                            <br/>
+                            下記ご注文内容にお間違えがないかご確認下さい。<br/>
+                            <br/>
+                            
+<hr style="border-top: 3px double #8c8b8b;">
+　お支払いにつきまして<br>
+<hr style="border-top: 3px double #8c8b8b;">
+
+
+{% if Order.Payment.id == 2 %} 
+【QR決済】を選択いただいた方<br>
+
+下記のURLにアクセスし、お買い上げ総合計金額をQRコードをスキャンしてお支払いしていただくようお願い致します。<br>
+<a href="https://www.earthmirai.com/pay.html">https://www.earthmirai.com/pay.html</a><br>
+<a href="https://www.earthmirai.com/qr.pdf">操作手順　https://www.earthmirai.com/qr.pdf</a><br>
+<br>ご入金が確認でき次第、商品を発送いたします。
+<br>在庫商品限り、14時までに入金確認で即日発送致します。
+{% endif %}
+
+
+
+
+{% if Order.Payment.id == 7 %}
+【クレジットカード決済】を選択いただいた方<br>
+
+発送の準備をさせていただきます。<br>
+在庫商品限り、14時までにご入金確認で即日発送致します。<br>
+{% endif %}
+
+
+
+{% if Order.Payment.id == 3 %}
+【銀行振込】を選択いただいた方<br>
+お買い上げ総合計金額を、下記いずれかの口座へお振込いただくようお願いいたします。<br>
+在庫商品限り、14時までにご入金確認で即日発送致します。<br>
+<br>ーーーーー<br>
+★銀行名：PayPay銀行(ペイペイ銀行・旧称ジャパンネット銀行）<br>
+支店名：すずめ支店(002)<br>
+預金種類：普通<br>
+口座番号：5737778<br>
+口座名義：カ）アースミライ<br>
+<br>
+★銀行名：三井住友銀行<br>
+支店名：大分(おおいた)支店(721)<br>
+預金種類：普通預金<br>
+口座番号：1285944<br>
+口座名義：カ）アースミライ<br>
+<br>
+★銀行名：楽天銀行<br>
+支店名：第二営業支店(252)<br>
+預金種類：普通<br>
+口座番号：7046389<br>
+口座名義：カ）アースミライ<br>
+ーーーーー
+<br>
+●振込手数料はお客様負担でお願いします。
+●お申込者とお振込時のお名前が異なる場合は、入金確認が遅延する場合がございます。
+注文情報入力画面の【備考】欄で、必ずお振込時のお名前をご記入ください。
+
+<br><br>ご入金が確認でき次第、商品を発送いたします。
+<br>在庫商品限り、14時までにご入金確認で即日発送致します。<br>
+{% endif %}
+
+
+
+
+{% if Order.Payment.id == 1 %}
+【郵便振替】を選択いただいた方<br>
+ご購入いただいた商品の振替口座をご案内いたします。<br>
+お買い上げ総合計金額を、以下の口座にお振替いただくようお願いいたします。<br>
+ーーーーー<br>
+記号：17230<br>
+番号：24087411<br>
+名義：カ）アースミライ<br>
+ーーーーー
+<br>ご入金が確認でき次第、商品を発送いたします。
+<br>在庫商品限り、14時までにご入金確認で即日発送致します。
+{% endif %}
+
+
+
+{% if Order.Payment.id == 6 %}
+【WEBコンビニ決済】を選択いただいた方<br>
+<br>在庫商品限り、14時までにご入金確認で即日発送致します。<br>
+WEB上で表示される番号を控えて、3日以内にコンビニにて端末やレジで手続き、お支払い期限までお支払いいただくようお願いいたします。<br>
+<br>お客様がコンビニエンスストアでお支払いされる際の利用方法をご案内します。<br>
+<a href="https://www.econtext.jp/support/cvs/6brand.html">https://www.econtext.jp/support/cvs/6brand.html</a><br>
+<br>
+コンビニ決済では、24時間簡単にお支払いが可能です。<br>
+お支払い期限が切れた場合は再注文する必要がありますので、ご了承ください。<br>
+ご入金が確認でき次第、商品を発送いたします。
+
+{% endif %}
+
+
+{% if Order.Payment.id == 4 %}
+【代金引換】を選択いただいた方<br><br>
+発送の準備をさせていただきます。<br>
+<br>在庫商品限り、14時までにご注文で即日発送致します。<br>
+<br>※当社指定の配送会社が商品をお届けした際に商品代金および代金引換手数料をお支払いください。
+<br>※配送会社から領収書をお受け取りください。 領収書の宛名には、ご注文者様のお名前が記載されます。宛名の変更はできません。
+<br>※代金引換の場合、理由のいかんを問わず、領収書の再発行はできません。 領収書はお客様ご自身で大切に保管してください。 弊社からの領収書の発行・再発行は、一切承れません。ご了承ください。
+<br>※現金以外のお支払い（クレジットカード、デビットカード、電子マネーなど）はご利用できません。
+<br>※出荷準備開始後のお届け先およびお届け時間の変更はおこなえません。
+<br>※代金引換手数料は1回の発送ごとにかかります。 ただし、当社の配送上の理由により、ご注文商品を分割して発送させていただいた場合は追加の手数料はかかりません。
+<br>※配送業者よりご注文商品をお届けする際に、お客様がご不在の場合、配送業者が不在票を投函し、商品を1週間程お預かりしております。 万が一、お客様のご不在が続き、配送業者の保管期限が過ぎてしまいますと、商品のお届けができず返品となりますので十分にご注意ください。
+{% endif %}
+
+{% if Order.Payment.id == 9 %}
+【代金引換(現金のみ・手数料330円)】を選択いただいた方<br><br>
+発送の準備をさせていただきます。<br>
+<br>在庫商品限り、14時までにご注文で即日発送致します。<br>
+<br>※当社指定の配送会社が商品をお届けした際に商品代金および代金引換手数料をお支払いください。
+<br>※配送会社から領収書をお受け取りください。 領収書の宛名には、ご注文者様のお名前が記載されます。宛名の変更はできません。
+<br>※代金引換の場合、理由のいかんを問わず、領収書の再発行はできません。 領収書はお客様ご自身で大切に保管してください。 弊社からの領収書の発行・再発行は、一切承れません。ご了承ください。
+<br>※現金以外のお支払い（クレジットカード、デビットカード、電子マネーなど）はご利用できません。
+<br>※出荷準備開始後のお届け先およびお届け時間の変更はおこなえません。
+<br>※代金引換手数料は1回の発送ごとにかかります。 ただし、当社の配送上の理由により、ご注文商品を分割して発送させていただいた場合は追加の手数料はかかりません。
+<br>※配送業者よりご注文商品をお届けする際に、お客様がご不在の場合、配送業者が不在票を投函し、商品を1週間程お預かりしております。 万が一、お客様のご不在が続き、配送業者の保管期限が過ぎてしまいますと、商品のお届けができず返品となりますので十分にご注意ください。
+{% endif %}
+
+
+<br>商品出荷が完了しましたら、メールにてお知らせいたします。
+<br>ご不明な点などがございましたら、お気軽にお知らせください。<br>
+
+                            
+                            
+                            
+                            
+                            
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            　ご請求金額<br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            ご注文日時：{{ Order.order_date|date_sec }}<br/>
+                            ご注文番号：{{ Order.order_no }}<br/>
+                            お支払い合計：{{ Order.payment_total|price }}<br/>
+                            お支払い方法：{{ Order.payment_method }}<br/>
+                            {% if BaseInfo.isOptionPoint and Order.Customer is not null %}
+                            ご利用ポイント：{{ Order.usePoint|number_format }} pt<br/>
+                            加算ポイント：{{ Order.addPoint|number_format }} pt<br/>
+                            {% endif %}
+                            連絡事項：{{ Order.message }}<br/>
+                            <br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            　ご注文商品明細<br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            {% set isShowReducedTaxMess = false %}
+                            {% for OrderItem in Order.MergedProductOrderItems %}
+                                商品コード：{{ OrderItem.product_code }}<br/>
+                                商品名：{{ OrderItem.product_name }}  {{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }}{% if is_reduced_tax_rate(OrderItem) %}※{% set isShowReducedTaxMess = true %}{% endif %}<br/>
+                                単価：{{ OrderItem.price_inctax|price }}<br/>
+                                数量：{{ OrderItem.quantity|number_format }}<br/>
+                                <br/>
+                            {% endfor %}
+                            {% if isShowReducedTaxMess %}※は軽減税率対象商品です。{% endif %}
+                            <hr style="border-top: 2px dashed #8c8b8b;">
+                            小　計：{{ Order.subtotal|price }}<br/>
+                            手数料：{{ Order.charge|price }}<br/>
+                            送　料：{{ Order.delivery_fee_total|price }}<br/>
+                            {% if Order.taxable_discount < 0 %}
+                            値引き：{{ Order.taxable_discount|price }}<br/>
+                            {% endif %}
+                            <hr style="border-top: 1px dotted #8c8b8b;">
+                            合　計：{{ Order.taxable_total|price }}<br/>
+                            {% for rate, total in Order.taxable_total_by_tax_rate %}
+                                ({{ rate }} %対象：{{ total|price }})<br/>
+                            {% endfor %}
+                            {% for item in Order.tax_free_discount_items %}
+                                <hr style="border-top: 1px dotted #8c8b8b;">
+                                {{ item.product_name }}：{{ item.total_price|price }}<br/>
+                            {% endfor %}
+                            <hr style="border-top: 1px dotted #8c8b8b;">
+                            お支払い合計：{{ Order.payment_total|price }}
+                            <br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            ご注文者情報<br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            お名前：{{ Order.name01 }} {{ Order.name02 }} 様<br/>
+                            お名前(カナ)：{{ Order.kana01 }} {{ Order.kana02 }} 様<br/>
+                            {% if Order.company_name %}
+                                会社名：{{ Order.company_name }}<br/>
+                            {% endif %}
+                            郵便番号：〒{{ Order.postal_code }}<br/>
+                            住所：{{ Order.Pref.name }}{{ Order.addr01 }}{{ Order.addr02 }}<br/>
+                            電話番号：{{ Order.phone_number }}<br/>
+                            メールアドレス：{{ Order.email }}<br/>
+                            <br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+                            　配送情報<br/>
+                            <hr style="border-top: 3px double #8c8b8b;">
+
+                            {% for Shipping in Order.Shippings %}
+                                ◎お届け先{% if Order.multiple %}{{ loop.index }}{% endif %}<br/>
+                                <br/>
+                                お名前：{{ Shipping.name01 }} {{ Shipping.name02 }} 様<br/>
+                                お名前(カナ)：{{ Shipping.kana01 }} {{ Shipping.kana02 }} 様<br/>
+                                {% if Shipping.company_name %}
+                                    会社名：{{ Shipping.company_name }}<br/>
+                                {% endif %}
+                                郵便番号：〒{{ Shipping.postal_code }}<br/>
+                                住所：{{ Shipping.Pref.name }}{{ Shipping.addr01 }}{{ Shipping.addr02 }}<br/>
+                                電話番号：{{ Shipping.phone_number }}<br/>
+                                <br/>
+                                配送方法：{{ Shipping.shipping_delivery_name }}<br/>
+                                お届け日：{{ Shipping.shipping_delivery_date is empty ? '指定なし' : Shipping.shipping_delivery_date|date_day }}<br/>
+                                お届け時間：{{ Shipping.shipping_delivery_time|default('指定なし') }}<br/>
+                                <br/>
+                                {% for OrderItem in Shipping.productOrderItems %}
+                                    商品コード：{{ OrderItem.product_code }}<br/>
+                                    商品名：{{ OrderItem.product_name }}  {{ OrderItem.classcategory_name1 }}  {{ OrderItem.classcategory_name2 }}<br/>
+                                    数量：{{ OrderItem.quantity|number_format }}<br/>
+                                    <br/>
+                                {% endfor %}
+                            {% endfor %}
+                            {% if Order.complete_mail_message is not empty %}
+                                {{ Order.complete_mail_message|nl2br }}<br/>
+                            {% endif %}
+                            <hr style="border-top: 2px dotted #8c8b8b;">
+                            このメッセージはお客様へのお知らせ専用ですので、<br/>
+                            このメッセージへの返信としてご質問をお送りいただいても回答できません。<br/>
+                            ご了承ください。<br/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!--/600px container -->
+            <br>
+            <br>
+            <table id="html-mail-table2" border="0" width="600px" cellpadding="10" cellspacing="0" class="container" style="border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+                <tr>
+                    <td class="container-padding content footer-text" align="left" style="border-collapse:collapse;font-family:Helvetica, Arial, sans-serif;font-size:12px;line-height:16px;color:#aaaaaa;padding-left:24px;padding-right:24px;padding-top:12px;padding-bottom:12px;background-color:#ffffff;">
+                        本メールは、{{ BaseInfo.shop_name }}より送信しております。<br/>
+                        もしお心当たりが無い場合は、その旨 <a href="mailto:{{ BaseInfo.email02 }}" style="text-decoration:none;">{{ BaseInfo.email02 }}</a> までご連絡いただければ幸いです。<br/>
+                        <br/>
+                        <div class="title" style="font-size:14px;font-family:Helvetica, Arial, sans-serif;font-weight:600;color:#374550;"><a href="{{ url('homepage') }}" style="color:#aaaaaa;text-decoration:none;">{{ BaseInfo.shop_name }}</a></div>
+                        <div>copyright &copy; {{ BaseInfo.shop_name }} all rights reserved.</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!--/100% background wrapper-->
+<br>
+<br>
+</body>
+
+</html>

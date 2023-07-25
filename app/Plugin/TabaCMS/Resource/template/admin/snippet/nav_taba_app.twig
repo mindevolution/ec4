@@ -1,0 +1,23 @@
+{% set const = TabaCMSConstants %}
+<script>
+    $(function() {
+        var baseNav = $('ul.c-mainNavArea__nav > li').eq(4);{# コンテンツ管理の下に差し込む #}
+        var parentNav = $('#{{ constant('PLUGIN_CATEGORY_ID',const) }}-snippet');
+        baseNav.after(parentNav.html());
+    });
+</script>
+<ul id="{{ constant('PLUGIN_CATEGORY_ID',const) }}-snippet" style="display:none;">
+    <li class="c-mainNavArea__navItem">
+        <a
+            class="c-mainNavArea__navItemTitle{{ active_menus(menus)[0] != constant('PLUGIN_CATEGORY_ID',const) ? ' collapsed' }}"
+            data-toggle="collapse"
+            href="#nav-{{ constant('PLUGIN_CATEGORY_ID',const) }}"
+            aria-expanded="{{ active_menus(menus)[0] == constant('PLUGIN_CATEGORY_ID',const) ? 'true' : 'false' }}"
+            aria-controls="nav-{{ constant('PLUGIN_CATEGORY_ID',const) }}">
+        <svg version="1.1" class="cb" style="width:20px;height:20px;margin-right:.5em" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" xml:space="preserve">';<polygon fill="#54687A" points="52.1,62.2 33.1,95.1 71.1,95.1"/><polygon fill="#54687A" points="41.2,62.1 25.1,62.1 44.1,29.2 71.1,76.1 87.7,76.1 44.4,1.1 1.1,76.1 33.1,76.1"/></svg>
+        <span>{{ constant('PLUGIN_CATEGORY_NAME',const)|raw }}</span>
+        </a>
+        <ul class="collapse {% if active_menus(menus)[0] == constant('PLUGIN_CATEGORY_ID',const) %} show{% endif %}" id="nav-{{ constant('PLUGIN_CATEGORY_ID',const) }}">
+        </ul>
+    </li>
+</ul>

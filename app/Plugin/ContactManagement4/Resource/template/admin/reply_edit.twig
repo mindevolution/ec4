@@ -1,0 +1,257 @@
+
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['contact', 'contact_new'] %}
+
+{% block title %}{{ 'admin.contact.contact_registration'|trans }}{% endblock %}
+{% block sub_title %}{{ 'admin.contact.contact_management'|trans }}{% endblock %}
+
+{% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block javascript %}
+    <script src="//yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
+
+    <script>
+        $(function(){
+            $('#button-send').on('click', function () {
+                if (confirm('保存後にメールを送信します。よろしいですか？')) {
+                    $('#button-register').attr('value', 'send').trigger('click');
+                }
+            })
+        })
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <form name="contact_form" role="form" id="contact_form" method="post" class="h-adr"
+          action=""
+          novalidate>
+        <span class="p-country-name" style="display:none;">Japan</span>
+        {{ form_widget(form._token) }}
+        <div class="c-contentsArea__cols">
+            <div class="c-contentsArea__primaryCol">
+                <div class="c-primaryCol">
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8"><span class="card-title">{{ 'admin.contact.contact_info'|trans }} ({{ Contact.name01 }}{{ Contact.name02 }}様)</span>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#contactInfo"
+                                       aria-expanded="false" aria-controls="contactInfo">
+                                        <i class="fa fa-angle-down fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse ec-cardCollapse" id="contactInfo">
+                            <div class="card-body">
+
+                                {% if Contact.Product %}
+                                    <div class="row mb-2">
+                                        <div class="col-3">
+                                            <div class="d-inline-block" data-tooltip="true" data-placement="top"
+                                                 title="{{ 'tooltip.contact.product'|trans }}">
+                                                <span>{{ 'admin.contact.product'|trans }}</span>
+                                                <i class="fa fa-question-circle fa-lg ml-1"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <p><a href="{{ url('admin_product_product_edit', {'id' :  Contact.Product.id }) }}">{{ Contact.Product.name }}</a></p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.name'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ Contact.name01 }}{{ Contact.name02 }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ Contact.kana01 }}{{ Contact.kana02 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-3"><span>{{ 'admin.common.address'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            {{ Contact.postalCode }}
+                                            {{ Contact.Pref }}
+                                            {{ Contact.addr01 }}
+                                            {{ Contact.addr02 }}
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.mail_address'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ Contact.email }}
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.common.phone_number'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ Contact.phoneNumber }}
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.contact.contents'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ Contact.contents }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8"><span class="card-title">返信内容</span>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#ordererInfo"
+                                       aria-expanded="false" aria-controls="ordererInfo">
+                                        <i class="fa fa-angle-up fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse show ec-cardCollapse" id="ordererInfo">
+                            <div class="card-body">
+                                <p>※回答内容は今後のバージョンアップでマイページに表示されるようになる予定です。</p>
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.contact.reply.email'|trans }}</span>
+                                        <span class="badge badge-light ml-1">{{ 'admin.contact.not_required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_widget(form.email) }}
+                                                {{ form_errors(form.email) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.contact.reply.mail_subject'|trans }}</span>
+                                        <span class="badge badge-light ml-1">{{ 'admin.contact.not_required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                {{ form_widget(form.mail_subject) }}
+                                                {{ form_errors(form.mail_subject) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col-3">
+                                        <span>{{ 'admin.contact.reply.contents'|trans }}</span>
+                                        <span class="badge badge-primary ml-1">{{ 'admin.common.required'|trans }}</span>
+                                    </div>
+                                    <div class="col">
+                                        {{ form_widget(form.contents, {'attr' : {'style' : 'height: 200px;'}}) }}
+                                        {{ form_errors(form.contents) }}
+                                    </div>
+                                </div>
+
+                                {# エンティティ拡張の自動出力 #}
+                                {% for f in form if f.vars.eccube_form_options.auto_render %}
+                                    {% if f.vars.eccube_form_options.form_theme %}
+                                        {% form_theme f f.vars.eccube_form_options.form_theme %}
+                                        {{ form_row(f) }}
+                                    {% else %}
+                                        <div class="row mb-2">
+                                            <div class="col-3">
+                                                <span>{{ f.vars.label|trans }}</span>
+                                            </div>
+                                            <div class="col">
+                                                {{ form_widget(f) }}
+                                                {{ form_errors(f) }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for MailHistory in ContactReply.MailHistories %}
+                    <div class="card rounded border-0 mb-4">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <span class="card-title"><span class="badge badge-ec-blue mr-2">送信済</span>{{ MailHistory.sendDate|date_min }} {{ MailHistory.mail_subject }} (To:{{ MailHistory.to_email }})</span>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <a data-toggle="collapse" href="#mailHistory{{ MailHistory.id }}"
+                                       aria-expanded="false" aria-controls="mailHistory{{ MailHistory.id }}">
+                                        <i class="fa fa-angle-down fa-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapse ec-cardCollapse" id="mailHistory{{ MailHistory.id }}">
+                            <div class="card-body">
+                                <p>{{ MailHistory.mail_body|nl2br }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="c-conversionArea">
+            <div class="c-conversionArea__container">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-6">
+                        <div class="c-conversionArea__leftBlockItem">
+                            <a class="c-baseLink"
+                               href="{{ url('plugin_contact_edit', {id : Contact.id}) }} ">
+                                <i class="fa fa-backward" aria-hidden="true"></i>
+                                <span>{{ 'お問い合わせ'|trans }}({{ Contact.name01 }}様)</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="ex-conversion-action" class="row align-items-center justify-content-end">
+                            <div class="col-auto">
+                                <button id="button-send" class="btn btn-ec-conversion px-5" name="mode" value="register"
+                                        type="button">メール送信</button>
+                                <button id="button-register" class="btn btn-ec-conversion px-5" name="mode" value="register"
+                                        type="submit">保存する</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

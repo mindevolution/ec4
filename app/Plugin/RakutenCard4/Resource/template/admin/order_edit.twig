@@ -1,0 +1,292 @@
+{% if Order.id is not null and Order.Rc4OrderPayment is not null %}
+    <script>
+        $(function () {
+            // ページ最下部に移動
+            $('#rakuten_card4-info').appendTo($('#form1 > div.c-contentsArea__cols > div > div'));
+            $('#rakuten_card4-cvsinfo').appendTo($('#form1 > div.c-contentsArea__cols > div > div'));
+
+            function confirmOperate(operate_kind){
+                {% set msg_key = 'rakuten_card4.admin.order_edit.operate.payment' %}
+                var message = '{{ msg_key|trans({'%name%': 'rakuten_card4.admin.order_edit.payment_action.cancel'|trans}) }}';
+                if (operate_kind == 'captured'){
+                    message = '{{ msg_key|trans({'%name%': 'rakuten_card4.admin.order_edit.payment_action.capture'|trans}) }}';
+                }else if (operate_kind == 'requthorized'){
+                    message = '{{ msg_key|trans({'%name%': 'rakuten_card4.admin.order_edit.payment_action.reauthorized'|trans}) }}';
+                }else if (operate_kind == 'change_price'){
+                    message = '{{ msg_key|trans({'%name%': 'rakuten_card4.admin.order_edit.payment_action.change_price'|trans}) }}';
+                }
+
+                return confirm(message);
+            }
+
+            // 決済金額変更
+            var redirect_url = '{{ url('admin_order_edit', { id: Order.id }) }}';
+            $('#rakuten_card4-action__change_price').on('click', function () {
+                if (!confirmOperate('change_price')){
+                    return false;
+                }
+                $('#rakuten_card4-info__body button').prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('rakuten_card4_admin_order_change_price', { id: Order.id }) }}',
+                }).done(function(data) {
+                   // alert( JSON.stringify(data));
+                })
+                    .always(function () {
+                    location.href = redirect_url;
+                });
+            });
+
+            //  決済の売上処理
+            $('#rakuten_card4-action__captured').on('click', function () {
+                if (!confirmOperate('captured')){
+                    return false;
+                }
+                $('#rakuten_card4-info__body button').prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('rakuten_card4_admin_order_captured', { id: Order.id }) }}',
+                }).always(function () {
+                    location.href = redirect_url;
+                });
+            });
+
+            // 決済のキャンセル処理
+            $('#rakuten_card4-action__cancel').on('click', function () {
+                if (!confirmOperate('cancel')){
+                    return false;
+                }
+                $('#rakuten_card4-info__body button').prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('rakuten_card4_admin_order_cancel', { id: Order.id }) }}',
+                }).always(function () {
+                    location.href = redirect_url;
+                });
+            });
+
+            // 決済の再与信処理
+            $('#rakuten_card4-action__authorize').on('click', function () {
+                if (!confirmOperate('requthorized')){
+                    return false;
+                }
+                $('#rakuten_card4-info__body button').prop('disabled', true);
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url('rakuten_card4_admin_order_authorize', { id: Order.id }) }}',
+                }).always(function () {
+                    location.href = redirect_url;
+                });
+            });
+
+            $('#rakuten_card4_log_show').on('click', function () {
+                $('#rakuten_card4_log').fadeToggle();
+            });
+        });
+    </script>
+    <style>
+        #rakuten_card4_log{
+            display:none;
+            margin-top:10px;
+            border:#ccc;
+            table-layout:fixed;
+            width:100%;
+        }
+    </style>
+
+    <div class="d-none">
+        <div id="rakuten_card4-info" class="card rounded border-0 mb-4">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <span class="card-title">{{ 'rakuten_card4.admin.order_edit.title'|trans }}</span>
+                    </div>
+                    <div class="col-4 text-right">
+                        <a data-toggle="collapse" href="#rakuten_card4-info__body" aria-expanded="false" aria-controls="rakuten_card4-info__body">
+                            <i class="fa fa-angle-up fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% set Rc4OrderPayment = Order.Rc4OrderPayment %}
+            <div class="collapse show ec-cardCollapse" id="rakuten_card4-info__body">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.payment_status'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.getPaymentName|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.payment_status.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.PaymentStatusName }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.transaction_id.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.transaction_id|default('--') }}
+                        </div>
+                    </div>
+                    {% if Rc4OrderPayment.isCard %}
+                        <div class="row mb-2">
+                            <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.card_installment.label'|trans }}</span></div>
+                            <div class="col">
+                                {{ Rc4OrderPayment.CardInstallmentLabel|default('--') }}
+                            </div>
+                        </div>
+                    {% elseif Rc4OrderPayment.isConenience %}
+                        <div class="row mb-2">
+                            <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.convenience.label'|trans }}</span></div>
+                            <div class="col">
+                                {{ Rc4OrderPayment.getCvsKindLabel|default('--') }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.convenience_number.label'|trans }}</span></div>
+                            <div class="col">
+                                {{ Rc4OrderPayment.cvs_number|default('--') }}
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-2"><span>{{ 'rakuten_card4.admin.config.cvs_limit_day'|trans }}</span></div>
+                            <div class="col">
+                                {{ Rc4OrderPayment.cvs_expiration_date|date_day|default('--') }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.request_id.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.request_id|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.amount.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.pay_amount|price|default('--') }}
+                            {% if Rc4OrderPayment.pay_amount is not empty and Rc4OrderPayment.pay_amount != Order.payment_total %}
+                                <span class="font-weight-bold text-danger">
+                                    {{ 'rakuten_card4.admin.order_edit.amount.different'|trans({ '%payment_total%': Order.payment_total|price }) }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.ip_address.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.ip_address|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.auth_date.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.authorize_date ? Rc4OrderPayment.authorize_date|date_sec : '--' }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.capture_date.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.capture_date|date_sec|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.cancel_date.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ Rc4OrderPayment.cancel_date|date_sec|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.payment_action'|trans }}</span></div>
+                        <div class="col">
+                            <ul class="list-inline">
+                                {% set api_btn = false %}
+                                    {% if Rc4OrderPayment.execAbleAuthorize %}
+                                        {% set api_btn = true %}
+                                        <li class="list-inline-item">
+                                            <button id="rakuten_card4-action__authorize" type="button"
+                                                    class="btn btn-secondary px-5">
+                                                {{ 'rakuten_card4.admin.order_edit.payment_action.reauthorized'|trans }}
+                                            </button>
+                                        </li>
+                                    {% endif %}
+                                    {% if Rc4OrderPayment.execAbleCapture %}
+                                        {% set api_btn = true %}
+                                        <li class="list-inline-item">
+                                            <button id="rakuten_card4-action__captured" type="button"
+                                                    class="btn btn-primary px-5">
+                                                {{ 'rakuten_card4.admin.order_edit.payment_action.capture'|trans }}
+                                            </button>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if Rc4OrderPayment.execAbleCancel %}
+                                        {% set api_btn = true %}
+                                        <li class="list-inline-item">
+                                            <button id="rakuten_card4-action__cancel" type="button"
+                                                    class="btn btn-ec-regular px-5">
+                                                {{ 'rakuten_card4.admin.order_edit.payment_action.cancel'|trans }}
+                                            </button>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if Rc4OrderPayment.execAbleModify %}
+                                        {% set api_btn = true %}
+                                        <li class="list-inline-item">
+                                            <button id="rakuten_card4-action__change_price" type="button"
+                                                    class="btn btn-danger px-5">
+                                                {{ 'rakuten_card4.admin.order_edit.payment_action.change_price'|trans }}
+                                            </button>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if not api_btn %}
+                                        --
+                                    {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.error.label'|trans }}</span></div>
+                        <div class="col">
+                            {{ get_error_message_for_order_payment(Rc4OrderPayment)|default('--') }}
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-2"><span>{{ 'rakuten_card4.admin.order_edit.payment_log.label'|trans }}</span></div>
+                        <div class="col">
+                            <a href="javascript:;" id="rakuten_card4_log_show">{{ 'rakuten_card4.admin.order_edit.payment_log.disp'|trans }}</a><br/>
+                            <table id="rakuten_card4_log" border="1">
+                                <thead>
+                                <tr>
+                                    <th width='20%'>{{ 'rakuten_card4.admin.order_edit.payment_log.time'|trans }}</th>
+                                    <th>{{ 'rakuten_card4.admin.order_edit.payment_log.content'|trans }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for paymentLog in Rc4OrderPayment.DispPaymentLog %}
+                                    {% for key, logs in paymentLog %}
+                                        <tr>
+                                            <td>{{ key }}</td>
+                                            <td style="word-wrap:break-word;">
+                                                {{ logs|replace({',':', ', ':':': '}) }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2">--</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endif %}

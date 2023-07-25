@@ -1,0 +1,218 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends '@admin/default_frame.twig' %}
+
+{% set menus = ['customer', 'customer_shop_master'] %}
+
+{% block title %}{{ 'admin.customer.customer_shop_list'|trans }}{% endblock %}
+{% block sub_title %}{{ 'admin.customer.customer_management'|trans }}{% endblock %}
+
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/tempusdominus-bootstrap-4.min.css', 'admin') }}">
+    <style type="text/css">
+        .datepicker-days th.dow:first-child,
+        .datepicker-days td:first-child {
+            color: #f00;
+        }
+
+        .datepicker-days th.dow:last-child,
+        .datepicker-days td:last-child {
+            color: #00f;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script>
+        $(function() {
+
+            // datetimepicker と競合するため HTML5 のカレンダ入力を無効に
+            $('input[type="date"]').attr('type','text');
+
+            $.when(
+                $.getScript("{{ asset('assets/js/vendor/moment.min.js', 'admin') }}"),
+                $.getScript("{{ asset('assets/js/vendor/moment-with-locales.min.js', 'admin') }}"),
+                $.getScript("{{ asset('assets/js/vendor/tempusdominus-bootstrap-4.min.js', 'admin') }}")
+            ).done(function() {
+                // datetimepicker で value が消えてしまうので data-value に保持しておく
+                $('input.datetimepicker-input').each(function() {
+                    $(this).data('value', $(this).val());
+                });
+
+                $('input.datetimepicker-input').not('#admin_search_customer_birth_start').not('#admin_search_customer_birth_end').datetimepicker({
+                    locale: '{{ eccube_config.locale }}',
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    useCurrent: false,
+                    buttons: {
+                        showToday: true,
+                        showClose: true
+                    },
+                });
+
+                $('#admin_search_customer_birth_start').datetimepicker({
+                    locale: '{{ eccube_config.locale }}',
+                    format: 'YYYY-MM-DD',
+                    useCurrent: false,
+                    buttons: {
+                        showToday: true,
+                        showClose: true
+                    }
+                });
+
+                $('#admin_search_customer_birth_end').datetimepicker({
+                    locale: '{{ eccube_config.locale }}',
+                    format: 'YYYY-MM-DD',
+                    useCurrent: false,
+                    buttons: {
+                        showToday: true,
+                        showClose: true
+                    }
+                });
+
+                // datetimepicker で value が消えてしまうので更新
+                $('input.datetimepicker-input').each(function() {
+                    $(this).val($(this).data('value'));
+                });
+            });
+        });
+
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="c-contentsArea__cols">
+        <div class="c-contentsArea__primaryCol">
+            <div class="c-primaryCol">     
+                    <div class="row justify-content-between mb-2">
+                        <div class="col-6"></div>
+
+                        <div class="col-5 text-right">
+                            <!-- {#Dropdown page count#}
+                            <div class="d-inline-block mr-2">
+                                <select class="custom-select" onchange="location = this.value;">
+                                    {% for pageMax in pageMaxis %}
+                                        <option {% if pageMax.name == page_count %} selected {% endif %}
+                                                value="{{ path('admin_customer_page', {'page_no': 1, 'page_count': pageMax.name }) }}">
+                                            {{ 'admin.common.count'|trans({ '%count%': pageMax.name }) }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div> -->
+
+                            <div class="d-inline-block">
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-ec-regular" href="{{ url('admin_customer_shop_export') }}"><i class="fa fa-cloud-download mr-1 text-secondary"></i><span>{{ 'admin.common.csv_download'|trans }}</span></a>
+                                    <!-- <a class="btn btn-ec-regular" href="{{ url('admin_setting_shop_csv', { id : constant('\\Eccube\\Entity\\Master\\CsvType::CSV_TYPE_CUSTOMER') }) }}"><i class="fa fa-cog mr-1 text-secondary"></i><span>{{ 'admin.setting.shop.csv_setting'|trans }}</span></a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                    <div class="card rounded border-0 mb-4 d-block">
+                        <div class="card-body p-0">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th class="border-top-0 pt-2 pb-3 pl-3 text-nowrap">ID</th>
+                                    <th class="border-top-0 pt-2 pb-3 pl-3 text-nowrap">会社/店舗/事業所</th>
+                                    <th class="border-top-0 pt-2 pb-3">代表者</th>
+                                    <th class="border-top-0 pt-2 pb-3">所在地</th>
+                                    <th class="border-top-0 pt-2 pb-3">電話番号</th>
+                                    <th class="border-top-0 pt-2 pb-3">ステージ</th>
+                                    <th class="border-top-0 pt-2 pb-3">審査状況</th>
+                                    <th class="border-top-0 pt-2 pb-3 pr-3">&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for CustomerShop in CustomerShops %}
+                                    <tr id="ex-customer-{{ Customer.id }}">
+                                        <td class="align-middle pl-3">{{ CustomerShop.num }}</td>
+                                        <td class="align-middle pl-3">{{ CustomerShop.shop_name }}</td>
+                                        <td class="align-middle">{{ CustomerShop.manager1 }}</td>
+                                        <td class="align-middle">{{ CustomerShop.address }}</td>
+                                        <td class="align-middle">{{ CustomerShop.tel }}</td>
+                                        <td class="align-middle">{{ CustomerShop.CustomerShopLevel.level}}</td>
+                                        {% if CustomerShop.status == "Y" %}
+                                            <td class="align-middle">承認済</td>
+                                        {% elseif CustomerShop.status == "P" %}
+                                            <td class="align-middle">審査待ち</td>
+                                        {% else %}
+                                             <td class="align-middle">未承認</td>
+                                        {% endif %}
+                                        
+                                        <td class="align-middle pr-3">
+                                            <div class="text-right">
+                                                
+                                                <div class="px-1 d-inline-block" data-tooltip="true" data-placement="top" title="審査">
+                                                    <a style="padding: 0px 10px;background: red;color: #fff;font-size: 18px;" class="btn btn-ec-actionIcon" data-toggle="modal" data-target="#discontinuance-{{ CustomerShop.id }}">
+                                                        審査
+                                                    </a>
+                                                </div>
+
+
+                                                <div class="modal fade" id="discontinuance-{{ CustomerShop.id }}" tabindex="-1" role="dialog" aria-labelledby="discontinuance" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title font-weight-bold">
+                                                                    審査申込</h5>
+                                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body text-left">
+                                                                <p class="text-left"><span>会社/店舗/事業所：</span>{{ CustomerShop.shop_name }}</p>
+                                                                <p class="text-left"><span>代表者：</span>{{ CustomerShop.manager1 }}</p>
+                                                                <p class="text-left"><span>所在地：</span>{{ CustomerShop.address }}</p>
+                                                                <p class="text-left"><span>電話番号：</span>{{ CustomerShop.tel }}</p>
+                                                                <p class="text-left"><span>E-mail：</span>{{ CustomerShop.email }}</p>
+                                                                <p class="text-left"><span>ホームページ：</span>{{ CustomerShop.page }}</p>
+                                                                <p class="text-left"><span>担当者：</span>{{ CustomerShop.manager2 }}</p>
+                                                                <p class="text-left"><span>業種：</span>{{ CustomerShop.job }}</p>
+                                                                <p class="text-left"><span>届番号：</span>{{ CustomerShop.code }}</p>
+                                                                <p class="text-left"><span>営業届：</span>
+                                                                    <div id="thumb" style="width: 100%; margin: 0 auto;">
+                                                                        <img style="width: 100%;" src="{{ asset('', 'save_image') }}{{ CustomerShop.upload_file}}">
+                                                                    </div>
+                                                                </p>
+                                                                <p class="text-left"><span>営業届：</span>
+                                                                    <div id="thumb" style="width: 100%; margin: 0 auto;">
+                                                                        <img style="width: 100%;" src="{{ asset('', 'save_image') }}{{ CustomerShop.upload_file2}}">
+                                                                    </div>
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <!-- <button class="btn btn-ec-sub" type="button" data-dismiss="modal">
+                                                                    却下
+                                                                </button> -->
+                                                                <a href="{{ url('admin_customer_shop_no', {'id' : CustomerShop.id}) }}" class="btn btn-ec-sub"{{ csrf_token_for_anchor() }} data-method="post" data-confirm="false">
+                                                                    却下
+                                                                </a>
+                                                                <a href="{{ url('admin_customer_shop_yes', {'id' : CustomerShop.id}) }}" class="btn btn-ec-delete"{{ csrf_token_for_anchor() }} data-method="post"  data-confirm="false">
+                                                                    承認
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

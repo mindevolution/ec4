@@ -1,0 +1,9 @@
+<script>
+    $(function () {
+        // ナビ最下部に移動
+        $('#rakuten_card4_mypage_navi').appendTo($('div.ec-navlistRole > ul'));
+    });
+</script>
+<li id="rakuten_card4_mypage_navi" class="ec-navlistRole__item {% if mypageno|default('') == 'rakuten_card4_mypage' %}active{% endif %}">
+  <a href="{{ url('rakuten_card4_mypage') }}">{{ 'rakuten_card4.front.mypage.card.navi_title'|trans }}</a>
+</li>

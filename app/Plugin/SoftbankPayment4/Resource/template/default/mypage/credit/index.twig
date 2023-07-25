@@ -1,0 +1,51 @@
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'sbps_card_info' %}
+
+{% set body_class = 'mypage' %}
+
+{% block main %}
+    <div class="ec-layoutRole__main">
+        <div class="ec-mypageRole">
+            <div class="ec-pageHeader">
+                <h1>{{ 'マイページ'|trans }}/カード情報管理</h1>
+            </div>
+            {% include 'Mypage/navi.twig' %}
+        </div>
+
+        <div class="ec-mypageRole">
+            <div>
+                <div class="ec-rectHeading">
+                    <h2>クレジット情報</h2>
+                    <div>
+                        {% if cardInfo.result == 'OK' %}
+                            <label class="ec-label">クレジットカード番号</label>
+                            <div class="d-inline">
+                                {{ cardInfo.card_num_1 }}
+                                -
+                                {{ cardInfo.card_num_2 }}
+                                -
+                                {{ cardInfo.card_num_3 }}
+                                -
+                                {{ cardInfo.card_num_4 }}
+                            </div>
+                            <label class="ec-label">有効期限</label>
+                            <div class="d-inline">
+                                {{ cardInfo.expiration_year }}
+                                 /
+                                {{ cardInfo.expiration_month }}
+                            </div>
+                            <div style="margin-top: 20px">
+                                <a class="ec-inlineBtn" href="{{ url('sbps_credit_update') }}">変更</a>
+                                <a class="ec-inlineBtn" href="{{ url('sbps_credit_delete') }}" {{ csrf_token_for_anchor() }} data-method="delete">{{ 'common.delete'|trans }}</a>
+                            </div>
+                        {% else %}
+                            <p class="ec-para-normal">{{ '登録されているクレジットカードはありません。'|trans }}</p>
+                            <a class="ec-inlineBtn" href="{{ url('sbps_credit_store') }}">カード情報を登録する</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{#
+Copyright (C) SPREAD WORKS Inc. All Rights Reserved.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% if form_element.vars.block_prefixes.1 is defined and form_element.vars.block_prefixes.1 == 'hidden' %}
+    <div class="row mb-3" id="{{ form_element.vars.id }}_box">
+        <div class="col-3"></div>
+        <div class="col mb-2">
+            {{ form_widget(form_element) }}
+            {{ form_errors(form_element) }}
+        </div>
+    </div>
+{% else %}
+    <div class="row mb-3" id="{{ form_element.vars.id }}_box">
+        <div class="col-3">
+            {% include include_prefix~'common/form_render_label.twig' with {form_element:form_element} %}
+        </div>
+        {% if
+            form_element.vars.choices is defined
+            and form_element.vars.choices is not empty
+            and form_element.vars.multiple is defined
+            and not form_element.vars.multiple
+            and form_element.vars.expanded is defined
+            and form_element.vars.expanded
+        %}
+            <div class="col">
+                {{ form_widget(form_element,{'label_attr':{'class':'radio-inline'}}) }}
+                {{ form_errors(form_element) }}
+            </div>
+        {% elseif form_element.vars.block_prefixes.1 is defined and form_element.vars.block_prefixes.1 == 'file' %}
+            <div class="col mb-2">
+                <div class="text-center w-100 py-5 border-ec-dashed mb-2 rounded">
+                    <i class="fa fa-cloud-upload fa-4x text-ec-lightGray" aria-hidden="true"></i>
+                    <p class="font-weight-bold text-ec-gray">{{ 'admin.common.drag_and_drop_image_description'|trans }}</p>
+                    {{ form_widget(form_element, { attr : { accept : 'image/*', style : 'display:none;' } }) }}
+                    <a class="btn btn-ec-regular mr-2" onclick="$('#{{ form_element.vars.id }}').click()">{{ 'admin.common.file_select'|trans }}</a>
+                    {{ form_errors(form_element) }}
+                </div>
+                <div id="thumb" class="c-form__fileUploadThumbnails"></div>
+            </div>
+        {% else %}
+            <div class="col">
+                {{ form_widget(form_element) }}
+                {{ form_errors(form_element) }}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

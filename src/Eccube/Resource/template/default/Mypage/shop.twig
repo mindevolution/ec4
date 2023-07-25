@@ -1,0 +1,153 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set mypageno = 'shop' %}
+
+{% set body_class = 'mypage' %}
+
+
+
+{% block main %}
+    <div class="ec-layoutRole__main">
+        <div class="ec-mypageRole">
+            <div class="ec-pageHeader">
+                <h1>{{ 'マイページ'|trans }}/{{ 'プロ会員申込'|trans }}</h1>
+            </div>
+            {{ include('Mypage/navi.twig') }}
+        </div>
+        <div class="ec-withdrawRole">
+            {% if CustomerShop.id%}
+                <form method="post"  novalidate class="h-adr">
+                        <span class="p-country-name" style="display:none;">Japan</span>
+                        <div class="ec-borderedDefs">
+                            <dl>
+                                <dt>
+                                    <label class="ec-label required">申請状況</label>
+                                </dt>
+                                <dd>
+                                    {% if CustomerShop.status == "Y" %}
+                                        承認済
+                                    {% elseif CustomerShop.status == "P" %}
+                                        審査中
+                                    {% else %}
+                                        未承認  
+                                        <a href="{{ url('shopEdit') }}" style="padding-left: 20px;">申込内容訂正</a>
+
+                                    {% endif %}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.shop_name, '会社/店舗/事業所の名称', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.shop_name.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.manager1, '代表者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.manager1.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.address, '所在地', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.address.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.tel, '電話番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.tel.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.email, 'E-mail', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                     {{ form.email.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.page, 'ホームページ', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.page.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.manager2, '担当者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.manager2.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.job, '業種', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.job.vars.data }}
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.code, '法人番号/営業届番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    {{ form.code.vars.data }}
+                                </dd>
+                            </dl>
+                            
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.upload_file, '登記簿/営業届アップロード', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    <div id="thumb" class="c-form__fileUploadThumbnails clearfix" style="width: 200px; margin: 0 auto;">
+                                        <img src="{{ asset('', 'save_image') }}{{form.upload_file.vars.data}}">
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    {{ form_label(form.upload_file2, '登記簿/営業届アップロード', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                </dt>
+                                <dd>
+                                    <div id="thumb" class="c-form__fileUploadThumbnails clearfix" style="width: 200px; margin: 0 auto;">
+                                        <img src="{{ asset('', 'save_image') }}{{form.upload_file2.vars.data}}">
+                                    </div>
+                                </dd>
+                            </dl>
+
+
+                        </div>
+                </form>
+            {% else %}
+                <a href="{{ url('entryShop') }}" style="padding: 15px;background: #DE5D50;color: #fff;margin-top: 10px;display: block;width: 20%;margin: 0 auto;">プロ会員を申込する</a>
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

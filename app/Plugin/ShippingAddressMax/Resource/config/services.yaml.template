@@ -1,0 +1,2 @@
+parameters:
+    eccube_deliv_addr_max: %eccube_deliv_addr_max%

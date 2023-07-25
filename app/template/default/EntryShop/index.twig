@@ -1,0 +1,437 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'registration_page' %}
+
+{% form_theme form 'Form/form_div_layout.twig' %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload.css', 'admin') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fileupload/jquery.fileupload-ui.css', 'admin') }}">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <style type="text/css">
+        .c-form__fileUploadThumbnail,.c-form__fileUploadThumbnail2{
+                display: inline-block;
+            width: 170px;
+            height: 170px;
+            background-color: #f5f6f8;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            cursor: pointer;
+            position: relative;
+        }
+        .c-form__fileUploadThumbnail .delete-image, .c-form__fileUploadThumbnail2 .delete-image{
+    font-family: FontAwesome;
+    font-size: 18px;
+    line-height: 1;
+    color: #54687A;
+    padding: 5px;
+    background: #fff;
+    border-radius: 3px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+        }
+        .upload-zone{
+            margin:0;
+        }
+        #thumb, #thumb2{
+            line-height: 1 !important;
+        }
+    </style>
+{% endblock stylesheet %}
+
+{% block javascript %}
+    <script src="{{ asset('assets/js/vendor/fileupload/vendor/jquery.ui.widget.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.iframe-transport.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-process.js', 'admin') }}"></script>
+    <script src="{{ asset('assets/js/vendor/fileupload/jquery.fileupload-validate.js', 'admin') }}"></script>
+
+    \ec-cube5\html\template\admin\assets\scss\component
+
+    <script>var bootstrapTooltip = $.fn.tooltip.noConflict();</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   <script>
+        $(function() {
+            var hideThumbnail = function() {
+                if ($('#thumb div').length > 0) {
+                    $('#icon_no_image').css('display', 'none');
+                } else {
+                    $('#icon_no_image').css('display', '');
+                }
+            };
+
+            var proto_img = '<div class="c-form__fileUploadThumbnail" style="background-image:url(\'__path__\');">' +
+                '<a class="delete-image"><i class="fa fa-times" aria-hidden="true"></i></a>' +
+                '</div>';
+            var upload_file = $('#{{ form.upload_file.vars.id }}').val();
+            if (upload_file != '') {
+                var filename = $('#{{ form.upload_file.vars.id }}').val();
+                if (upload_file == '{{ oldUploadFile }}') {
+                    var path = '{{ asset('', 'save_image') }}' + filename;
+                } else {
+                    var path = '{{ asset('', 'temp_image') }}' + filename;
+                }
+                var $img = $(proto_img.replace(/__path__/g, path));
+                $('#{{ form.upload_file.vars.id }}').val(filename);
+
+                $('#thumb').append($img);
+                hideThumbnail();
+            }
+            hideThumbnail();
+
+            $('#{{ form.upload_file_file.vars.id }}').fileupload({
+                url: "{{ url('entry_shop_upload_file_add') }}",
+                type: 'post',
+                dataType: 'json',
+                dropZone: $('#upload-zone'),
+                done: function(e, data) {
+                    $('.progress').hide();
+                    var path = '{{ asset('', 'temp_image') }}/' + data.result.filename;
+                    var $img = $(proto_img.replace(/__path__/g, path));
+                    $('#{{ form.upload_file.vars.id }}').val(data.result.filename);
+
+                    $('#thumb').append($img);
+                    hideThumbnail();
+                },
+                fail: function(e, data) {
+                    alert('{{ 'admin.common.upload_error'|trans }}');
+                },
+                always: function(e, data) {
+                    $('.progress').hide();
+                    $('.progress .progress-bar').width('0%');
+                },
+                start: function(e, data) {
+                    if ($('.c-form__fileUploadThumbnail').length >= 1) {
+                        $.each($('.delete-image'), function(index, delete_image) {
+                            delete_image.click();
+                        });
+                    }
+                    $('.progress').show();
+                    $('#thumb').find('div').remove();
+                    $('#{{ form.upload_file.vars.id }}').val('');
+                },
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: 10000000,
+                maxNumberOfFiles: 1,
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('.progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                },
+                processalways: function(e, data) {
+                    if (data.files.error) {
+                        alert("{{ 'admin.common.upload_error'|trans }}");
+                    }
+                }
+            });
+
+            $('#thumb').on('click', '.delete-image', function() {
+                $('#{{ form.upload_file.vars.id }}').val('');
+                var thumbnail = $(this).parents('div.c-form__fileUploadThumbnail');
+                $(thumbnail).remove();
+                hideThumbnail();
+            });
+
+            // 画像アップロード
+            // $('#file_upload').on('click', function() {
+            //     $('#{{ form.upload_file_file.vars.id }}').click();
+            // });
+        });
+
+
+
+
+        $(function() {
+            var hideThumbnail2 = function() {
+                if ($('#thumb2 div').length > 0) {
+                    $('#icon_no_image').css('display', 'none');
+                } else {
+                    $('#icon_no_image').css('display', '');
+                }
+            };
+
+            var proto_img = '<div class="c-form__fileUploadThumbnail2" style="background-image:url(\'__path__\');">' +
+                '<a class="delete-image"><i class="fa fa-times" aria-hidden="true"></i></a>' +
+                '</div>';
+            var upload_file2 = $('#{{ form.upload_file2.vars.id }}').val();
+            if (upload_file2 != '') {
+                var filename = $('#{{ form.upload_file2.vars.id }}').val();
+                if (upload_file2 == '{{ oldUploadFile2 }}') {
+                    var path = '{{ asset('', 'save_image') }}' + filename;
+                } else {
+                    var path = '{{ asset('', 'temp_image') }}' + filename;
+                }
+                var $img = $(proto_img.replace(/__path__/g, path));
+                $('#{{ form.upload_file2.vars.id }}').val(filename);
+
+                $('#thumb2').append($img);
+                hideThumbnail2();
+            }
+            hideThumbnail2();
+
+            $('#{{ form.upload_file_file2.vars.id }}').fileupload({
+                url: "{{ url('entry_shop_upload_file_add2') }}",
+                type: 'post',
+                dataType: 'json',
+                dropZone: $('#upload-zone2'),
+                done: function(e, data) {
+                    $('.progress').hide();
+                    var path = '{{ asset('', 'temp_image') }}/' + data.result.filename;
+                    var $img = $(proto_img.replace(/__path__/g, path));
+                    $('#{{ form.upload_file2.vars.id }}').val(data.result.filename);
+
+                    $('#thumb2').append($img);
+                    hideThumbnail2();
+                },
+                fail: function(e, data) {
+                    alert('{{ 'admin.common.upload_error'|trans }}');
+                },
+                always: function(e, data) {
+                    $('.progress').hide();
+                    $('.progress .progress-bar').width('0%');
+                },
+                start: function(e, data) {
+                    if ($('.c-form__fileUploadThumbnail2').length >= 1) {
+                        $.each($('.delete-image'), function(index, delete_image) {
+                            delete_image.click();
+                        });
+                    }
+                    $('.progress').show();
+                    $('#thumb2').find('div').remove();
+                    $('#{{ form.upload_file2.vars.id }}').val('');
+                },
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                maxFileSize: 10000000,
+                maxNumberOfFiles: 1,
+                progressall: function(e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $('.progress .progress-bar').css(
+                        'width',
+                        progress + '%'
+                    );
+                },
+                processalways: function(e, data) {
+                    if (data.files.error) {
+                        alert("{{ 'admin.common.upload_error'|trans }}");
+                    }
+                }
+            });
+
+            $('#thumb2').on('click', '.delete-image', function() {
+                $('#{{ form.upload_file2.vars.id }}').val('');
+                var thumbnail = $(this).parents('div.c-form__fileUploadThumbnail2');
+                $(thumbnail).remove();
+                hideThumbnail2();
+            });
+
+            // 画像アップロード
+            // $('#file_upload2').on('click', function() {
+            //     $('#{{ form.upload_file_file2.vars.id }}').click();
+            // });
+        });
+    </script>
+{% endblock javascript %}
+
+{% block main %}
+    <div class="ec-registerRole">
+        <div class="ec-pageHeader">
+            <h1>{{ 'プロ会員申込'|trans }}</h1>
+        </div>
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <form method="post" action="{{ url('entryShop') }}" class="h-adr" enctype="multipart/form-data">
+
+                    <span class="p-country-name" style="display:none;">Japan</span>
+                    {{ form_widget(form._token) }}
+                    <div class="ec-borderedDefs">
+                        <dl>
+                            <dt>
+                                {{ form_label(form.shop_name, '会社/店舗/事業所の名称', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.shop_name) ? ' error'}}">
+                                    {{ form_widget(form.shop_name, { 'attr': { 'placeholder': '会社/店舗/事業所の名称' }}) }}
+                                    {{ form_errors(form.shop_name) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.manager1, '代表者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.manager1) ? ' error'}}">
+                                    {{ form_widget(form.manager1, { 'attr': { 'placeholder': '代表者' }}) }}
+                                    {{ form_errors(form.manager1) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.address, '所在地', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.address) ? ' error' }}">
+                                    {{ form_widget(form.address, { 'attr': { 'placeholder': '所在地' }}) }}
+                                    {{ form_errors(form.address) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.tel, '電話番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.tel) ? ' error' }}">
+                                    {{ form_widget(form.tel, { 'attr': { 'placeholder': '電話番号' }}) }}
+                                    {{ form_errors(form.tel) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.email, 'E-mail', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.email) ? ' error' }}">
+                                    {{ form_widget(form.email, { 'attr': { 'placeholder': 'E-mail' }}) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.page, 'ホームページ', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.page) ? ' error' }}">
+                                    {{ form_widget(form.page, { 'attr': { 'placeholder': 'ホームページ' }}) }}
+                                    {{ form_errors(form.page) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.manager2, '担当者', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.manager2) ? ' error' }}">
+                                    {{ form_widget(form.manager2, { 'attr': { 'placeholder': '担当者' }}) }}
+                                    {{ form_errors(form.manager2) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.job, '業種', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.job) ? ' error' }}">
+                                    {{ form_widget(form.job, { 'attr': { 'placeholder': '卸業者/ブリーダー/サロン/ショップ/その他' }}) }}
+                                    {{ form_errors(form.job) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                {{ form_label(form.code, '法人番号/営業届番号', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="ec-halfInput{{ has_errors(form.code) ? ' error' }}">
+                                    {{ form_widget(form.code, { 'attr': { 'placeholder': '法人番号/営業届番号' }}) }}
+                                    {{ form_errors(form.code) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        
+                        
+                        <dl>
+                            <dt>
+                                {{ form_label(form.upload_file, '登記簿/営業届アップロード', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="col mb-2">
+                                    <div class="progress" style="display: none;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div id="thumb" class="c-form__fileUploadThumbnails clearfix"></div>
+                                    {{ form_widget(form.upload_file, { attr : { style : 'display:none;' } }) }}
+                                    <div id="upload-zone" class="media py-5 border-ec-dashed mb-2 rounded">
+                                        <div class="media-body">
+                                            <i class="fa fa-cloud-upload fa-3x text-ec-lightGray mx-3 align-middle" aria-hidden="true"></i>
+                                            {{ form_widget(form.upload_file_file, { attr : { accept : 'image/*', style : 'display:none;' } }) }}
+                                            {{ form_errors(form.upload_file) }}
+                                            <a class="btn btn-ec-regular mr-2" onclick="$('#entryShop_upload_file_file').click()">
+                                                {{ 'admin.common.file_select'|trans }}
+                                            </a>
+                                        </div><!-- /.media-body -->
+                                    </div><!-- /.media -->
+                                </div>
+
+
+                            </dd>
+                        </dl>
+
+                        <dl>
+                            <dt>
+                                {{ form_label(form.upload_file2, '登記簿/営業届アップロード', { 'label_attr': { 'class': 'ec-label' }}) }}
+                            </dt>
+                            <dd>
+                                <div class="col mb-2">
+                                    <!-- <div class="progress2" style="display: none;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div> -->
+                                    <div id="thumb2" class="c-form__fileUploadThumbnails clearfix"></div>
+                                    {{ form_widget(form.upload_file2, { attr : { style : 'display:none;' } }) }}
+                                    <div id="upload-zone2" class="media py-5 border-ec-dashed mb-2 rounded">
+                                        <div class="media-body">
+                                            <i class="fa fa-cloud-upload fa-3x text-ec-lightGray mx-3 align-middle" aria-hidden="true"></i>
+                                            {{ form_widget(form.upload_file_file2, { attr : { accept : 'image/*', style : 'display:none;' } }) }}
+                                            {{ form_errors(form.upload_file2) }}
+                                            <a class="btn btn-ec-regular mr-2" onclick="$('#entryShop_upload_file_file2').click()">
+                                                {{ 'admin.common.file_select'|trans }}
+                                            </a>
+                                        </div><!-- /.media-body -->
+                                    </div><!-- /.media -->
+                                </div>
+
+
+                            </dd>
+                        </dl>
+
+
+                    </div>
+                    <div class="ec-registerRole__actions">
+                        <div class="ec-off4Grid">
+                            <div class="ec-off4Grid__cell">
+								<div class="ec-checkbox{{ has_errors(form.shop_policy_check) ? ' error' }}">
+                                    <label>
+                                        {{ form_widget(form.shop_policy_check) }}
+                                        {{ '<a class="ec-link" href="%url%" target="_blank">利用規約</a>に同意してお進みください'|trans({ '%url%': url('help_shop_agreement') })|raw }}
+                                    </label>
+                                    {{ form_errors(form.shop_policy_check) }}
+                                </div>
+                                <button class="ec-blockBtn--action" type="submit" name="mode" value="complete">{{ 'プロ会員申込を確定する'|trans }}</button>
+                                <a class="ec-blockBtn--cancel" href="{{ url('homepage') }}">{{ '戻る'|trans }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
