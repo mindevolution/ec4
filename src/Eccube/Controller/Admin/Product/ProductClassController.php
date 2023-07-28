@@ -358,7 +358,7 @@ class ProductClassController extends AbstractController
                 $ProductStock->setProductClass($pc);
                 $this->entityManager->persist($ProductStock);
             }
-            $ProductStock->setStock($pc->isStockUnlimited() ? null : $pc->getStock());
+            $ProductStock->setStock(699);
 
             if ($this->baseInfoRepository->get()->isOptionProductTaxRule()) {
                 $rate = $pc->getTaxRate();
