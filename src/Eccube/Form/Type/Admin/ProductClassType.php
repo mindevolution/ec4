@@ -56,6 +56,7 @@ class ProductClassType extends AbstractType
         $builder
             ->add('code', TextType::class, [
                 'required' => false,
+                'empty_value' => 'code_test_1',
                 'constraints' => [
                     new Assert\Length([
                         'max' => 255,
@@ -64,6 +65,7 @@ class ProductClassType extends AbstractType
             ])
             ->add('stock', NumberType::class, [
                 'required' => false,
+                'empty_value' => 699,
                 'constraints' => [
                     new Assert\Regex([
                         'pattern' => "/^\d+$/u",
