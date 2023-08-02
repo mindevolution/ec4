@@ -84,9 +84,11 @@ class ProductClassEditType extends AbstractType
             ])
             ->add('code', TextType::class, [
                 'required' => false,
+                'empty_data' => 'code_1',
             ])
             ->add('stock', IntegerType::class, [
                 'required' => false,
+                'empty_data' => 699,
             ])
             ->add('stock_unlimited', CheckboxType::class, [
                 'label' => 'admin.product.stock_unlimited__short',
