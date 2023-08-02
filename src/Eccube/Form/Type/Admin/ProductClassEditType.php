@@ -93,7 +93,9 @@ class ProductClassEditType extends AbstractType
             ->add('stock_unlimited', CheckboxType::class, [
                 'label' => 'admin.product.stock_unlimited__short',
                 'required' => false,
-                'checked' => true,
+                'attr' => [
+                    'checked' => 'checked',
+                ],
             ])
             ->add('sale_limit', NumberType::class, [
                 'required' => false,
