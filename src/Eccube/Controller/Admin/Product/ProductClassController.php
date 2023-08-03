@@ -360,8 +360,8 @@ class ProductClassController extends AbstractController
             $pc->setProduct($Product);
 
             $pc->setCode($Product->getCodeMin() . '-' . $key);
-            $pc->setPrice01IncTax($Product->getPrice01IncTaxMin() || $Product->getPrice01IncTaxMin());
-            $pc->setPrice02IncTax($Product->getPrice02IncTaxMin());
+            $pc->setPrice01($Product->getPrice01Min());
+            $pc->setPrice02($Product->getPrice02Min());
 
             $deliveryDuration = $this->deliveryDurationRepository->find(3);
             $pc->setDeliveryDuration($deliveryDuration);
