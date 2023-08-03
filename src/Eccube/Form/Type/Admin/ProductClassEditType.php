@@ -250,10 +250,10 @@ class ProductClassEditType extends AbstractType
             $this->addErrors('tax_rate', $form, $errors);
 
             // 販売種別
-            $errors = $this->validator->validate($data['sale_type'], [
-                new Assert\NotBlank(),
-            ]);
-            $this->addErrors('sale_type', $form, $errors);
+            // $errors = $this->validator->validate($data['sale_type'], [
+            //     new Assert\NotBlank(),
+            // ]);
+            // $this->addErrors('sale_type', $form, $errors);
         });
     }
 
