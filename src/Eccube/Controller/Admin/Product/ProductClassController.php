@@ -366,7 +366,7 @@ class ProductClassController extends AbstractController
                 $code = $Product->getCodeMin();
             }
 
-            $pc->getCode() || $pc->setCode($code . $delimiter . $key + 1);
+            $pc->getCode() || $pc->setCode($code . $delimiter . ($key + 1));
             $pc->getPrice01() || $pc->setPrice01($Product->getPrice01Min());
             $pc->getPrice02() || $pc->setPrice02($Product->getPrice02Min());
 
