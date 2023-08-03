@@ -24,6 +24,7 @@ use Eccube\Form\Type\Admin\ProductClassMatrixType;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Repository\ClassCategoryRepository;
 use Eccube\Repository\ProductClassRepository;
+use Eccube\Repository\DeliveryDurationRepository;
 use Eccube\Repository\ProductRepository;
 use Eccube\Repository\TaxRuleRepository;
 use Eccube\Util\CacheUtil;
@@ -46,6 +47,11 @@ class ProductClassController extends AbstractController
     protected $productClassRepository;
 
     /**
+     * @var DeliveryDurationRepository
+     */
+    protected $deliveryDurationRepository;
+
+    /**
      * @var ClassCategoryRepository
      */
     protected $classCategoryRepository;
@@ -65,19 +71,22 @@ class ProductClassController extends AbstractController
      *
      * @param ProductClassRepository $productClassRepository
      * @param ClassCategoryRepository $classCategoryRepository
+     * @param DeliveryDurationRepository $deliveryDurationRepository
      */
     public function __construct(
         ProductRepository $productRepository,
         ProductClassRepository $productClassRepository,
         ClassCategoryRepository $classCategoryRepository,
         BaseInfoRepository $baseInfoRepository,
-        TaxRuleRepository $taxRuleRepository
+        TaxRuleRepository $taxRuleRepository,
+        DeliveryDurationRepository $deliveryDurationRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productClassRepository = $productClassRepository;
         $this->classCategoryRepository = $classCategoryRepository;
         $this->baseInfoRepository = $baseInfoRepository;
         $this->taxRuleRepository = $taxRuleRepository;
+        $this->deliveryDurationRepository = $deliveryDurationRepository;
     }
 
     /**
@@ -312,7 +321,7 @@ class ProductClassController extends AbstractController
      */
     protected function saveProductClasses(Product $Product, $ProductClasses = [])
     {
-        foreach ($ProductClasses as $pc) {
+        foreach ($ProductClasses as $key => $pc) {
             // 新規登録時、チェックを入れていなければ更新しない
             if (!$pc->getId() && !$pc->isVisible()) {
                 continue;
@@ -349,6 +358,14 @@ class ProductClassController extends AbstractController
             }
 
             $pc->setProduct($Product);
+
+            $pc->setCode($Product->getCodeMin() . '-' . $key);
+            $pc->setPrice01IncTax($Product->getPrice01IncTaxMin() || $Product->getPrice01IncTaxMin());
+            $pc->setPrice02IncTax($Product->getPrice02IncTaxMin());
+
+            $deliveryDuration = $this->deliveryDurationRepository->find(3);
+            $pc->setDeliveryDuration($deliveryDuration);
+
             $this->entityManager->persist($pc);
 
             // 在庫の更新

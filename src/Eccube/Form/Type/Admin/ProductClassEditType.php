@@ -84,8 +84,6 @@ class ProductClassEditType extends AbstractType
             ])
             ->add('code', TextType::class, [
                 'required' => false,
-                'empty_data' => 'code_1',
-                'data' => 'code_1',
             ])
             ->add('stock', IntegerType::class, [
                 'required' => false,
