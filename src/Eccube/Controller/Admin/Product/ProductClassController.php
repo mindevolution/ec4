@@ -366,12 +366,12 @@ class ProductClassController extends AbstractController
                 $code = $Product->getCodeMin();
             }
 
-            $pc->setCode($code);
-            $pc->setPrice01($Product->getPrice01Min());
-            $pc->setPrice02($Product->getPrice02Min());
+            $pc->getCode() || $pc->setCode($code . $delimiter . $key);
+            $pc->getPrice01() || $pc->setPrice01($Product->getPrice01Min());
+            $pc->getPrice02() || $pc->setPrice02($Product->getPrice02Min());
 
             $deliveryDuration = $this->deliveryDurationRepository->find(3);
-            $pc->setDeliveryDuration($deliveryDuration);
+            $pc->getDeliveryDuration() || $pc->setDeliveryDuration($deliveryDuration);
 
             $this->entityManager->persist($pc);
 
