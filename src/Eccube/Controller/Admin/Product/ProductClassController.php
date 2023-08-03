@@ -358,8 +358,15 @@ class ProductClassController extends AbstractController
             }
 
             $pc->setProduct($Product);
+            $delimiter = '-';
+            $codes = explode($delimiter, $Product->getCodeMin());
+            if (is_array($codes)) {
+                $code = $codes[0];
+            } else {
+                $code = $Product->getCodeMin();
+            }
 
-            $pc->setCode($Product->getCodeMin() . '-' . $key);
+            $pc->setCode($code);
             $pc->setPrice01($Product->getPrice01Min());
             $pc->setPrice02($Product->getPrice02Min());
 
