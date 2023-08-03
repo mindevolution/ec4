@@ -25,6 +25,7 @@ use Eccube\Repository\BaseInfoRepository;
 use Eccube\Repository\ClassCategoryRepository;
 use Eccube\Repository\ProductClassRepository;
 use Eccube\Repository\DeliveryDurationRepository;
+use Eccube\Repository\Master\SaleTypeRepository;
 use Eccube\Repository\ProductRepository;
 use Eccube\Repository\TaxRuleRepository;
 use Eccube\Util\CacheUtil;
@@ -52,6 +53,11 @@ class ProductClassController extends AbstractController
     protected $deliveryDurationRepository;
 
     /**
+     * @val SaleTypeRepository
+     */
+    protected $saleTypeRepository;
+
+    /**
      * @var ClassCategoryRepository
      */
     protected $classCategoryRepository;
@@ -72,6 +78,7 @@ class ProductClassController extends AbstractController
      * @param ProductClassRepository $productClassRepository
      * @param ClassCategoryRepository $classCategoryRepository
      * @param DeliveryDurationRepository $deliveryDurationRepository
+     * @param SaleTypeRepository $saleTypeRepository
      */
     public function __construct(
         ProductRepository $productRepository,
@@ -79,7 +86,8 @@ class ProductClassController extends AbstractController
         ClassCategoryRepository $classCategoryRepository,
         BaseInfoRepository $baseInfoRepository,
         TaxRuleRepository $taxRuleRepository,
-        DeliveryDurationRepository $deliveryDurationRepository
+        DeliveryDurationRepository $deliveryDurationRepository,
+        SaleTypeRepository $saleTypeRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productClassRepository = $productClassRepository;
@@ -87,6 +95,7 @@ class ProductClassController extends AbstractController
         $this->baseInfoRepository = $baseInfoRepository;
         $this->taxRuleRepository = $taxRuleRepository;
         $this->deliveryDurationRepository = $deliveryDurationRepository;
+        $this->saleTypeRepository = $saleTypeRepository;
     }
 
     /**
@@ -374,6 +383,8 @@ class ProductClassController extends AbstractController
 
             $deliveryDuration = $this->deliveryDurationRepository->find(3);
             $pc->getDeliveryDuration() || $pc->setDeliveryDuration($deliveryDuration);
+            $saleType = $this->saleTypeRepository->find(1);
+            $pc->getSaleType() || $pc->setSaleType($saleType);
 
             $this->entityManager->persist($pc);
 
