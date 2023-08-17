@@ -152,6 +152,13 @@ file that was distributed with this source code.
                             <a href="{{ url('product_detail', {'id': Product.id}) }}">
                                 <p class="ec-shelfGrid__item-image">
                                     <img src="{{ asset(Product.main_list_image|no_image_product, 'save_image') }}">
+                                    <div class="sale_badge_area">
+                                        <ul>
+                                            <li class="sale_badge">
+                                                55 %OFF
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </p>
                                 <p>{{ Product.name }}</p>
                                 {% if Product.description_list %}
