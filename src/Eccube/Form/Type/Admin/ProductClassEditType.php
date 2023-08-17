@@ -233,9 +233,9 @@ class ProductClassEditType extends AbstractType
             $this->addErrors('sale_limit', $form, $errors);
 
             // 販売価格
-            $errors = $this->validator->validate($data['price02'], [
-                new Assert\NotBlank(),
-            ]);
+            // $errors = $this->validator->validate($data['price02'], [
+            //     new Assert\NotBlank(),
+            // ]);
 
             $this->addErrors('price02', $form, $errors);
 
@@ -250,10 +250,10 @@ class ProductClassEditType extends AbstractType
             $this->addErrors('tax_rate', $form, $errors);
 
             // 販売種別
-            $errors = $this->validator->validate($data['sale_type'], [
-                new Assert\NotBlank(),
-            ]);
-            $this->addErrors('sale_type', $form, $errors);
+            // $errors = $this->validator->validate($data['sale_type'], [
+            //     new Assert\NotBlank(),
+            // ]);
+            // $this->addErrors('sale_type', $form, $errors);
         });
     }
 

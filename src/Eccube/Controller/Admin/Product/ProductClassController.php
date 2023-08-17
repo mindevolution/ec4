@@ -24,6 +24,8 @@ use Eccube\Form\Type\Admin\ProductClassMatrixType;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Repository\ClassCategoryRepository;
 use Eccube\Repository\ProductClassRepository;
+use Eccube\Repository\DeliveryDurationRepository;
+use Eccube\Repository\Master\SaleTypeRepository;
 use Eccube\Repository\ProductRepository;
 use Eccube\Repository\TaxRuleRepository;
 use Eccube\Util\CacheUtil;
@@ -46,6 +48,16 @@ class ProductClassController extends AbstractController
     protected $productClassRepository;
 
     /**
+     * @var DeliveryDurationRepository
+     */
+    protected $deliveryDurationRepository;
+
+    /**
+     * @val SaleTypeRepository
+     */
+    protected $saleTypeRepository;
+
+    /**
      * @var ClassCategoryRepository
      */
     protected $classCategoryRepository;
@@ -65,19 +77,25 @@ class ProductClassController extends AbstractController
      *
      * @param ProductClassRepository $productClassRepository
      * @param ClassCategoryRepository $classCategoryRepository
+     * @param DeliveryDurationRepository $deliveryDurationRepository
+     * @param SaleTypeRepository $saleTypeRepository
      */
     public function __construct(
         ProductRepository $productRepository,
         ProductClassRepository $productClassRepository,
         ClassCategoryRepository $classCategoryRepository,
         BaseInfoRepository $baseInfoRepository,
-        TaxRuleRepository $taxRuleRepository
+        TaxRuleRepository $taxRuleRepository,
+        DeliveryDurationRepository $deliveryDurationRepository,
+        SaleTypeRepository $saleTypeRepository
     ) {
         $this->productRepository = $productRepository;
         $this->productClassRepository = $productClassRepository;
         $this->classCategoryRepository = $classCategoryRepository;
         $this->baseInfoRepository = $baseInfoRepository;
         $this->taxRuleRepository = $taxRuleRepository;
+        $this->deliveryDurationRepository = $deliveryDurationRepository;
+        $this->saleTypeRepository = $saleTypeRepository;
     }
 
     /**
@@ -312,7 +330,7 @@ class ProductClassController extends AbstractController
      */
     protected function saveProductClasses(Product $Product, $ProductClasses = [])
     {
-        foreach ($ProductClasses as $pc) {
+        foreach ($ProductClasses as $key => $pc) {
             // 新規登録時、チェックを入れていなければ更新しない
             if (!$pc->getId() && !$pc->isVisible()) {
                 continue;
@@ -349,6 +367,25 @@ class ProductClassController extends AbstractController
             }
 
             $pc->setProduct($Product);
+            $delimiter = '-';
+            $codes = explode($delimiter, $Product->getCodeMin());
+            if (is_array($codes)) {
+                $code = $codes[0];
+            } else {
+                $code = $Product->getCodeMin();
+            }
+
+            $index = $key + 1;
+
+            $pc->getCode() || $pc->setCode($code . $delimiter . $index);
+            $pc->getPrice01() || $pc->setPrice01($Product->getPrice01Min());
+            $pc->getPrice02() || $pc->setPrice02($Product->getPrice02Min());
+
+            $deliveryDuration = $this->deliveryDurationRepository->find(3);
+            $pc->getDeliveryDuration() || $pc->setDeliveryDuration($deliveryDuration);
+            $saleType = $this->saleTypeRepository->find(1);
+            $pc->getSaleType() || $pc->setSaleType($saleType);
+
             $this->entityManager->persist($pc);
 
             // 在庫の更新
