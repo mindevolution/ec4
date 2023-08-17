@@ -543,15 +543,16 @@ section {
                     {% else %}
                         <div class="ec-productRole__description custom_shop_detail">{{ Product.description_detail|raw|nl2br }}</div>
                     {% endif %}
+
+                    {% if Product.freearea %}
+                        {% if is_shop == false %}
+                            <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
+                        {% else %}
+                            <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
+                        {% endif %}
+                    {% endif %}
                 </div>
            </div>
      </div>
-        {% if Product.freearea %}
-            {% if is_shop == false %}
-                <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% else %}
-                <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% endif %}
-        {% endif %}
     </div>
 {% endblock %}

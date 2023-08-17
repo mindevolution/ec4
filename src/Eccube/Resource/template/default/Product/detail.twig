@@ -311,6 +311,12 @@ file that was distributed with this source code.
                         <div class="ec-productRole__description custom_shop_detail">{{ Product.description_detail|raw|nl2br }}</div>
                     {% endif %}
 
+                    {% if is_shop == false %}
+                        <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
+                    {% else %}
+                        <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
+                    {% endif %}
+
 
                     <form action="{{ url('product_add_cart', {id:Product.id}) }}" method="post" id="form1" name="form1">
                         {% if Product.stock_find %}
@@ -386,11 +392,6 @@ file that was distributed with this source code.
         </div>
         {% if Product.freearea %}
         
-            {% if is_shop == false %}
-                <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% else %}
-                <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% endif %}
 
 
         {% endif %}
