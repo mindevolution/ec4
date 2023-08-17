@@ -526,6 +526,9 @@ section {
                                 {% if is_favorite == false %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel">
                                         {{ 'お気に入りに追加'|trans }}
+                                        {% if favorite_count %}
+                                            <span class="favorite-count" data-prefix="件">{{ favorite_count }}件</span>
+                                        {% endif %}
                                     </button>
                                 {% else %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel"
