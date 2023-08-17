@@ -283,11 +283,11 @@ file that was distributed with this source code.
                         {% endif %}
                     </div>
                     {# 商品コード #}
-                    {% if Product.code_min is not empty %}
+                    {# {% if Product.code_min is not empty %}
                         <div class="ec-productRole__code">
                             {{ '商品コード'|trans }}： <span class="product-code-default">{{ Product.code_min }}{% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}</span>
                         </div>
-                    {% endif %}
+                    {% endif %} #}
                     {# 関連カテゴリ #}
                     {% if Product.ProductCategories is not empty %}
                         <div class="ec-productRole__category">
