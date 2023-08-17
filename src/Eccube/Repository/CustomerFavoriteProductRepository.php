@@ -72,6 +72,25 @@ class CustomerFavoriteProductRepository extends AbstractRepository
     }
 
     /**
+     * @param  \Eccube\Entity\Product  $Product
+     *
+     * @return number
+     */
+    public function getFavoriteCount(\Eccube\Entity\Product $Product)
+    {
+        $qb = $this->createQueryBuilder('cf')
+            ->select('COUNT(cf.Product)')
+            ->andWhere('cf.Product = :Product')
+            ->setParameters([
+                'Product' => $Product,
+            ]);
+        return $qb
+            ->getQuery()
+            ->getSingleScalarResult();
+
+    }
+
+    /**
      * @param  \Eccube\Entity\Customer $Customer
      *
      * @return QueryBuilder

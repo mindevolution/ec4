@@ -316,6 +316,8 @@ class ProductController extends AbstractController
             $is_favorite = $this->customerFavoriteProductRepository->isFavorite($Customer, $Product);
         }
 
+        $favorite_count = $this->customerFavoriteProductRepository->getFavoriteCount($Product);
+
         //计算能获取的积分
         $points_rate=0;
         if ($this->isGranted('ROLE_USER')) {
@@ -342,6 +344,7 @@ class ProductController extends AbstractController
             'title' => $this->title,
             'subtitle' => $Product->getName(),
             'form' => $builder->getForm()->createView(),
+            'favorite_count' => $favorite_count,
             'Product' => $Product,
             'is_favorite' => $is_favorite,
             'is_shop' => $is_shop,
