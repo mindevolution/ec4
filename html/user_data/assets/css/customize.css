@@ -1,0 +1,168 @@
+/* 配色
+- 赤: #F74B57
+- 青: #006CB8
+- 紺: #525263
+- 背景グレー: #f3f3f3
+- font: noto-sans-cjk-jp,sans-serif
+*/
+
+/* フッターロゴの位置修正 */
+footer .footer__logoImg {
+  margin-top: -10px;
+}
+
+/* フォント */
+.custom_ru_pro .ec-shelfGrid__item > a > dl > dt,
+.custom_ru_pro .section-header__titleText,
+#shopify-section-menu-tabs .c-menu-tabs > ul > li > a,
+.custom_zuijin .ec-secHeading .ec-secHeading__en,
+.custom_zuijin .ec-checkProductRole__listItemTitle,
+.ec-secHeading__en,
+.custom_brand .section-header__titleText,
+.custom_about .c-custom-section__subHeading,
+.c-newsletter-containerBox p.h2 {
+  font-family: noto-sans-cjk-jp,sans-serif;
+}
+body {
+  font-family: noto-sans-cjk-jp,sans-serif;
+  color: #222;
+}
+/* テキストの色 */
+.ec-contactRole,
+.ec-registerRole,
+.ec-registerCompleteRole,
+.ec-cartRole,
+.ec-mypageRole,
+.ec-withdrawRole,
+.ec-navlistRole,
+.ec-layoutRole__main,
+.ec-orderRole,
+.ec-contactConfirmRole,
+.ec-contactCompleteRole,
+.ec-role {
+  color: #222;
+}
+
+
+/* ページ上下のスペース */
+.other_page .ec-layoutRole .ec-layoutRole__main,
+.cart_page .ec-layoutRole .ec-layoutRole__main,
+.mypage .ec-layoutRole .ec-layoutRole__main,
+.registration_page .ec-layoutRole__main {
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+/* 一覧ページ上のスペース削除 */
+#category_extension_b_header_contents {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* ボタンの色 */
+.ec-blockBtn--action,
+.ec-inlineBtn--action {
+  background-color: #F74B57;
+  border-color: #F74B57;
+  border-radius: 35px;
+}
+.ec-blockBtn--cancel {
+  border-radius: 35px;
+}
+
+/* 商品一覧コンテンツの見出しサイズ */
+.custom_zuijin .ec-secHeading .ec-secHeading__en,
+.custom_ru_pro .section-header__titleText {
+  font-size: 32px;
+}
+
+/* 一覧ページ */
+.custom_cat {
+  /*overflow-y: unset;
+  min-height: auto;
+  flex-shrink: 0;
+  max-width: 220px;*/
+}
+#page_product_list .ec-searchnavRole {
+  padding: 0 30px;
+}
+.ec-itemNav .custom_nav_li_jia {
+  display: none !important;
+}
+@media only screen and (min-width: 768px) {
+  #page_product_list .ec-shelfRole {
+    display: flex;
+  }
+  .ec-shelfGrid {
+    padding-left: 30px;
+  }
+}
+
+/* 商品ページ */
+.ec-price .ec-price__price {
+    padding-left: 0;
+}
+@media only screen and (min-width: 768px) {
+  .ec-productRole .ec-productRole__profile {
+      margin-left: 0;
+  }
+}
+.ec-productRole .ec-productRole__code {
+  display: block;
+}
+.ec-productRole {
+  color: #222;
+  line-height: 1.6;
+}
+.ec-productRole .ec-productRole__price {
+  padding-bottom: 10px;
+}
+.ec-productRole .ec-productRole__price {
+  color: #F74B57;
+  font-size: 28px;
+  padding: 0;
+  border-bottom: 0;
+}
+.ec-productRole .ec-productRole__category {
+  font-size: 14px;
+}
+.ec-productRole__SNS_Share {
+  margin: 10px 0;
+}
+.ec-productRole .ec-productRole__description {
+  margin-top: 20px;
+}
+
+/* カートページ */
+.ec-cartHeader .ec-cartHeader__label {
+  background: #f3f3f3;
+}
+.ec-color-red {
+  color: #F74B57;
+}
+.ec-cartRole .ec-cartRole__totalAmount {
+  color: #F74B57;
+}
+
+/* formの色 */
+.ec-required {
+  color: #F74B57;
+}
+.ec-login,
+.ec-guest {
+  background: #f3f3f3;
+}
+.ec-progress .is-complete .ec-progress__number {
+  background: #006CB8;
+}
+.ec-progress .is-complete .ec-progress__label {
+  color: #006CB8;
+}
+.ec-layoutRole__contents .ec-layoutRole__main .ec-mypageRole{
+  max-width: 1600px;
+  margin:  0 auto;
+}
+.ec-layoutRole__contents .ec-layoutRole__main table{
+  max-width: 1574px;
+  margin:  0 auto;
+ 
+}

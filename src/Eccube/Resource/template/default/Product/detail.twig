@@ -283,11 +283,11 @@ file that was distributed with this source code.
                         {% endif %}
                     </div>
                     {# 商品コード #}
-                    {% if Product.code_min is not empty %}
+                    {# {% if Product.code_min is not empty %}
                         <div class="ec-productRole__code">
                             {{ '商品コード'|trans }}： <span class="product-code-default">{{ Product.code_min }}{% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}</span>
                         </div>
-                    {% endif %}
+                    {% endif %} #}
                     {# 関連カテゴリ #}
                     {% if Product.ProductCategories is not empty %}
                         <div class="ec-productRole__category">
@@ -309,6 +309,12 @@ file that was distributed with this source code.
                         <div class="ec-productRole__description">{{ Product.description_detail|raw|nl2br }}</div>
                     {% else %}
                         <div class="ec-productRole__description custom_shop_detail">{{ Product.description_detail|raw|nl2br }}</div>
+                    {% endif %}
+
+                    {% if is_shop == false %}
+                        <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
+                    {% else %}
+                        <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
                     {% endif %}
 
 
@@ -366,7 +372,11 @@ file that was distributed with this source code.
                             <div class="ec-productRole__btn">
                                 {% if is_favorite == false %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel">
-                                        {{ 'お気に入りに追加'|trans }}
+                                        {{ 'お気に入りに追加'|trans }} 
+
+                                        {% if favorite_count %}
+                                            <span class="favorite-count" data-prefix="件">{{ favorite_count }}件</span>
+                                        {% endif %}
                                     </button>
                                 {% else %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel"
@@ -382,11 +392,6 @@ file that was distributed with this source code.
         </div>
         {% if Product.freearea %}
         
-            {% if is_shop == false %}
-                <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% else %}
-                <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% endif %}
 
 
         {% endif %}

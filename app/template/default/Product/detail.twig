@@ -366,12 +366,12 @@ section {
                         </div>
                         
                     {# 商品コード #}
-                    {% if Product.code_min is not empty %}
+                    {# {% if Product.code_min is not empty %}
                         <div class="ec-productRole__code">
                             {{ '商品コード'|trans }}： <span class="product-code-default">{{ Product.code_min }}
                             {% if Product.code_min != Product.code_max %} ～ {{ Product.code_max }}{% endif %}</span>
                         </div>
-                    {% endif %}
+                    {% endif %} #}
 
                         
                     {# 通常価格 #}
@@ -477,11 +477,13 @@ section {
                             <div class="ec-productRole__actions">
                                 {% if form.classcategory_id1 is defined %}
                                     <div class="ec-select">
+                                        {{ form_label(form.classcategory_id1) }}
                                         {{ form_widget(form.classcategory_id1) }}
                                         {{ form_errors(form.classcategory_id1) }}
                                     </div>
                                     {% if form.classcategory_id2 is defined %}
                                         <div class="ec-select">
+                                            {{ form_label(form.classcategory_id2) }}
                                             {{ form_widget(form.classcategory_id2) }}
                                             {{ form_errors(form.classcategory_id2) }}
                                         </div>
@@ -526,6 +528,9 @@ section {
                                 {% if is_favorite == false %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel">
                                         {{ 'お気に入りに追加'|trans }}
+                                        {% if favorite_count %}
+                                            <span class="favorite-count" data-prefix="件">{{ favorite_count }}件</span>
+                                        {% endif %}
                                     </button>
                                 {% else %}
                                     <button type="submit" id="favorite" class="ec-blockBtn--cancel"
@@ -540,15 +545,16 @@ section {
                     {% else %}
                         <div class="ec-productRole__description custom_shop_detail">{{ Product.description_detail|raw|nl2br }}</div>
                     {% endif %}
+
+                    {% if Product.freearea %}
+                        {% if is_shop == false %}
+                            <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
+                        {% else %}
+                            <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
+                        {% endif %}
+                    {% endif %}
                 </div>
            </div>
      </div>
-        {% if Product.freearea %}
-            {% if is_shop == false %}
-                <div class="ec-productRole__description">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% else %}
-                <div class="ec-productRole__description custom_shop_detail">{{ include(template_from_string(Product.freearea)) }}</div>
-            {% endif %}
-        {% endif %}
     </div>
 {% endblock %}
