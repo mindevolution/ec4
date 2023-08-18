@@ -406,8 +406,8 @@ class EccubeExtension extends AbstractExtension
         $price2 = $Product->getPrice02IncTaxMin();
 
         if ($price1) {
-            $discount = ($price1 - $price2) / $price2 * 100;
-            return $discount . "%";
+            $discount = intval(($price1 - $price2) / $price1 * 100);
+            return $discount . "% OFF";
         }
 
         return null;
