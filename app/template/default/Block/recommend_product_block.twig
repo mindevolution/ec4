@@ -61,11 +61,11 @@
             <li class="ec-shelfGrid__item">
                 <a href="{{ url('product_detail', {'id': RecommendProduct.Product.id}) }}">
                     <img src="{{ asset(RecommendProduct.Product.mainFileName|no_image_product, "save_image") }}">
-                    {% if Product.getPrice01IncTaxMin %}
+                    {% if RecommendProduct.Product.getPrice01IncTaxMin %}
                     <div class="sale_badge_area">
                         <ul>
                             <li class="sale_badge">
-                                {{ Product|sales_off }}
+                                {{ RecommendProduct.Product|sales_off }}
                             </li>
                         </ul>
                     </div>
