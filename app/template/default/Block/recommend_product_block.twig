@@ -8,6 +8,37 @@
 #}
 {% set recommend_products = repository('Plugin\\Recommend4\\Entity\\RecommendProduct').getRecommendProduct %}
 
+<style type="text/css">
+    .sale_badge_area {
+        font-size: 10px;
+        position: relative;
+        bottom: 5px;
+        left: 5px;
+    }
+
+    .sale_badge_area ul {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        font-size: 10px;
+        bottom: 0;
+    }
+
+    .sale_badge_area ul li {
+        list-style: none;
+        padding: 5px 10px;
+        background-color: #fd565f;
+        color: #FFF;
+        z-index: 1;
+    }
+
+    @media screen and (max-width:768px) {
+        .sale_badge_area ul li {
+            padding: 2px 5px;
+        }
+    }
+</style>
+
 
 
 <!-- ▼item_list▼ -->
@@ -32,6 +63,15 @@
             <li class="ec-shelfGrid__item">
                 <a href="{{ url('product_detail', {'id': RecommendProduct.Product.id}) }}">
                     <img src="{{ asset(RecommendProduct.Product.mainFileName|no_image_product, "save_image") }}">
+                    {% if RecommendProduct.Product.getPrice01IncTaxMin %}
+                    <div class="sale_badge_area">
+                        <ul>
+                            <li class="sale_badge">
+                                {{ RecommendProduct.Product|sales_off }}
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
                     <p>{{ RecommendProduct.comment|raw|nl2br }}</p>
                     <dl>
                         <dt class="item_name">{{ RecommendProduct.Product.name }}</dt>

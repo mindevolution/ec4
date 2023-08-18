@@ -91,6 +91,7 @@ class EccubeExtension extends AbstractExtension
             new TwigFilter('ellipsis', [$this, 'getEllipsis']),
             new TwigFilter('time_ago', [$this, 'getTimeAgo']),
             new TwigFilter('file_ext_icon', [$this, 'getExtensionIcon'], ['is_safe' => ['html']]),
+            new TwigFilter('sales_off', [$this, 'getSalesOff']),
         ];
     }
 
@@ -392,5 +393,23 @@ class EccubeExtension extends AbstractExtension
         $qb->andWhere('ph.point != 0');
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Get product sale off like 10% 
+     *
+     * @return string
+     */
+    public function getSalesOff(Product $Product)
+    {
+        $price1 = $Product->getPrice01IncTaxMin();
+        $price2 = $Product->getPrice02IncTaxMin();
+
+        if ($price1) {
+            $discount = intval(($price1 - $price2) / $price1 * 100);
+            return $discount . "% OFF";
+        }
+
+        return null;
     }
 }
