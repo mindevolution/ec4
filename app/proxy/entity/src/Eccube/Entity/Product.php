@@ -492,7 +492,7 @@ use Doctrine\ORM\Mapping as ORM;
         /**
          * @var string|null
          *
-         * @ORM\Column(name="shop_discount", type="string", length=255)
+         * @ORM\Column(name="shop_discount", type="string", length=255, nullable=true)
          */
         private $shop_discount;
 
