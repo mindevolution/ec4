@@ -1,0 +1,1 @@
+{"name":"ec-cube\/ProductReviewReplyable","version":"4.0.1","description":"\u8fd4\u4fe1\u4ed8\u304d\u5546\u54c1\u30ec\u30d3\u30e5\u30fc\u7ba1\u7406\u30d7\u30e9\u30b0\u30a4\u30f3","type":"eccube-plugin","require":{"ec-cube\/plugin-installer":"~0.0.6"},"extra":{"code":"ProductReviewReplyable","id":1925}}
