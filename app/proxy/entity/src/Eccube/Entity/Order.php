@@ -41,7 +41,7 @@ use Eccube\Service\PurchaseFlow\ItemCollection;
      */
     class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, ItemHolderInterface
     {
-    use NameTrait, PointTrait, \Plugin\SoftbankPayment4\Entity\OrderTrait, \Plugin\SSNext\Entity\OrderTrait, \Plugin\StripePaymentGateway\Entity\OrderTrait;
+    use NameTrait, PointTrait, \Plugin\SoftbankPayment4\Entity\OrderTrait, \Plugin\SSNext\Entity\OrderTrait, \Plugin\StripePaymentGateway\Entity\OrderTrait, \Plugin\PayPalCheckout\Entity\OrderTrait;
 
     /**
          * 課税対象の明細を返す.

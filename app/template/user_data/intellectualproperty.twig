@@ -1,0 +1,108 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+
+http://www.ec-cube.co.jp/
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+#}
+{% extends 'default_frame.twig' %}
+
+{% block main %}
+<style>
+.member-page-nav {
+  padding: 0;
+  margin-top: 60px;
+  margin-bottom: 40px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.member-page-nav a {
+  padding: 10px 20px;
+  background-color: #006CB8;
+  color: #fff;
+  border-radius: 35px;
+  display: block;
+  margin: 0 15px 15px 0;
+}
+.member-page-nav a:hover {
+    text-decoration: none;
+    opacity: .8;
+}
+.member-page-nav i {
+  margin-left: 5px;
+}
+.guide-page-box {
+  padding: 0 0 100px;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+}
+.guide-page-box h1 {
+  text-align: center;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+.guide-page-box h2 {
+  margin-top: 60px;
+  color: #016cbe;
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+.guide-page-box h3 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 24px;
+}
+.guide-page-box h4 {
+  margin-top: 30px;
+  font-weight: bold;
+}
+.guide-page-box p {
+  font-weight: 400;
+  color: #222;
+  font-size: 17px;
+  line-height: 1.8;
+  vertical-align: middle;
+  margin-bottom: 24px;
+}
+.guide-page-box img {
+  width: 70%;
+  margin: 20px 0 20px;
+  display: block;
+  border: 1px solid #eee;
+}
+.guide-sm img {
+  width: 45%;
+}
+@media (max-width: 640px) {
+  .guide-page-box img {
+    width: 100%;
+  }
+  .guide-sm img {
+    width: 100%;
+  }
+}
+</style>
+
+<div class="ec-role">
+  <div class="ec-off1Grid">
+    <div class="ec-off1Grid__cell">
+      <div class="guide-page-box">
+        <p>知的財産権侵害の懸念や起訴がある場合、support@ecnext.jpにメールを送ってください。特定の権利侵害と告発された製品を詳しく述べるようにしてください。</p>
+        <p>(該当メールアドレスは知的財産権に関する業務対応のみで御座います。他の業務内容の場合、返信されないことに致します。ご注意下さい。)</p>
+        <h1><br>
+          <br>
+        </p>
+      </h1>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
