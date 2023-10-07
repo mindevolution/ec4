@@ -75,7 +75,7 @@
 
 <script>
     $(function() {
-        $('#product_review_area').appendTo($('div.ec-layoutRole__main, div.ec-layoutRole__mainWithColumn, div.ec-layoutRole__mainBetweenColumn'));
+        $('script[data-template="reviews"]').children().appendTo($('div.ec-layoutRole__main, div.ec-layoutRole__mainWithColumn, div.ec-layoutRole__mainBetweenColumn'));
 
         $('#product_review_area .ec-rectHeading').on('click', function() {
             $content = $('#reviewContent');
@@ -93,6 +93,7 @@
     });
 </script>
 
+<script type="text/template" data-template="reviews">
 <!--▼レビューエリア-->
 <div id="product_review_area">
     <div class="ec-role">
@@ -164,3 +165,4 @@
     </div>
 </div>
 <!-- ▲レビューエリア -->
+</script>
