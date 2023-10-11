@@ -95,6 +95,13 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block main %}
+<style>
+.product-name {
+  font-weight: normal;
+  height: auto;
+  margin-bottom: 10px;
+}
+</style>
     {% if search_form.category_id.vars.errors|length > 0 %}
         <div class="ec-searchnavRole">
             <p class="errormsg text-danger">{{ 'ご指定のカテゴリは存在しません'|trans }}</p>
