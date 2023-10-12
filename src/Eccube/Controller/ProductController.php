@@ -325,7 +325,10 @@ class ProductController extends AbstractController
             if($CustomerShop && $CustomerShop->getStatus() == "Y"){
             }
             else{
-                $points_rate=$this->customerLevelRepository->getCustomerLevelByCustomer($this->getUser())->getCustomerLevelDetail()->getDiscount();
+                $customerLevel = $this->customerLevelRepository->getCustomerLevelByCustomer($this->getUser());
+                if ($customerLevel) {
+                    $points_rate = $customerLevel->getCustomerLevelDetail()->getDiscount();
+                }
             }
         }
 
